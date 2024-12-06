@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DashBoard from "./Components/DashBoard/DashBoard";
 import NavBar from "./Components/NavBar/NavBar";
 
-//const themes = ['blue', 'green']
+const themes = ['blue', 'green']
 
 function App() {
   const [mode, setMode] = useState(() => {
@@ -15,7 +15,7 @@ function App() {
     return "dark"
     //return savedTheme || 'default'; // Default to system preference
   });
-  //const [theme, setTheme] = useState(themes[0])
+  const [theme, setTheme] = useState(themes[0])
 
   useEffect(() => {
     if (mode === 'dark') {
@@ -42,9 +42,9 @@ function App() {
 
 
   return (
-    <Wrapper className={`flex bg-slate-100 dark:bg-[#02010cfa] w-screen h-screen `}>
+    <Wrapper className={`flex bg-slate-100 dark:bg-[#0d1117] w-screen h-screen font-roboto theme-${theme}`}>
       <BrowserRouter>
-        <NavBar />
+        <NavBar theme={theme} />
         <Routes>
           <Route path="/main" element={<DashBoard />} />
         </Routes>
