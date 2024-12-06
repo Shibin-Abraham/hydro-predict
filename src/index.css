@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base{
+    :root{
+        --color-primary: hsl(0,0%,0%);
+        --color-secondary:hsl(0,0%,50%);
+        --color-text-base:hsl(0,0%,100%);
+        --color-bg-primary:hsl(0,0%,100%);
+    }
+}
+.theme-blue{
+    --color-primary:hsl(270,100%,50%);
+    --color-secondary:hsl(270,100%,75%);
+}
+.theme-green{
+    --color-primary:hsl(120,100%,35%);
+    --color-secondary:hsl(120,100%,45%);
+}

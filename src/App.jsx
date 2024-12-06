@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react"
+
 import Wrapper from "./Components/AtomicDesign/Wrapper/Wrapper";
 import Typography from "./Components/AtomicDesign/Typography/Typography";
 import Button from "./Components/AtomicDesign/Button/Button";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import DashBoard from "./Components/DashBoard/DashBoard";
+import NavBar from "./Components/NavBar/NavBar";
+
+//const themes = ['blue', 'green']
 
 function App() {
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return savedTheme || 'default'; // Default to system preference
+    return "dark"
+    //return savedTheme || 'default'; // Default to system preference
   });
+  //const [theme, setTheme] = useState(themes[0])
 
   useEffect(() => {
     if (mode === 'dark') {
@@ -32,34 +40,15 @@ function App() {
     setMode(newTheme);
   };
 
+
   return (
-    <Wrapper className="bg-slate-100 dark:bg-slate-700 w-full h-screen">
-      <Typography tag="h3" text="Hello world!" className="text-3xl font-bold dark:text-slate-300">
-        <Button
-          variant="primary"
-          variantType="outline"
-          type="button"
-          onClick={() => handleModeChange('light')}
-          className={`px-4 py-2 rounded ${mode === 'light' ? 'bg-blue-500 text-white' : ''
-            }`}
-        >
-          Light
-        </Button>
-        <Button
-          onClick={() => handleModeChange('dark')}
-          className={`px-4 py-2 rounded ${mode === 'dark' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-            }`}
-        >
-          Dark
-        </Button>
-        <Button
-          onClick={() => handleModeChange('default')}
-          className={`px-4 py-2 rounded ${mode === 'default' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-            }`}
-        >
-          Default
-        </Button>
-      </Typography>
+    <Wrapper className={`flex bg-slate-100 dark:bg-[#02010cfa] w-screen h-screen `}>
+      <BrowserRouter>
+        <NavBar />
+        <Routes>
+          <Route path="/main" element={<DashBoard />} />
+        </Routes>
+      </BrowserRouter>
     </Wrapper>
   )
 }
