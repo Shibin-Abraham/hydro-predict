@@ -6,6 +6,7 @@ import Button from "./Components/AtomicDesign/Button/Button";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DashBoard from "./Components/DashBoard/DashBoard";
 import NavBar from "./Components/NavBar/NavBar";
+import TopBar from "./Components/TopBar/TopBar";
 
 const themes = ['blue', 'green']
 
@@ -42,12 +43,16 @@ function App() {
 
 
   return (
-    <Wrapper className={`flex bg-[#ffffff] dark:bg-[#0d1117] w-screen h-screen font-roboto theme-${theme}`}>
+    <Wrapper className={`bg-[#ffffff] dark:bg-[#0d1117] w-screen h-screen font-roboto theme-${theme}`}>
       <BrowserRouter>
-        <NavBar theme={theme} />
-        <Routes>
-          <Route path="/home" element={<DashBoard />} />
-        </Routes>
+        <TopBar theme={theme} />
+        <Wrapper className='flex w-screen h-[87vh]' >
+          <NavBar theme={theme} />
+          <Routes>
+            <Route path="/home" element={<DashBoard ></DashBoard>} />
+          </Routes>
+        </Wrapper>
+
       </BrowserRouter>
     </Wrapper>
   )

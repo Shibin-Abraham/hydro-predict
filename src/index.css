@@ -12,9 +12,13 @@
 }
 .theme-blue{
     --color-primary:hsl(247,100%,73%);
-    --color-secondary:hsl(270,100%,75%);
+    --color-secondary:hsl(247,100%,79%);
+    --color-tertiary:hsla(247, 100%, 73%, 0.199);
+    --color-tertiary-variant:hsla(247, 100%, 73%, 0.082);
 }
 .theme-green{
     --color-primary:hsl(120,100%,35%);
-    --color-secondary:hsl(120,100%,45%);
+    --color-secondary:hsl(120,100%,70%);
+    --color-tertiary:hsla(120, 100%, 70%, 0.17);
+    --color-tertiary-variant:hsla(120, 100%, 70%, 0.068);
 }

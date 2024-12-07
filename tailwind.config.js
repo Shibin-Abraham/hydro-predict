@@ -9,6 +9,8 @@ export default {
       colors: {
         primary: "var(--color-primary)",
         secondary: "var(--color-secondary)",
+        tertiary: "var(--color-tertiary)",
+        'tertiary-variant': "var(--color-tertiary-variant)",
         bgPrimary: "var(--color-bg-primary)",
         tBase: "var(--color-text-base)",
       },
@@ -17,8 +19,9 @@ export default {
         albert: ['"Albert Sans"', 'sans-serif'],
       },
       animation: {
-        'spin-ai': 'spinWithDelay 12s linear infinite',
+        'spin-ai': 'spinWithDelay 8s linear infinite',
         'shake-ai': 'shakeWithDelay 2s ease-in-out infinite',
+        'bubble': 'float 5s infinite',
       },
       keyframes: {
         spinWithDelay: {
@@ -34,6 +37,10 @@ export default {
           '30%': { transform: 'translateX(5px)' },
           '40%': { transform: 'translateX(0)' }, // Shake finishes
           '100%': { transform: 'translateX(0)' }, // Remain still for 4 seconds
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px) translateX(0px)' },
+          '50%': { transform: 'translateY(5px) translateX(-5px)' },
         },
       },
     },
