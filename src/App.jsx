@@ -42,11 +42,11 @@ function App() {
 
 
   return (
-    <Wrapper className={`flex bg-slate-100 dark:bg-[#0d1117] w-screen h-screen font-roboto theme-${theme}`}>
+    <Wrapper className={`flex bg-[#ffffff] dark:bg-[#0d1117] w-screen h-screen font-roboto theme-${theme}`}>
       <BrowserRouter>
         <NavBar theme={theme} />
         <Routes>
-          <Route path="/main" element={<DashBoard />} />
+          <Route path="/home" element={<DashBoard />} />
         </Routes>
       </BrowserRouter>
     </Wrapper>

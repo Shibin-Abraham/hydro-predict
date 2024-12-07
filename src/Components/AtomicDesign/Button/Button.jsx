@@ -3,8 +3,8 @@ import { getBtnClasses } from './utils'
 import BtnLoader from '../Loader/BtnLoader'
 
 const Button = ({
-    variant = "primary",
-    variantType = "solid",
+    variant = "",
+    variantType = "",
     type = "button",
     className,
     children,
