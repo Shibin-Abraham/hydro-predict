@@ -8,6 +8,7 @@
         --color-secondary:hsl(0,0%,50%);
         --color-text-base:hsl(0,0%,100%);
         --color-bg-primary:hsl(0,0%,100%);
+        --color-border:#d1d9e0b3;
     }
 }
 .theme-blue{

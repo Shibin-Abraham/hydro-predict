@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 
-import Wrapper from "./Components/AtomicDesign/Wrapper/Wrapper";
-import Typography from "./Components/AtomicDesign/Typography/Typography";
-import Button from "./Components/AtomicDesign/Button/Button";
+import Wrapper from "./Components/AtomicDesign/Atom/Wrapper/Wrapper";
+import Typography from "./Components/AtomicDesign/Atom/Typography/Typography";
+import Button from "./Components/AtomicDesign/Atom/Button/Button";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DashBoard from "./Components/DashBoard/DashBoard";
 import NavBar from "./Components/NavBar/NavBar";
@@ -13,10 +13,10 @@ const themes = ['blue', 'green']
 function App() {
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return "dark"
+    return "light"
     //return savedTheme || 'default'; // Default to system preference
   });
-  const [theme, setTheme] = useState(themes[0])
+  const [theme, setTheme] = useState(themes[1])
 
   useEffect(() => {
     if (mode === 'dark') {

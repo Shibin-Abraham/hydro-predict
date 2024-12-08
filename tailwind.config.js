@@ -13,6 +13,7 @@ export default {
         'tertiary-variant': "var(--color-tertiary-variant)",
         bgPrimary: "var(--color-bg-primary)",
         tBase: "var(--color-text-base)",
+        'color-border': "var(--color-border)",
       },
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],
@@ -20,8 +21,10 @@ export default {
       },
       animation: {
         'spin-ai': 'spinWithDelay 8s linear infinite',
+        'tilte-bell': 'tiltWithDelay 2s ease-in-out infinite',
         'shake-ai': 'shakeWithDelay 2s ease-in-out infinite',
         'bubble': 'float 5s infinite',
+        'blink': "blink 2s infinite",
       },
       keyframes: {
         spinWithDelay: {
@@ -38,9 +41,22 @@ export default {
           '40%': { transform: 'translateX(0)' }, // Shake finishes
           '100%': { transform: 'translateX(0)' }, // Remain still for 4 seconds
         },
+        tiltWithDelay: {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '10%': { transform: 'rotate(40deg)' }, /* 1/6 of 6s = 1s spin */
+          '15%': { transform: 'rotate(-40deg)' }, /* 1/6 of 6s = 1s spin */
+          '25%': { transform: 'rotate(40deg)' }, /* 1/6 of 6s = 1s spin */
+          '30%': { transform: 'rotate(-40deg)' }, /* 1/6 of 6s = 1s spin */
+          '40%': { transform: 'rotate(0deg)' }, /* 1/6 of 6s = 1s spin */
+          '100%': { transform: 'rotate(0deg)' }, /* Pause for remaining 5s */
+        },
         float: {
           '0%, 100%': { transform: 'translateY(0px) translateX(0px)' },
           '50%': { transform: 'translateY(5px) translateX(-5px)' },
+        },
+        blink: {
+          "0%, 100%": { opacity: 1 },
+          "50%": { opacity: 0 },
         },
       },
     },
