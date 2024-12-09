@@ -26,7 +26,7 @@ const NavBar = () => {
                 <Wrapper className="w-full h-[384px]">
 
                     <Wrapper className="h-12 relative">
-                        <NavLink to="/Home" className={({ isActive }) => {
+                        <NavLink to="/dashboard" className={({ isActive }) => {
                             return isActive ? "active" : null
                         }}>
                             {
@@ -35,7 +35,7 @@ const NavBar = () => {
                                 [.active_&]:before:left-0">
                                     <HomeIcon className="size-4 text-black dark:text-[#7d8da1] ml-6 [.active_&]:text-primary group-hover:ml-10 group-hover:text-primary transition-all ease-linear duration-200" />
                                     <Typography tag="h4" className="text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary">
-                                        Home
+                                        Dashboard
                                     </Typography>
                                 </Wrapper>
                                     :
