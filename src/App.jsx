@@ -13,10 +13,10 @@ const themes = ['blue', 'green']
 function App() {
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return "light"
+    return "dark"
     //return savedTheme || 'default'; // Default to system preference
   });
-  const [theme, setTheme] = useState(themes[1])
+  const [theme, setTheme] = useState(themes[0])
 
   useEffect(() => {
     if (mode === 'dark') {
