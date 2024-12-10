@@ -9,10 +9,17 @@
         --color-text-base:hsl(0,0%,100%);
         --color-bg-primary:hsl(0,0%,100%);
         --color-border:#d1d9e0b3;
+        --color-danger:#ff0d3e;
+        --color-danger-variant:#ff0d3d1f;
+        --color-warning:#fd7418;
+        --color-warning-variant:#fd74181f;
+        --color-normal:#8575ff;
+        --color-normal-variant:#8575ff1f;
+        scroll-behavior: smooth;
     }
 }
 .theme-blue{
-    --color-primary:hsl(247,100%,73%);
+    --color-primary:rgb(133, 117, 255);
     --color-primary-variant:hsla(247, 100%, 73%, 0.473);
     --color-secondary:hsl(247,100%,79%);
     --color-tertiary:hsla(247, 100%, 73%, 0.199);

@@ -15,6 +15,12 @@ export default {
         bgPrimary: "var(--color-bg-primary)",
         tBase: "var(--color-text-base)",
         'color-border': "var(--color-border)",
+        'color-red': "var(--color-danger)",
+        'color-red-variant': "var(--color-danger-variant)",
+        'color-orange': "var(--color-warning)",
+        'color-orange-variant': "var(--color-warning-variant)",
+        'color-blue': "var(--color-normal)",
+        'color-blue-variant': "var(--color-normal-variant)",
       },
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],
