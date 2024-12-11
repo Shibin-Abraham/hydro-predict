@@ -6,17 +6,22 @@ import Typography from "../AtomicDesign/Atom/Typography/Typography"
 import Wrapper from "../AtomicDesign/Atom/Wrapper/Wrapper"
 import Pichart from "../AtomicDesign/Molecule/Pichart.jsx/Pichart"
 import iconDam from "../../assets/dam.png"
+import drop from "../../assets/drop.png"
+import { ResponsiveLine } from '@nivo/line'
+import { data } from './utils'
 import './style.css'
 
 
+
 const DashBoard = () => {
+    console.log('Grid X Values:', ResponsiveLine);
 
     return (
         <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex">
 
             <Wrapper className='w-[70%] h-full'>
 
-                <Wrapper className='w-full flex items-start justify-between'>
+                <Wrapper className='w-ful h-[30%] flex items-center justify-between'>
 
                     <Wrapper className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-8 ml-8">
                         <Wrapper className='w-full h-[30%] flex items-center justify-between'>
@@ -93,19 +98,90 @@ const DashBoard = () => {
                         </Wrapper>
                     </Wrapper>
                 </Wrapper>
-                <Typography tag="h4" className="text-lg font-bold mt-6 ml-8" text="Alert" />
-                <Wrapper className="w-full flex justify-between">
-                    <Wrapper className="w-[490px] relative h-[355px] border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ml-8">
 
+                <Typography tag="h4" className="text-lg font-bold mt-4 ml-8" text="Line Chart" />
+                <Wrapper className="w-full h-[60%] flex justify-between">
+                    <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-1 ml-8">
+                        <ResponsiveLine
+                            data={data}
+                            margin={{ top: 20, right: 30, bottom: 50, left: 40 }}
+                            lineWidth={3}
+                            xScale={{ type: 'point' }}
+                            yScale={{
+                                type: 'linear',
+                                min: 'auto',
+                                max: 'auto',
+                                stacked: true,
+                                reverse: false
+                            }}
+                            colors={['#ff0d3e', '#8575ff', '#66ff66', '#fd7418']}
+                            yFormat=" >-.2f"
+                            gridXValues={{}}
+                            axisTop={null}
+                            axisRight={null}
+                            axisBottom={{
+                                tickSize: 10,
+                                tickPadding: 0,
+                                tickRotation: 0,
+                                legendOffset: 36,
+                                legendPosition: 'middle',
+                                truncateTickAt: 0,
+                            }}
+                            axisLeft={{
+                                tickSize: 10,
+                                tickPadding: 0,
+                                tickRotation: 0,
+                                legendPosition: 'middle',
+                                truncateTickAt: 20
+                            }}
+                            theme={{
+                                axis: {
+                                    ticks: {
+                                        text: {
+                                            fill: '#7d8da196'
+                                        }
+                                    },
+                                    legend: {
+                                        text: {
+                                            fill: '#7d8da196'
+                                        }
+                                    }
+                                },
+                                grid: {
+                                    line: {
+                                        stroke: '#7d8da196',
+                                        strokeWidth: 1,   // Optional: Set grid line thickness
+                                        strokeDasharray: '4 4',
+                                    }
+                                }
+                            }}
+                            pointSize={4}
+                            pointColor={{ theme: 'background' }}
+                            pointBorderWidth={4}
+                            pointBorderColor={{ from: 'serieColor' }}
+                            pointLabel="data.yFormatted"
+                            pointLabelYOffset={-12}
+                            enableTouchCrosshair={true}
+                            useMesh={true}
+
+                        />
                     </Wrapper>
-                    <Wrapper className="w-[390px] relative h-[320px] border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2">
-
+                    <Wrapper className="w-24 h-full flex flex-col items-center justify-center border-2 border-color-border dark:border-none
+                     dark:bg-[#121721f5] rounded-lg mt-1">
+                        <Wrapper className='w-2 h-2 rounded-full bg-[#ff0d3e] mt-2' />
+                        <Typography tag="p" className="text-[10px] font-light mt-1" text="IDUKKI" />
+                        <Wrapper className='w-2 h-2 rounded-full bg-[#66ff66] mt-2' />
+                        <Typography tag="p" className="text-[10px] font-light mt-1" text="LOWER PERIYAR" />
+                        <Wrapper className='w-2 h-2 rounded-full bg-[#fd7418] mt-2' />
+                        <Typography tag="p" className="text-[10px] font-light mt-1" text="PONMUDI" />
+                        <Wrapper className='w-2 h-2 rounded-full bg-[#8575ff] mt-2' />
+                        <Typography tag="p" className="text-[10px] font-light mt-1" text="KALLARKUTTY" />
                     </Wrapper>
                 </Wrapper>
 
             </Wrapper>
             {/* alert section */}
-            <Wrapper className='w-[30%] h-full pr-6 pl-9'>
+            <Wrapper className='w-[30%] h-full mr-5 ml-9'>
                 <Typography tag="h4" className="text-lg font-bold" text="Alert" />
 
                 <Wrapper className="w-full h-48 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg overflow-y-scroll no-scrollbar">
@@ -214,8 +290,62 @@ const DashBoard = () => {
                             <FlagIcon className="size-4 ml-2" />
                         </Wrapper>
                     </Wrapper>
-
                 </Wrapper>
+
+                <Typography tag="h4" className="text-lg font-bold mt-3" text="Rainfall Alert" />
+                <Wrapper className="w-full h-[55%] overflow-y-scroll no-scrollbar mt-2">
+                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                    </Wrapper>
+                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                    </Wrapper>
+                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                    </Wrapper>
+                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                    </Wrapper>
+                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                    </Wrapper>
+                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                    </Wrapper>
+                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                    </Wrapper>
+                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                    </Wrapper>
+                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                    </Wrapper>
+                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                    </Wrapper>
+                </Wrapper>
+
             </Wrapper>
 
         </Wrapper>

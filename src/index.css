@@ -28,7 +28,7 @@
 .theme-green{
     --color-primary:hsl(120,100%,35%);
     --color-primary-variant:hsla(120, 100%, 35%, 0.474);
-    --color-secondary:hsl(120,100%,70%);
+    --color-secondary:#66ff66;
     --color-tertiary:hsla(120, 100%, 70%, 0.17);
     --color-tertiary-variant:hsla(120, 100%, 70%, 0.068);
 }
