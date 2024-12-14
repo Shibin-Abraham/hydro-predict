@@ -7,6 +7,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DashBoard from "./Components/DashBoard/DashBoard";
 import NavBar from "./Components/NavBar/NavBar";
 import TopBar from "./Components/TopBar/TopBar";
+import SignUp from "./Components/Auth/SignUp/SignUp";
+import Login from "./Components/Auth/Login/Login";
 
 const themes = ['blue', 'green']
 
@@ -40,19 +42,26 @@ function App() {
   const handleModeChange = (newTheme) => {
     setMode(newTheme);
   };
+  const [auth, setAuth] = useState(false)
 
 
   return (
     <Wrapper className={`bg-[#ffffff] dark:bg-[#0d1117] w-screen h-screen font-roboto theme-${theme}`}>
       <BrowserRouter>
-        <TopBar theme={theme} />
-        <Wrapper className='flex w-screen h-[87vh]' >
-          <NavBar theme={theme} />
-          <Routes>
-            <Route path="/dashboard" element={<DashBoard ></DashBoard>} />
-          </Routes>
-        </Wrapper>
-
+        {
+          auth ? <>
+            <TopBar theme={theme} />
+            <Wrapper className='flex w-screen h-[87vh]' >
+              <NavBar theme={theme} />
+              <Routes>
+              </Routes>
+            </Wrapper></>
+            :
+            <Routes>
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+        }
       </BrowserRouter>
     </Wrapper>
   )
