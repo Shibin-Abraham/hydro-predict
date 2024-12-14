@@ -4,17 +4,24 @@ import MapPointerIcon from "../../assets/icons/MapPointerIcon"
 import Media from "../AtomicDesign/Atom/Media/Media"
 import Typography from "../AtomicDesign/Atom/Typography/Typography"
 import Wrapper from "../AtomicDesign/Atom/Wrapper/Wrapper"
-import Pichart from "../AtomicDesign/Molecule/Pichart.jsx/Pichart"
+import Pichart from "../AtomicDesign/Molecule/Pichart/Pichart"
 import iconDam from "../../assets/dam.png"
 import drop from "../../assets/drop.png"
 import { ResponsiveLine } from '@nivo/line'
 import { data } from './utils'
 import './style.css'
+import TabBtn from "../AtomicDesign/Molecule/TabBtn/TabBtn"
+import { useState } from "react"
 
 
 
 const DashBoard = () => {
-    console.log('Grid X Values:', ResponsiveLine);
+    const [btnState, setBtnState] = useState({
+        redLevel: true,
+        orangeLevel: false,
+        blueLevel: false,
+        normalLevel: false
+    })
 
     return (
         <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex">
@@ -99,7 +106,7 @@ const DashBoard = () => {
                     </Wrapper>
                 </Wrapper>
 
-                <Typography tag="h4" className="text-lg font-bold mt-4 ml-8" text="Line Chart" />
+                <Typography tag="h4" className="text-lg font-bold mt-4 ml-8" text="Inflow Chart" />
                 <Wrapper className="w-full h-[60%] flex justify-between">
                     <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-1 ml-8">
                         <ResponsiveLine
@@ -182,114 +189,147 @@ const DashBoard = () => {
             </Wrapper>
             {/* alert section */}
             <Wrapper className='w-[30%] h-full mr-5 ml-9'>
-                <Typography tag="h4" className="text-lg font-bold" text="Alert" />
+                <Wrapper className="w-full flex items-center">
+                    <Typography tag="h4" className="text-lg font-bold" text="Alert" />
+                    <TabBtn btnState={btnState} setBtnState={setBtnState} count={{ red: 2, orange: 1, blue: 2, normal: 2 }} />
+                </Wrapper>
 
                 <Wrapper className="w-full h-48 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg overflow-y-scroll no-scrollbar">
 
-                    <Wrapper className='w-[100%] h-16 flex items-center bg-color-red-variant'>
-                        <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
-                        <Wrapper className="w-[75%] flex items-center">
+                    {
+                        btnState.redLevel && <>
+                            <Wrapper className='w-[100%] h-16 flex items-center bg-color-red-variant'>
+                                <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
+                                <Wrapper className="w-[75%] flex items-center">
 
-                            <Wrapper className='w-24 '>
-                                <Typography tag="p" className="text-sm ml-2" text="Idukki" />
-                                <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text="Live: 730.88 m" />
+                                    <Wrapper className='w-24 '>
+                                        <Typography tag="p" className="text-sm ml-2" text="Idukki" />
+                                        <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text="Live: 730.88 m" />
+                                    </Wrapper>
+
+                                    <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                    <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="730.56" />
+                                    <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="730.87" />
+                                </Wrapper>
+                                <Wrapper className="w-[10%] mr-2" >
+                                    <FlagIcon className="size-4 ml-2 text-color-red" />
+                                </Wrapper>
                             </Wrapper>
+                            <Wrapper className='w-[100%] h-16 flex items-center bg-color-red-variant'>
+                                <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
+                                <Wrapper className="w-[75%] flex items-center">
 
-                            <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
-                            <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="730.56" />
-                            <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="730.87" />
-                        </Wrapper>
-                        <Wrapper className="w-[10%] mr-2" >
-                            <FlagIcon className="size-4 ml-2 text-color-red" />
-                        </Wrapper>
-                    </Wrapper>
+                                    <Wrapper className='w-24 '>
+                                        <Typography tag="p" className="text-sm ml-2" text="Idukki" />
+                                        <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text="Live: 730.88 m" />
+                                    </Wrapper>
 
-                    <Wrapper className='w-[100%] h-16 flex items-center bg-color-blue-variant'>
-                        <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
-                        <Wrapper className="w-[75%] flex items-center">
-
-                            <Wrapper className='w-24 '>
-                                <Typography tag="p" className="text-sm ml-2" text="Lower Periyar" />
-                                <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text="Live: 728.74 m" />
+                                    <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                    <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="730.56" />
+                                    <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="730.87" />
+                                </Wrapper>
+                                <Wrapper className="w-[10%] mr-2" >
+                                    <FlagIcon className="size-4 ml-2 text-color-red" />
+                                </Wrapper>
                             </Wrapper>
+                        </>
+                    }
 
-                            <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
-                            <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
-                            <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
-                        </Wrapper>
-                        <Wrapper className="w-[10%] mr-2" >
-                            <FlagIcon className="size-4 ml-2 text-color-blue" />
-                        </Wrapper>
-                    </Wrapper>
+                    {
+                        btnState.orangeLevel && <Wrapper className='w-[100%] h-16 flex items-center bg-color-orange-variant'>
+                            <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
+                            <Wrapper className="w-[75%] flex items-center">
 
-                    <Wrapper className='w-[100%] h-16 flex items-center'>
-                        <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
-                        <Wrapper className="w-[75%] flex items-center">
+                                <Wrapper className='w-24 '>
+                                    <Typography tag="p" className="text-sm ml-2" text="Idukki" />
+                                    <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text="Live: 727.23 m" />
+                                </Wrapper>
 
-                            <Wrapper className='w-24 '>
-                                <Typography tag="p" className="text-sm ml-2" text="Anayirankal" />
-                                <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text="Live: 727.23 m" />
+                                <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
+                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
+                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
+                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
                             </Wrapper>
-
-                            <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
-                            <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
-                            <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
-                        </Wrapper>
-                        <Wrapper className="w-[10%] mr-2" >
-                            <FlagIcon className="size-4 ml-2" />
-                        </Wrapper>
-                    </Wrapper>
-
-                    <Wrapper className='w-[100%] h-16 flex items-center bg-color-orange-variant'>
-                        <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
-                        <Wrapper className="w-[75%] flex items-center">
-
-                            <Wrapper className='w-24 '>
-                                <Typography tag="p" className="text-sm ml-2" text="Idukki" />
-                                <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text="Live: 727.23 m" />
+                            <Wrapper className="w-[10%] mr-2" >
+                                <FlagIcon className="size-4 ml-2 text-color-orange" />
                             </Wrapper>
-
-                            <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
-                            <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
-                            <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
                         </Wrapper>
-                        <Wrapper className="w-[10%] mr-2" >
-                            <FlagIcon className="size-4 ml-2 text-color-orange" />
-                        </Wrapper>
-                    </Wrapper>
+                    }
+                    {
+                        btnState.blueLevel && <>
+                            <Wrapper className='w-[100%] h-16 flex items-center bg-color-blue-variant'>
+                                <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
+                                <Wrapper className="w-[75%] flex items-center">
 
-                    <Wrapper className='w-[100%] h-16 flex items-center'>
-                        <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
-                        <Wrapper className="w-[75%] flex items-center">
+                                    <Wrapper className='w-24 '>
+                                        <Typography tag="p" className="text-sm ml-2" text="Lower Periyar" />
+                                        <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text="Live: 728.74 m" />
+                                    </Wrapper>
 
-                            <Wrapper className='w-24 '>
-                                <Typography tag="p" className="text-sm ml-2" text="Idukki" />
-                                <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text="Live: 727.23 m" />
+                                    <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                    <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                    <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                </Wrapper>
+                                <Wrapper className="w-[10%] mr-2" >
+                                    <FlagIcon className="size-4 ml-2 text-color-blue" />
+                                </Wrapper>
                             </Wrapper>
+                            <Wrapper className='w-[100%] h-16 flex items-center bg-color-blue-variant'>
+                                <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
+                                <Wrapper className="w-[75%] flex items-center">
 
-                            <Wrapper className='w-2 h-2 bg-[#8575ff] relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
-                            <Wrapper className='w-2 h-2 bg-[#fd7418] relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
-                            <Wrapper className='w-2 h-2 bg-[#ff0d3e] relative rounded-full ml-2' />
-                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                    <Wrapper className='w-24 '>
+                                        <Typography tag="p" className="text-sm ml-2" text="Lower Periyar" />
+                                        <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text="Live: 728.74 m" />
+                                    </Wrapper>
+
+                                    <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                    <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                    <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
+                                    <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                </Wrapper>
+                                <Wrapper className="w-[10%] mr-2" >
+                                    <FlagIcon className="size-4 ml-2 text-color-blue" />
+                                </Wrapper>
+                            </Wrapper>
+                        </>
+                    }
+                    {
+                        btnState.normalLevel && <Wrapper className='w-[100%] h-16 flex items-center'>
+                            <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
+                            <Wrapper className="w-[75%] flex items-center">
+
+                                <Wrapper className='w-24 '>
+                                    <Typography tag="p" className="text-sm ml-2" text="Anayirankal" />
+                                    <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text="Live: 727.23 m" />
+                                </Wrapper>
+
+                                <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
+                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
+                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                                <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
+                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text="728.73" />
+                            </Wrapper>
+                            <Wrapper className="w-[10%] mr-2" >
+                                <FlagIcon className="size-4 ml-2" />
+                            </Wrapper>
                         </Wrapper>
-                        <Wrapper className="w-[10%] mr-2" >
-                            <FlagIcon className="size-4 ml-2" />
-                        </Wrapper>
-                    </Wrapper>
+                    }
+
                 </Wrapper>
 
                 <Typography tag="h4" className="text-lg font-bold mt-3" text="Rainfall Alert" />

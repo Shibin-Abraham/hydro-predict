@@ -16,7 +16,7 @@ function App() {
     return "dark"
     //return savedTheme || 'default'; // Default to system preference
   });
-  const [theme, setTheme] = useState(themes[0])
+  const [theme, setTheme] = useState(themes[1])
 
   useEffect(() => {
     if (mode === 'dark') {

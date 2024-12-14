@@ -39,7 +39,7 @@ export const data = [
                 "y": 19.94
             },
             {
-                "x": "2m-ago",
+                "x": "2d-ago",
                 "y": 27.15
             },
             {
@@ -92,7 +92,7 @@ export const data = [
                 "y": 27.70
             },
             {
-                "x": "2m-ago",
+                "x": "2d-ago",
                 "y": 33.91
             },
             {
@@ -145,7 +145,7 @@ export const data = [
                 "y": 50.67
             },
             {
-                "x": "2m-ago",
+                "x": "2d-ago",
                 "y": 47.60
             },
             {
@@ -197,7 +197,7 @@ export const data = [
                 "y": 14.84
             },
             {
-                "x": "2m-ago",
+                "x": "2d-ago",
                 "y": 12.29
             },
             {
