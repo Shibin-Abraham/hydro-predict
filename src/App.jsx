@@ -54,6 +54,7 @@ function App() {
             <Wrapper className='flex w-screen h-[87vh]' >
               <NavBar theme={theme} />
               <Routes>
+                <Route path="/dashboard" element={<DashBoard ></DashBoard>} />
               </Routes>
             </Wrapper></>
             :

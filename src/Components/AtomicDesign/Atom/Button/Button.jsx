@@ -21,7 +21,7 @@ const Button = ({
                     isLoading ? <>
                         <BtnLoader
                             className='w-full h-full '
-                            spinnerClassName='w-7 h-7 border-[4px] border-[#575353] border-t-[#ffff] rounded-[50%] animate-spin'
+                            spinnerClassName='w-5 h-5 border-[2px] border-[#575353] border-t-white rounded-[50%] animate-spin'
                         />
                         processing...
                     </> : children
