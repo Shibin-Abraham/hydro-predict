@@ -9,6 +9,7 @@ import NavBar from "./Components/NavBar/NavBar";
 import TopBar from "./Components/TopBar/TopBar";
 import SignUp from "./Components/Auth/SignUp/SignUp";
 import Login from "./Components/Auth/Login/Login";
+import Verify from "./Components/Auth/Varify/Verify";
 
 const themes = ['blue', 'green']
 
@@ -61,6 +62,7 @@ function App() {
             <Routes>
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/verify" element={<Verify />} />
             </Routes>
         }
       </BrowserRouter>
