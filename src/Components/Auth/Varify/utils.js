@@ -1,6 +1,7 @@
-export const timer = ({ issuedAt, duration }) => {
-    console.log(issuedAt.split(":"))
-    const date = new Date()
-    console.log(date.getHours(), date.getMinutes(), date.getSeconds(), date)
-}
+export const calculateRemainingTime = (otpExpirationTime) => {
+    const expirationTime = new Date(`1970-01-01T${otpExpirationTime}`).getTime(); // Convert to milliseconds
+    const currentTime = new Date().getTime();
+    const remainingTime = Math.floor((expirationTime - currentTime) / 1000); // Remaining time in seconds
+    return remainingTime > 0 ? remainingTime : 0;
+};
 
