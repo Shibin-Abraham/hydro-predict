@@ -16,7 +16,7 @@ const themes = ['blue', 'green']
 function App() {
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return "dark"
+    return "light"
     //return savedTheme || 'default'; // Default to system preference
   });
   const [theme, setTheme] = useState(themes[1])

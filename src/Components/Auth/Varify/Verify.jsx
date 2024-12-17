@@ -48,7 +48,7 @@ const Verify = () => {
                             OTP will expire at.
                             <Typography tag="span" text="10:45 PM IST" className="text-xs text-primary cursor-pointer" />
                         </Typography>
-                        <Typography tag="p" text="Re-send OTP" className="text-xs cursor-pointer hover:dark:text-primary" />
+                        <Typography tag="p" text="Re-send OTP" className="text-xs cursor-pointer hover:text-primary" />
                     </Wrapper>
                 </Wrapper>
             </Wrapper>

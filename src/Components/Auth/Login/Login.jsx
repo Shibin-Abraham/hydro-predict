@@ -89,7 +89,7 @@ const Login = () => {
                                 <Typography tag="span" text=" SignUp" className="text-xs text-primary font-bold cursor-pointer" />
                             </NavLink>
                         </Typography>
-                        <Typography tag="p" text="Forgot password" className="text-xs cursor-pointer hover:dark:text-white" />
+                        <Typography tag="p" text="Forgot password" className="text-xs cursor-pointer hover:text-primary" />
                     </Wrapper>
                 </Wrapper>
 
