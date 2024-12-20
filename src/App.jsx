@@ -16,7 +16,7 @@ const themes = ['blue', 'green']
 function App() {
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return "light"
+    return "dark"
     //return savedTheme || 'default'; // Default to system preference
   });
   const [theme, setTheme] = useState(themes[1])
@@ -43,7 +43,7 @@ function App() {
   const handleModeChange = (newTheme) => {
     setMode(newTheme);
   };
-  const [auth, setAuth] = useState(true)
+  const [auth, setAuth] = useState(false)
 
 
   return (
