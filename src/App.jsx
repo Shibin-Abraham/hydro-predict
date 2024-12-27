@@ -43,21 +43,23 @@ function App() {
   const handleModeChange = (newTheme) => {
     setMode(newTheme);
   };
-  const [auth, setAuth] = useState(false)
+  const [auth, setAuth] = useState(true)
 
 
   return (
     <Wrapper className={`bg-[#ffffff] dark:bg-[#0d1117] w-screen h-screen font-roboto theme-${theme}`}>
       <BrowserRouter>
         {
-          auth ? <>
-            <TopBar theme={theme} />
-            <Wrapper className='flex w-screen h-[87vh]' >
-              <NavBar theme={theme} />
-              <Routes>
-                <Route path="/dashboard" element={<DashBoard ></DashBoard>} />
-              </Routes>
-            </Wrapper></>
+          auth ?
+            <>
+              <TopBar theme={theme} />
+              <Wrapper className='flex w-screen h-[87vh]' >
+                <NavBar theme={theme} />
+                <Routes>
+                  <Route path="/dashboard" element={<DashBoard ></DashBoard>} />
+                </Routes>
+              </Wrapper>
+            </>
             :
             <Routes>
               <Route path="/signup" element={<SignUp />} />

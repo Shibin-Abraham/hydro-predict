@@ -3,19 +3,19 @@ import Typography from "../AtomicDesign/Atom/Typography/Typography"
 import Wrapper from "../AtomicDesign/Atom/Wrapper/Wrapper"
 import Media from "../AtomicDesign/Atom/Media/Media"
 import { NavLink } from "react-router-dom"
-import HomeIcon from "../../assets/icons/HomeIcon"
-import ChartIcon from "../../assets/icons/ChartIcon"
-import Settings from "../../assets/icons/Settings"
-import BeakerIcon from "../../assets/icons/BeakerIcon"
-import MapIcon from "../../assets/icons/MapIcon"
-import UsersIcon from "../../assets/icons/UsersIcon"
-import TableIcon from "../../assets/icons/TableIcon"
-import BookIcon from "../../assets/icons/BookIcon"
-import aiWhite from '../../assets/images/ai-white.png'
-import aiDark from '../../assets/images/ai-dark.png'
-import aiLight from '../../assets/images/ai-light.png'
+import HomeIcon from "../../Assets/icons/HomeIcon"
+import ChartIcon from "../../Assets/icons/ChartIcon"
+import Settings from "../../Assets/icons/Settings"
+import BeakerIcon from "../../Assets/icons/BeakerIcon"
+import MapIcon from "../../Assets/icons/MapIcon"
+import UsersIcon from "../../Assets/icons/UsersIcon"
+import TableIcon from "../../Assets/icons/TableIcon"
+import BookIcon from "../../Assets/icons/BookIcon"
+import aiWhite from '../../Assets/images/ai-white.png'
+import aiDark from '../../Assets/images/ai-dark.png'
+import aiLight from '../../Assets/images/ai-light.png'
 import Button from "../AtomicDesign/Atom/Button/Button"
-import SparklesIcon from "../../assets/icons/SparklesIcon"
+import SparklesIcon from "../../Assets/icons/SparklesIcon"
 import { useState } from "react"
 
 const NavBar = () => {
@@ -42,9 +42,7 @@ const NavBar = () => {
                                     <Wrapper className='group bg-tertiary-variant w-10 h-12 ml-6 flex items-center justify-center rounded-t-md'>
                                         <HomeIcon className="size-5 text-black dark:text-[#7d8da1] [.active_&]:text-primary  group-hover:text-primary transition-all ease-linear duration-200" />
                                     </Wrapper>
-
                             }
-
                         </NavLink>
                     </Wrapper>
 
@@ -227,7 +225,6 @@ const NavBar = () => {
                                         <Media mediaType="image" mediaSrc={aiDark} className="w-7 h-7 dark:hidden group-hover:animate-shake-ai" imgClass="rounded-none" />
                                         <Media mediaType="image" mediaSrc={aiLight} className="w-6 h-6 hidden dark:block group-hover:animate-shake-ai" imgClass="rounded-none" />
                                     </Wrapper>
-
                             }
 
                         </NavLink>

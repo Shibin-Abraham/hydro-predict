@@ -2,11 +2,11 @@
 import Media from "../AtomicDesign/Atom/Media/Media"
 import Typography from "../AtomicDesign/Atom/Typography/Typography"
 import Wrapper from "../AtomicDesign/Atom/Wrapper/Wrapper"
-import iconBlue from '../../assets/images/water-blue.png'
-import iconGreen from '../../assets/images/water-green.png'
+import iconBlue from '../../Assets/images/water-blue.png'
+import iconGreen from '../../Assets/images/water-green.png'
 import BreadCrumb from "../AtomicDesign/Molecule/Breadcrumb/BreadCrumb"
-import UserIcon from "../../assets/icons/UserIcon"
-import BellIcon from "../../assets/icons/BellIcon"
+import UserIcon from "../../Assets/icons/UserIcon"
+import BellIcon from "../../Assets/icons/BellIcon"
 
 const TopBar = ({ theme }) => {
     return (

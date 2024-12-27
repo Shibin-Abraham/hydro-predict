@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
-import FlagIcon from "../../assets/icons/FlagIcon"
-import MapPointerIcon from "../../assets/icons/MapPointerIcon"
+import FlagIcon from "../../Assets/icons/FlagIcon"
+import MapPointerIcon from "../../Assets/icons/MapPointerIcon"
 import Media from "../AtomicDesign/Atom/Media/Media"
 import Typography from "../AtomicDesign/Atom/Typography/Typography"
 import Wrapper from "../AtomicDesign/Atom/Wrapper/Wrapper"
 import Pichart from "../AtomicDesign/Molecule/Pichart/Pichart"
-import iconDam from "../../assets/dam.png"
-import drop from "../../assets/drop.png"
+import iconDam from "../../Assets/dam.png"
+import drop from "../../Assets/drop.png"
 import { ResponsiveLine } from '@nivo/line'
 import { data } from './utils'
 import './style.css'
