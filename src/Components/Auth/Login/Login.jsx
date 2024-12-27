@@ -6,6 +6,7 @@ import Input from "../../AtomicDesign/Atom/Input/Input"
 import { NavLink } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
+import { getsample } from "../../../API/Handler/sample"
 
 const Login = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -89,7 +90,7 @@ const Login = () => {
                                 <Typography tag="span" text=" SignUp" className="text-xs text-primary font-bold cursor-pointer" />
                             </NavLink>
                         </Typography>
-                        <Typography tag="p" text="Forgot password" className="text-xs cursor-pointer hover:text-primary" />
+                        <Typography onClick={() => getsample()} tag="p" text="Forgot password" className="text-xs cursor-pointer hover:text-primary" />
                     </Wrapper>
                 </Wrapper>
 

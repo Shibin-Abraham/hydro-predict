@@ -43,7 +43,7 @@ function App() {
   const handleModeChange = (newTheme) => {
     setMode(newTheme);
   };
-  const [auth, setAuth] = useState(true)
+  const [auth, setAuth] = useState(false)
 
 
   return (
