@@ -10,15 +10,18 @@ import TopBar from "./Components/TopBar/TopBar";
 import SignUp from "./Components/Auth/SignUp/SignUp";
 import Login from "./Components/Auth/Login/Login";
 import Verify from "./Components/Auth/Varify/Verify";
+import ErrorPopUp from "./Components/PopUp/ErrorPopUp";
+import { ErrorProvider, useError } from "./Components/Contexts/ErrorContext";
 
 const themes = ['blue', 'green']
 
 function App() {
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return "dark"
+    return "light"
     //return savedTheme || 'default'; // Default to system preference
   });
+
   const [theme, setTheme] = useState(themes[1])
 
   useEffect(() => {
@@ -45,9 +48,19 @@ function App() {
   };
   const [auth, setAuth] = useState(false)
 
+  const { error } = useError()
+
 
   return (
     <Wrapper className={`bg-[#ffffff] dark:bg-[#0d1117] w-screen h-screen font-roboto theme-${theme}`}>
+
+      <Wrapper className='left-[50%] min-h-12 rounded-md fixed z-50 flex flex-col items-center justify-end '>
+        {
+          error !== null && <ErrorPopUp error={error} />
+        }
+
+      </Wrapper>
+
       <BrowserRouter>
         {
           auth ?

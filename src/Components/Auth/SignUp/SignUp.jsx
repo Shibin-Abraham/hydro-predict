@@ -8,12 +8,15 @@ import Wrapper from "../../AtomicDesign/Atom/Wrapper/Wrapper"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { signUp } from "../../../API/Handler/signUpHandler"
+import { useError } from "../../Contexts/ErrorContext"
 
 const SignUp = () => {
     const options = ['admin', 'employee']
     const [isLoading, setIsLoading] = useState(false)
     const { register, handleSubmit, watch, formState: { errors } } = useForm()
     const password = watch("password")
+
+    const { showError } = useError()
 
     const onSubmit = async (data) => {
         console.log(data)
@@ -26,15 +29,13 @@ const SignUp = () => {
         } finally {
             setIsLoading(false)
         }
-
-        setTimeout(() => setIsLoading(false), 5000)
     }
     return (
         <Wrapper className='w-screen h-screen flex items-center justify-center text-black dark:text-[#7d8da1]'>
             <Form
                 onSubmit={handleSubmit(onSubmit)}
                 className='w-[30%] min-h-[80%] border-[1px] border-black dark:border-none dark:bg-[#121721f5] rounded-md flex flex-col items-center'>
-                <Typography tag="h2" text="SIGN-UP" className="text-primary text-xl font-bold mt-2" />
+                <Typography tag="h2" text="SIGN-UP" className="text-primary text-xl font-bold mt-2" onClick={() => showError('something went error')} />
                 <Wrapper className="w-[90%] mt-8">
                     <Typography tag="p" text="Name" className=" text-sm" />
                     <Input type='text'
