@@ -7,16 +7,26 @@ import Typography from "../../AtomicDesign/Atom/Typography/Typography"
 import Wrapper from "../../AtomicDesign/Atom/Wrapper/Wrapper"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { signUp } from "../../../API/Handler/signUpHandler"
 
 const SignUp = () => {
-    const options = ['Admin', 'Employee']
+    const options = ['admin', 'employee']
     const [isLoading, setIsLoading] = useState(false)
     const { register, handleSubmit, watch, formState: { errors } } = useForm()
     const password = watch("password")
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log(data)
         setIsLoading(true)
+        try {
+            const response = await signUp(data)
+            console.log("response", response)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
+
         setTimeout(() => setIsLoading(false), 5000)
     }
     return (
@@ -101,15 +111,15 @@ const SignUp = () => {
                         autoComplete='off'
                         className="w-full h-11 mt-1 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                         placeholder:text-[#7d8da1] outline-none bg-transparent pl-2 text-sm"
-                        {...register('confirmPassword', {
+                        {...register('password_confirmation', {
                             required: 'Confirm password is required',
                             validate: (value) => value === password || "Passwords do not match",
                         })}
                     />
                     {
-                        errors.confirmPassword && (
+                        errors.password_confirmation && (
                             <Typography tag='p' className='text-color-red text-[11px] mt-1'>
-                                {errors.confirmPassword.message}
+                                {errors.password_confirmation.message}
                             </Typography>
                         )
                     }
