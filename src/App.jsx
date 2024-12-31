@@ -11,14 +11,15 @@ import SignUp from "./Components/Auth/SignUp/SignUp";
 import Login from "./Components/Auth/Login/Login";
 import Verify from "./Components/Auth/Varify/Verify";
 import ErrorPopUp from "./Components/PopUp/ErrorPopUp";
-import { ErrorProvider, useError } from "./Components/Contexts/ErrorContext";
+import { usePopUp } from "./Components/Contexts/PopUpContext";
+import SuccessPopUp from "./Components/PopUp/SuccessPopUp";
 
 const themes = ['blue', 'green']
 
 function App() {
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return "light"
+    return "dark"
     //return savedTheme || 'default'; // Default to system preference
   });
 
@@ -46,9 +47,9 @@ function App() {
   const handleModeChange = (newTheme) => {
     setMode(newTheme);
   };
-  const [auth, setAuth] = useState(false)
+  const [auth, setAuth] = useState(true)
 
-  const { error } = useError()
+  const { error, success } = usePopUp()
 
 
   return (
@@ -58,7 +59,9 @@ function App() {
         {
           error !== null && <ErrorPopUp error={error} />
         }
-
+        {
+          success !== null && <SuccessPopUp success={success} />
+        }
       </Wrapper>
 
       <BrowserRouter>

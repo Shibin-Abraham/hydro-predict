@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import Button from "../../AtomicDesign/Atom/Button/Button"
 import Form from "../../AtomicDesign/Atom/Form/Form"
 import Input from "../../AtomicDesign/Atom/Input/Input"
@@ -8,15 +8,17 @@ import Wrapper from "../../AtomicDesign/Atom/Wrapper/Wrapper"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { signUp } from "../../../API/Handler/signUpHandler"
-import { useError } from "../../Contexts/ErrorContext"
+import { usePopUp } from "../../Contexts/PopUpContext"
 
 const SignUp = () => {
-    const options = ['admin', 'employee']
+    const options = ['Admin', 'Employee']
     const [isLoading, setIsLoading] = useState(false)
-    const { register, handleSubmit, watch, formState: { errors } } = useForm()
+    const { register, setError, handleSubmit, watch, formState: { errors } } = useForm()
     const password = watch("password")
 
-    const { showError } = useError()
+    const { showError, showSuccess } = usePopUp() //cunstom hook
+
+    const navigate = useNavigate()
 
     const onSubmit = async (data) => {
         console.log(data)
@@ -24,9 +26,18 @@ const SignUp = () => {
         try {
             const response = await signUp(data)
             console.log("response", response)
+            if (response?.status === 200) {
+                showSuccess(response?.data?.message)
+                navigate('/verify', { replace: true, state: response?.data })
+            }
         } catch (error) {
-            console.log(error)
+            if (error.response?.data?.errors?.email) setError("email", { type: "server", message: error.response?.data?.errors?.email })
+            if (error.response?.data?.errors?.password) setError("password", { type: "server", message: error.response?.data?.errors?.password })
+            if (error.response?.data?.errors?.position) setError("position", { type: "server", message: error.response?.data?.errors?.position })
+
+            if (error.response?.data?.message) showError(error.response?.data?.message)
         } finally {
+
             setIsLoading(false)
         }
     }
@@ -35,9 +46,9 @@ const SignUp = () => {
             <Form
                 onSubmit={handleSubmit(onSubmit)}
                 className='w-[30%] min-h-[80%] border-[1px] border-black dark:border-none dark:bg-[#121721f5] rounded-md flex flex-col items-center'>
-                <Typography tag="h2" text="SIGN-UP" className="text-primary text-xl font-bold mt-2" onClick={() => showError('something went error')} />
+                <Typography tag="h2" text="SIGN-UP" className="text-primary text-xl font-bold mt-2" />
                 <Wrapper className="w-[90%] mt-8">
-                    <Typography tag="p" text="Name" className=" text-sm" />
+                    <Typography tag="p" text="Name" className="text-sm" />
                     <Input type='text'
                         placeholder='Your Name'
                         autoComplete='off'
@@ -92,8 +103,8 @@ const SignUp = () => {
                         {...register('password', {
                             required: 'Password is required',
                             minLength: {
-                                value: 4,
-                                message: 'Password must contain 4 character or number'
+                                value: 6,
+                                message: 'Password must contain 6 character or number'
                             }
                         })}
                     />
