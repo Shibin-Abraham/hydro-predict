@@ -3,19 +3,38 @@ import Typography from "../../AtomicDesign/Atom/Typography/Typography"
 import Wrapper from "../../AtomicDesign/Atom/Wrapper/Wrapper"
 import Button from "../../AtomicDesign/Atom/Button/Button"
 import Input from "../../AtomicDesign/Atom/Input/Input"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { getsample } from "../../../API/Handler/sample"
+import { login } from "../../../API/Handler/authHandler"
 
 const Login = () => {
     const [isLoading, setIsLoading] = useState(false)
-    const { register, handleSubmit, formState: { errors } } = useForm()
+    const { register, handleSubmit, setError, formState: { errors } } = useForm()
 
-    const onSubmit = (data) => {
+    const navigate = useNavigate()
+
+    const onSubmit = async (data) => {
         console.log(data)
         setIsLoading(true)
-        setTimeout(() => setIsLoading(false), 5000)
+        try {
+            const response = await login(data)
+            console.log(response)
+            if (response?.status === 200) {
+                //showSuccess(response?.data?.message)
+
+                navigate('/dashboard', { replace: true })
+            }
+        } catch (error) {
+            console.log(error)
+            if (error.response?.data?.errors?.email) setError("email", { type: "server", message: error.response?.data?.errors?.email })
+            if (error.response?.data?.errors?.password) setError("password", { type: "server", message: error.response?.data?.errors?.password })
+        } finally {
+            setIsLoading(false)
+        }
+
+        //setTimeout(() => setIsLoading(false), 5000)
     }
 
     return (
@@ -61,8 +80,8 @@ const Login = () => {
                         {...register('password', {
                             required: 'Password is required',
                             minLength: {
-                                value: 4,
-                                message: 'Password must contain 4 character or number'
+                                value: 6,
+                                message: 'Password must contain 6 character or number'
                             }
                         })}
                     />

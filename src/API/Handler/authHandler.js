@@ -29,3 +29,13 @@ export const verify = async (data) => {
         throw error;
     }
 }
+
+export const login = async (data) => {
+    try {
+        const response = await axiosInstance.post('/login', data);
+        return response;
+    } catch (error) {
+        console.error('Error login :', error);
+        throw error;
+    }
+}

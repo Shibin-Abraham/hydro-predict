@@ -7,7 +7,7 @@ import Typography from "../../AtomicDesign/Atom/Typography/Typography"
 import Wrapper from "../../AtomicDesign/Atom/Wrapper/Wrapper"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { signUp } from "../../../API/Handler/signUpHandler"
+import { signUp } from "../../../API/Handler/authHandler"
 import { usePopUp } from "../../Contexts/PopUpContext"
 
 const SignUp = () => {
@@ -16,7 +16,7 @@ const SignUp = () => {
     const { register, setError, handleSubmit, watch, formState: { errors } } = useForm()
     const password = watch("password")
 
-    const { showError, showSuccess } = usePopUp() //cunstom hook
+    const { showError, showSuccess } = usePopUp() //custom hook
 
     const navigate = useNavigate()
 
@@ -34,10 +34,8 @@ const SignUp = () => {
             if (error.response?.data?.errors?.email) setError("email", { type: "server", message: error.response?.data?.errors?.email })
             if (error.response?.data?.errors?.password) setError("password", { type: "server", message: error.response?.data?.errors?.password })
             if (error.response?.data?.errors?.position) setError("position", { type: "server", message: error.response?.data?.errors?.position })
-
             if (error.response?.data?.message) showError(error.response?.data?.message)
         } finally {
-
             setIsLoading(false)
         }
     }

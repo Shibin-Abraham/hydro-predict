@@ -5,7 +5,7 @@ import Wrapper from "../../AtomicDesign/Atom/Wrapper/Wrapper"
 import { useEffect, useState } from "react"
 import Button from "../../AtomicDesign/Atom/Button/Button"
 import { useLocation, useNavigate } from "react-router-dom"
-import { resendOTP, verify } from "../../../API/Handler/signUpHandler"
+import { resendOTP, verify } from "../../../API/Handler/authHandler"
 import { usePopUp } from "../../Contexts/PopUpContext"
 
 
