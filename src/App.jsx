@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 import Wrapper from "./Components/AtomicDesign/Atom/Wrapper/Wrapper";
 import Typography from "./Components/AtomicDesign/Atom/Typography/Typography";
@@ -13,6 +13,7 @@ import Verify from "./Components/Auth/Varify/Verify";
 import ErrorPopUp from "./Components/PopUp/ErrorPopUp";
 import { usePopUp } from "./Components/Contexts/PopUpContext";
 import SuccessPopUp from "./Components/PopUp/SuccessPopUp";
+import { AuthContext } from "./Components/Contexts/AuthContext";
 
 const themes = ['blue', 'green']
 
@@ -24,6 +25,7 @@ function App() {
   });
 
   const [theme, setTheme] = useState(themes[1])
+  const { auth } = useContext(AuthContext)
 
   useEffect(() => {
     if (mode === 'dark') {
@@ -47,7 +49,7 @@ function App() {
   const handleModeChange = (newTheme) => {
     setMode(newTheme);
   };
-  const [auth, setAuth] = useState(false)
+  //const [auth, setAuth] = useState(false)
 
   const { error, success } = usePopUp()
 
@@ -65,23 +67,23 @@ function App() {
       </Wrapper>
 
       <BrowserRouter>
+        <Routes>
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/verify" element={<Verify />} />
+        </Routes>
         {
-          auth ?
-            <>
-              <TopBar theme={theme} />
-              <Wrapper className='flex w-screen h-[87vh]' >
-                <NavBar theme={theme} />
-                <Routes>
-                  <Route path="/dashboard" element={<DashBoard ></DashBoard>} />
-                </Routes>
-              </Wrapper>
-            </>
-            :
-            <Routes>
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/verify" element={<Verify />} />
-            </Routes>
+          auth.isAuthorized
+          &&
+          <>
+            <TopBar theme={theme} />
+            <Wrapper className='flex w-screen h-[87vh]' >
+              <NavBar theme={theme} />
+              <Routes>
+                <Route path="/dashboard" element={<DashBoard ></DashBoard>} />
+              </Routes>
+            </Wrapper>
+          </>
         }
       </BrowserRouter>
     </Wrapper>

@@ -7,8 +7,12 @@ import iconGreen from '../../Assets/images/water-green.png'
 import BreadCrumb from "../AtomicDesign/Molecule/Breadcrumb/BreadCrumb"
 import UserIcon from "../../Assets/icons/UserIcon"
 import BellIcon from "../../Assets/icons/BellIcon"
+import { useContext } from "react"
+import { AuthContext } from "../Contexts/AuthContext"
 
 const TopBar = ({ theme }) => {
+    const { auth } = useContext(AuthContext)
+
     return (
         <Wrapper className='w-full h-[10vh] flex justify-between items-center'>
             <Wrapper className="w-56 pl-6 pr-6 mt-2">
@@ -30,8 +34,8 @@ const TopBar = ({ theme }) => {
                         <Typography tag="span" text='' className='w-2 h-2 bg-primary rounded-full absolute top-1 right-[7px]' />
                     </Wrapper>
                     <Wrapper className='mr-2'>
-                        <Typography text='Shibin' tag="h5" className='text-black dark:text-[#7d8da1] text-sm font-bold' />
-                        <Typography text='Admin' tag="p" className='text-black dark:text-[#7d8da1] text-xs' />
+                        <Typography text={auth?.user?.name} tag="h5" className='text-black dark:text-[#7d8da1] text-sm font-bold' />
+                        <Typography text={auth?.user?.position} tag="p" className='text-black dark:text-[#7d8da1] text-xs' />
                     </Wrapper>
                     <UserIcon className='size-9 text-black dark:text-[#7d8da1] cursor-pointer' />
                 </Wrapper>

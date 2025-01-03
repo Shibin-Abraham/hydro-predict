@@ -5,13 +5,15 @@ import Button from "../../AtomicDesign/Atom/Button/Button"
 import Input from "../../AtomicDesign/Atom/Input/Input"
 import { NavLink, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { getsample } from "../../../API/Handler/sample"
 import { login } from "../../../API/Handler/authHandler"
+import { AuthContext } from "../../Contexts/AuthContext"
 
 const Login = () => {
     const [isLoading, setIsLoading] = useState(false)
     const { register, handleSubmit, setError, formState: { errors } } = useForm()
+    const { updateAuth } = useContext(AuthContext)
 
     const navigate = useNavigate()
 
@@ -23,8 +25,8 @@ const Login = () => {
             console.log(response)
             if (response?.status === 200) {
                 //showSuccess(response?.data?.message)
-
-                navigate('/dashboard', { replace: true })
+                updateAuth(true, response?.data?.toke, response?.data?.user) //
+                navigate('/dashboard')
             }
         } catch (error) {
             console.log(error)
