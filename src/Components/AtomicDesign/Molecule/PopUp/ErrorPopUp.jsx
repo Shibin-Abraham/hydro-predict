@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
-import ErrorIcon from '../../Assets/icons/ErrorIcon';
-import Typography from '../AtomicDesign/Atom/Typography/Typography';
+import Wrapper from '../../Atom/Wrapper/Wrapper'
+import ErrorIcon from '../../../../Assets/icons/ErrorIcon';
+import Typography from '../../Atom/Typography/Typography';
 
 const ErrorPopUp = ({ error }) => {
     const [isActive, setIsActive] = useState(false)

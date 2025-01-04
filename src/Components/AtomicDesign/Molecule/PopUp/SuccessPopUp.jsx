@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 
 import { useEffect, useState } from "react"
-import Wrapper from "../AtomicDesign/Atom/Wrapper/Wrapper"
-import Typography from "../AtomicDesign/Atom/Typography/Typography"
-import SuccessIcon from "../../Assets/icons/SuccessIcon"
+import Wrapper from "../../Atom/Wrapper/Wrapper"
+import Typography from "../../Atom/Typography/Typography"
+import SuccessIcon from "../../../../Assets/icons/SuccessIcon"
 
 const SuccessPopUp = ({ success }) => {
     const [isActive, setIsActive] = useState(false)

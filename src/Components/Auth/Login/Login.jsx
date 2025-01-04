@@ -6,14 +6,25 @@ import Input from "../../AtomicDesign/Atom/Input/Input"
 import { NavLink, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { useContext, useState } from "react"
-import { getsample } from "../../../API/Handler/sample"
+//import { getsample } from "../../../API/Handler/sample"
 import { login } from "../../../API/Handler/authHandler"
 import { AuthContext } from "../../Contexts/AuthContext"
+import { usePopUp } from "../../Contexts/PopUpContext"
+import InputPopUp from "../../AtomicDesign/Molecule/PopUp/InputPopUp"
+import CloseIcon from "../../../Assets/icons/CloseIcon"
 
 const Login = () => {
     const [isLoading, setIsLoading] = useState(false)
+    const [isResetLoading, setIsResetLoading] = useState(false)
+    const [forgotPassword, setForgotPassword] = useState(false)
     const { register, handleSubmit, setError, formState: { errors } } = useForm()
+    const {
+        register: registerReset,
+        handleSubmit: handleSubmitReset,
+        formState: { errors: resetErrors },
+    } = useForm();
     const { updateAuth } = useContext(AuthContext)
+    const { showSuccess } = usePopUp() //custom hook
 
     const navigate = useNavigate()
 
@@ -26,7 +37,8 @@ const Login = () => {
             if (response?.status === 200) {
                 //showSuccess(response?.data?.message)
                 updateAuth(true, response?.data?.toke, response?.data?.user) //
-                navigate('/dashboard')
+                showSuccess(response?.data?.message)
+                navigate('/dashboard', { replace: true })
             }
         } catch (error) {
             console.log(error)
@@ -37,6 +49,11 @@ const Login = () => {
         }
 
         //setTimeout(() => setIsLoading(false), 5000)
+    }
+
+    const resetPassword = (data) => {
+        console.log(data)
+        setIsResetLoading(true)
     }
 
     return (
@@ -111,11 +128,63 @@ const Login = () => {
                                 <Typography tag="span" text=" SignUp" className="text-xs text-primary font-bold cursor-pointer" />
                             </NavLink>
                         </Typography>
-                        <Typography onClick={() => getsample()} tag="p" text="Forgot password" className="text-xs cursor-pointer hover:text-primary" />
+                        <Typography onClick={() => setForgotPassword(true)} tag="p" text="Forgot password" className="text-xs cursor-pointer hover:text-primary" />
                     </Wrapper>
                 </Wrapper>
 
             </Form>
+            {
+                forgotPassword
+                &&
+                <InputPopUp className="w-full h-full bg-[#000000be] absolute flex items-center justify-center">
+                    <Wrapper className="w-full flex items-center justify-between">
+                        <Typography tag="h2" text="Reset Password" className="text-center text-primary text-xl font-bold mt-4 ml-4" />
+                        <CloseIcon onClick={() => setForgotPassword(false)} className="size-5 text-[#595959] dark:text-[#7d8da196] mr-4 hover:cursor-pointer" />
+                    </Wrapper>
+
+                    <Typography tag="p" className="text-sm mt-6 px-6" >
+                        {
+                            "Forgot your password? We can email you a link to reset it. Please enter the email address that you had provided during registration. Now click the Send Reset Link button and check your inbox for an email to reset your password."
+                        }
+                    </Typography>
+                    <Form
+                        onSubmit={handleSubmitReset(resetPassword)}
+                        className='w-full mt-4 px-6 pb-6'>
+                        <Input type='email'
+                            placeholder='Email Address'
+                            autoComplete='off'
+                            className={`w-full h-11 mt-1 rounded-md border-[1px] border-black dark:border-[#7d8da1]
+                                placeholder:text-[#7d8da1] outline-none bg-transparent pl-2 text-sm
+                                `}
+                            {...registerReset('email', {
+                                required: 'Email is required',
+                                pattern: {
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    message: 'Please enter a valid email address.'
+                                }
+                            })}
+                        />
+                        {
+                            resetErrors.email && (
+                                <Typography tag='p' className='text-color-red text-[11px] mt-2'>
+                                    {resetErrors.email.message}
+                                </Typography>
+                            )
+                        }
+
+                        <Button
+                            type="submit"
+                            className="w-full mt-4 h-12 bg-primary text-white hover:bg-primary-hover"
+                            containerClass="text-sm flex items-center justify-center gap-3"
+                            isLoading={isResetLoading}
+                        >
+                            Send Reset Link
+                        </Button>
+                    </Form>
+
+                </InputPopUp>
+
+            }
         </Wrapper>
     )
 }

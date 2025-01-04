@@ -10,9 +10,9 @@ import TopBar from "./Components/TopBar/TopBar";
 import SignUp from "./Components/Auth/SignUp/SignUp";
 import Login from "./Components/Auth/Login/Login";
 import Verify from "./Components/Auth/Varify/Verify";
-import ErrorPopUp from "./Components/PopUp/ErrorPopUp";
+import ErrorPopUp from "./Components/AtomicDesign/Molecule/PopUp/ErrorPopUp";
 import { usePopUp } from "./Components/Contexts/PopUpContext";
-import SuccessPopUp from "./Components/PopUp/SuccessPopUp";
+import SuccessPopUp from "./Components/AtomicDesign/Molecule/PopUp/SuccessPopUp";
 import { AuthContext } from "./Components/Contexts/AuthContext";
 
 const themes = ['blue', 'green']
@@ -24,7 +24,7 @@ function App() {
     //return savedTheme || 'default'; // Default to system preference
   });
 
-  const [theme, setTheme] = useState(themes[1])
+  const [theme, setTheme] = useState(themes[0])
   const { auth } = useContext(AuthContext)
 
   useEffect(() => {
