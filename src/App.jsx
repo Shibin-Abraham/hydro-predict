@@ -14,6 +14,7 @@ import ErrorPopUp from "./Components/AtomicDesign/Molecule/PopUp/ErrorPopUp";
 import { usePopUp } from "./Components/Contexts/PopUpContext";
 import SuccessPopUp from "./Components/AtomicDesign/Molecule/PopUp/SuccessPopUp";
 import { AuthContext } from "./Components/Contexts/AuthContext";
+import ResetPassword from "./Components/Auth/Login/ResetPassword";
 
 const themes = ['blue', 'green']
 
@@ -71,6 +72,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify" element={<Verify />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
         {
           auth.isAuthorized

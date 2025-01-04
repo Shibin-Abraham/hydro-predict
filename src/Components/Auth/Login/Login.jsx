@@ -7,7 +7,7 @@ import { NavLink, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { useContext, useState } from "react"
 //import { getsample } from "../../../API/Handler/sample"
-import { login } from "../../../API/Handler/authHandler"
+import { login, sendResetLink } from "../../../API/Handler/authHandler"
 import { AuthContext } from "../../Contexts/AuthContext"
 import { usePopUp } from "../../Contexts/PopUpContext"
 import InputPopUp from "../../AtomicDesign/Molecule/PopUp/InputPopUp"
@@ -22,6 +22,8 @@ const Login = () => {
         register: registerReset,
         handleSubmit: handleSubmitReset,
         formState: { errors: resetErrors },
+        reset,
+        setError: setResetError
     } = useForm();
     const { updateAuth } = useContext(AuthContext)
     const { showSuccess } = usePopUp() //custom hook
@@ -51,9 +53,27 @@ const Login = () => {
         //setTimeout(() => setIsLoading(false), 5000)
     }
 
-    const resetPassword = (data) => {
+    const resetPassword = async (data) => {
         console.log(data)
         setIsResetLoading(true)
+        try {
+            const requestData = {
+                ...data,
+                frontend_url: import.meta.env.VITE_APP_URL,
+            }
+
+            const response = await sendResetLink(requestData)
+            console.log(response)
+            if (response?.status === 200) {
+                showSuccess(response?.data?.message)
+                reset()
+            }
+        } catch (error) {
+            console.log(error)
+            if (error.response?.data?.errors?.email) setResetError("email", { type: "server", message: error.response?.data?.errors?.email })
+        } finally {
+            setIsResetLoading(false)
+        }
     }
 
     return (
@@ -171,7 +191,6 @@ const Login = () => {
                                 </Typography>
                             )
                         }
-
                         <Button
                             type="submit"
                             className="w-full mt-4 h-12 bg-primary text-white hover:bg-primary-hover"
@@ -181,9 +200,7 @@ const Login = () => {
                             Send Reset Link
                         </Button>
                     </Form>
-
                 </InputPopUp>
-
             }
         </Wrapper>
     )

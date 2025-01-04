@@ -39,3 +39,23 @@ export const login = async (data) => {
         throw error;
     }
 }
+
+export const sendResetLink = async (data) => {
+    try {
+        const response = await axiosInstance.post('/password/forgot', data)
+        return response;
+    } catch (error) {
+        console.error('Error sendResetLink :', error);
+        throw error;
+    }
+}
+
+export const resetPassword = async (data) => {
+    try {
+        const response = await axiosInstance.post('/password/reset', data)
+        return response;
+    } catch (error) {
+        console.error('Error sendResetLink :', error);
+        throw error;
+    }
+}
