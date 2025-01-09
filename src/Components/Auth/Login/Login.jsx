@@ -26,7 +26,7 @@ const Login = () => {
         setError: setResetError
     } = useForm();
     const { updateAuth } = useContext(AuthContext)
-    const { showSuccess } = usePopUp() //custom hook
+    const { showSuccess, showError } = usePopUp() //custom hook
 
     const navigate = useNavigate()
 
@@ -44,6 +44,7 @@ const Login = () => {
             }
         } catch (error) {
             console.log(error)
+            if (error.response?.data?.error) showError(error.response?.data?.error)
             if (error.response?.data?.errors?.email) setError("email", { type: "server", message: error.response?.data?.errors?.email })
             if (error.response?.data?.errors?.password) setError("password", { type: "server", message: error.response?.data?.errors?.password })
         } finally {

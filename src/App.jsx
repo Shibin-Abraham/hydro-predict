@@ -21,11 +21,11 @@ const themes = ['blue', 'green']
 function App() {
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return "dark"
+    return "light"
     //return savedTheme || 'default'; // Default to system preference
   });
 
-  const [theme, setTheme] = useState(themes[0])
+  const [theme, setTheme] = useState(themes[1])
   const { auth } = useContext(AuthContext)
 
   useEffect(() => {
@@ -75,7 +75,7 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
         {
-          auth.isAuthorized
+          !auth.isAuthorized
           &&
           <>
             <TopBar theme={theme} />

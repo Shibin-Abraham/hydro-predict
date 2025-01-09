@@ -35,6 +35,7 @@ const ResetPassword = () => {
             }
         } catch (error) {
             console.log(error)
+            if (error.response?.data?.error) showError(error.response?.data?.error)
             if (error.response?.data?.errors?.email) showError(error.response?.data?.errors?.email)
             if (error.response?.data?.errors?.token) showError(error.response?.data?.errors?.token)
             if (error.response?.data?.errors?.password) setError("password", { type: "server", message: error.response?.data?.errors?.password })
