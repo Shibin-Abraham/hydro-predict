@@ -15,17 +15,19 @@ import { usePopUp } from "./Components/Contexts/PopUpContext";
 import SuccessPopUp from "./Components/AtomicDesign/Molecule/PopUp/SuccessPopUp";
 import { AuthContext } from "./Components/Contexts/AuthContext";
 import ResetPassword from "./Components/Auth/Login/ResetPassword";
+import Analysis from "./Components/Analysis/Analysis";
+import Home from "./Components/Home/Home";
 
 const themes = ['blue', 'green']
 
 function App() {
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return "light"
+    return "dark"
     //return savedTheme || 'default'; // Default to system preference
   });
 
-  const [theme, setTheme] = useState(themes[1])
+  const [theme, setTheme] = useState(themes[0])
   const { auth } = useContext(AuthContext)
 
   useEffect(() => {
@@ -69,13 +71,14 @@ function App() {
 
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
         {
-          !auth.isAuthorized
+          auth.isAuthorized
           &&
           <>
             <TopBar theme={theme} />
@@ -83,6 +86,7 @@ function App() {
               <NavBar theme={theme} />
               <Routes>
                 <Route path="/dashboard" element={<DashBoard ></DashBoard>} />
+                <Route path="/analysis" element={<Analysis theme={theme}  />} />
               </Routes>
             </Wrapper>
           </>
