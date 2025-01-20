@@ -28,7 +28,7 @@ const DashBoard = () => {
 
             <Wrapper className='w-[70%] h-full'>
 
-                <Wrapper className='w-ful h-[30%] flex items-center justify-between'>
+                <Wrapper className='w-full h-[30%] flex items-center justify-between'>
 
                     <Wrapper className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-8 ml-8">
                         <Wrapper className='w-full h-[30%] flex items-center justify-between'>
@@ -338,25 +338,25 @@ const DashBoard = () => {
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
-                        <FlagIcon className="size-4 ml-28 text-color-red" />
+                        <Wrapper className='w-2 h-2 rounded-full bg-[#ff0d3e]  ml-auto mr-4' />
                     </Wrapper>
                     <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
-                        <FlagIcon className="size-4 ml-28 text-color-orange" />
+                        <Wrapper className='w-2 h-2 rounded-full bg-[#ff0d3e]  ml-auto mr-4' />
                     </Wrapper>
                     <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
-                        <FlagIcon className="size-4 ml-28 text-color-orange" />
+                        <Wrapper className='w-2 h-2 rounded-full bg-[#ff0d3e] ml-auto mr-4' />
                     </Wrapper>
                     <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
-                        <FlagIcon className="size-4 ml-28 text-color-orange" />
+                        <Wrapper className='w-2 h-2 rounded-full bg-[#fd7418] ml-auto mr-4' />
                     </Wrapper>
                     <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
