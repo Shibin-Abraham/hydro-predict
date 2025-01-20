@@ -75,7 +75,7 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
         {
-          !auth.isAuthorized
+          auth.isAuthorized
           &&
           <>
             <TopBar theme={theme} />
