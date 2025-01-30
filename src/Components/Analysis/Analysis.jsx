@@ -8,10 +8,60 @@ import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Pichart from '../AtomicDesign/Molecule/Pichart/Pichart'
 import {  useState } from 'react'
-import { getColor } from './utils'
-
+import { getColor,data } from './utils'
+import Button from '../AtomicDesign/Atom/Button/Button'
+import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
+import Media from '../AtomicDesign/Atom/Media/Media'
+import drop from "../../Assets/drop.png"
 const Analysis = ({theme}) => {
   const color = getColor({theme})
+
+  const [donutState, setDonutState] = useState({
+          
+    series: [44, 55, 41, 17, 15],
+    options: {
+      chart: {
+        width: 400,
+        height:400,
+        type: 'donut',
+      },
+      colors: ['#ff0d3e', '#23d823', '#715ff8', '#F4C724', '#B833FF'],
+      labels: ['Water Level', 'Inflow', 'Power Discharge', 'Spillway release', 'Total Outflow'],
+      plotOptions: {
+        pie: {
+          startAngle: -90,
+          endAngle: 270
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      fill: {
+        type: 'gradient',
+      },
+      legend: {
+        position: 'right',  // Place legend to the right
+        floating: false,    
+        offsetY: -15,         // Center vertically
+        offsetX: -5, 
+        fontSize:'10px', 
+        formatter: function(val, opts) {
+          return " &nbsp;&nbsp;"+val + " - " + opts.w.globals.series[opts.seriesIndex]
+        }
+      },
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: 'center'
+          }
+        }
+      }]
+    },
+});
 
   const [stateInflow, setStateInflow] = useState({
           
@@ -21,7 +71,7 @@ const Analysis = ({theme}) => {
     }, {
       name:'rainfall',
       data: [11, 32, 45, 0, 34, 52, 41]
-    }],
+    },],
     options: {
       chart: {
         width:'100%',
@@ -31,12 +81,12 @@ const Analysis = ({theme}) => {
           show: false 
       },
       offsetX:0,  
-      offsetY: -10
+      offsetY: -20
       },
       grid: {
         show: true,  
         borderColor: '#7d8da196', 
-        strokeDashArray: 1,   
+        strokeDashArray: 3,   
         yaxis: {
           lines: {
             show: true 
@@ -50,16 +100,22 @@ const Analysis = ({theme}) => {
         curve: 'smooth'
       },
       xaxis: {
-        show: false,
-      axisBorder: {
-        show: false
-      },
-      axisTicks: {
-        show: false
-      },
-      labels: {
-        show: false
-      }
+          type: 'datetime',
+          categories: [
+            '2018-09-19T00:00:00.000Z',
+            '2018-09-19T01:30:00.000Z',
+            '2018-09-19T02:30:00.000Z',
+            '2018-09-19T03:30:00.000Z',
+            '2018-09-19T04:30:00.000Z',
+            '2018-09-19T05:30:00.000Z',
+            '2018-09-19T06:30:00.000Z',
+          ],
+          labels: {
+            style: {
+              fontSize: '10px',
+            },
+          },
+        
       },
       
       yaxis: {
@@ -72,7 +128,8 @@ const Analysis = ({theme}) => {
       },
       legend: {
         show: false  // Hides the legend buttons
-    }
+    },
+    colors:['#715ff8','#23d823']
     },
   
   
@@ -149,21 +206,70 @@ const Analysis = ({theme}) => {
           },
           grid: {
             borderColor: '#7d8da196', 
-            strokeDashArray: 4,    
-        }
+            strokeDashArray: 3,    
+        },
+        annotations: {
+          yaxis: [
+            {
+              y: 67,  
+              borderColor: '#FF0000',  // Line color
+              strokeDashArray: 3,  // Makes it a dashed line
+              label: {
+                borderColor: '#FF0000',
+                style: {
+                  color: '#fff',
+                  background: '#FF0000',
+                  fontSize: '10px'
+                },
+                text: 'red level',
+              },
+            },
+            {
+              y: 50,  
+              borderColor: 'orange',  // Line color
+              strokeDashArray: 3,  // Makes it a dashed line
+              label: {
+                borderColor: 'orange',
+                style: {
+                  color: '#fff',
+                  background: 'orange',
+                  fontSize: '10px'
+                },
+                text: 'orange level',
+                offsetX: -540,
+              },
+            },
+            {
+              y: 47,  
+              borderColor: 'blue',  // Line color
+              strokeDashArray: 3,  // Makes it a dashed line
+              label: {
+                borderColor: 'blue',
+                style: {
+                  color: '#fff',
+                  background: 'blue',
+                  fontSize: '10px'
+                },
+                text: 'blue level',
+              },
+            },
+          ],
+        },
         },
     });
 
 
   return (
-    <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex">
+    <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex overflow-hidden">
          <Wrapper className='w-[50%] h-full'>
-            <Wrapper className='w-full ml-8 mt-4' >
+            <Wrapper className='w-full ml-8 mt-4 flex items-center gap-4' >
                 <Select options={['idukki','madupetty','periyar','anayirankal']} 
                 className='w-28 h-6 bg-inherit rounded-md text-[#595959] dark:text-[#7d8da196] text-sm border border-color-border dark:border-[#161d29f5] outline-none' 
                 firstOptionClassName="dark:bg-[#121721f5]"
                 childClassName="dark:bg-[#121721f5]"
                 placeholder="Select Dam" />
+                <AddSolidIcon className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]' />
+                
             </Wrapper>
 
             <Wrapper className='w-full h-[30%] flex items-center justify-between'>
@@ -232,8 +338,199 @@ const Analysis = ({theme}) => {
                     className='px-2 pt-4'
                  />
             </Wrapper>
-                
             </Wrapper>
+         </Wrapper>
+         <Wrapper className='w-[50%] h-full flex'>
+          <Wrapper className='w-[60%] h-full'>
+              <Typography tag="h4" className="text-lg font-bold mt-2 ml-8" text="Readings" />
+              <Wrapper className='pt-4 w-[350px] h-44 flex justify-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ml-8'>
+                <ReactApexChart options={donutState.options} series={donutState.series} type="donut" width={300} height={300} />
+              </Wrapper>
+              <Typography tag="h4" className="text-lg font-bold mt-6 ml-8" text="Dam Constant Metrics" />
+              <Wrapper className='h-full ml-4 mt-1 flex flex-col gap-3'>
+                 <Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                      <Typography tag="p" className="text-xs font-medium" >
+                            Maximum Water Level(MWL): <Typography tag='span' className="text-primary" text='734.1108 ' /> (meter)
+                      </Typography>
+                 </Wrapper>
+                 <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                      <Typography tag="p" className="text-xs font-medium mt-1" >
+                            Full Reservoir Level(FRL): <Typography tag='span' className="text-primary" text='732.4344 ' /> (meter)
+                      </Typography>
+                 </Wrapper>
+                 <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                      <Typography tag="p" className="text-xs font-medium mt-1" >
+                            Spillway Crest Level: <Typography tag='span' className="text-primary" text='723.2904 ' /> (meter)
+                      </Typography>
+                 </Wrapper>
+                 <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                      <Typography tag="p" className="text-xs font-medium mt-1" >
+                            Live Storage at FRL: <Typography tag='span' className="text-primary" text='1459.49 ' /> (Million Cubic Meters)
+                        </Typography>
+                 </Wrapper>
+                 <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                        <Typography tag="p" className="text-xs font-medium mt-1" >
+                            Rule Level: <Typography tag='span' className="text-primary" text='732.4344 ' /> (meter)
+                        </Typography>
+                 </Wrapper>  
+                 <Wrapper className='w-[90%] h-12 flex items-center'>
+                        <Wrapper className='size-3 bg-color-blue rounded-full'/>
+                        <Typography tag='span' className="text-xs font-medium pl-2" text='732.4344 ' />
+                        <Wrapper className='size-3 bg-color-orange rounded-full ml-4'/>
+                        <Typography tag='span' className="text-xs font-medium pl-2" text='732.4344 ' />
+                        <Wrapper className='size-3 bg-color-red rounded-full ml-4'/>
+                        <Typography tag='span' className="text-xs font-medium pl-2" text='732.4344 ' />
+                        
+                 </Wrapper>             
+              </Wrapper>
+          </Wrapper>
+          <Wrapper className='w-[40%] h-full '>
+          <Typography tag="h4" className="text-lg font-bold mt-2 " text="Rainfall" />
+          <Wrapper className='w-full h-[80vh] flex flex-col gap-3 overflow-y-scroll no-scrollbar mt-2 '>
+          <Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-red' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper>
+          <Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-red' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper>
+          <Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-red' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-red' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-orange' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-orange' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-orange' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                  Rainfall- 
+                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
+                    mm
+                    </Typography>
+                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
+          </Wrapper>
+          
+          
+          </Wrapper>
+          </Wrapper>
+          
          </Wrapper>
     </Wrapper>
   )
