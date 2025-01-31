@@ -16,6 +16,7 @@ import ResetPassword from "./Components/Auth/Login/ResetPassword";
 import Analysis from "./Components/Analysis/Analysis";
 import Home from "./Components/Home/Home";
 import AddDamData from "./Components/Analysis/Popup/AddDamData";
+import LeafletMap from "./Components/RainGauge/LeafletMap";
 
 const themes = ['blue', 'green']
 
@@ -89,6 +90,7 @@ function App() {
               <Routes>
                 <Route path="/dashboard" element={<DashBoard ></DashBoard>} />
                 <Route path="/analysis" element={<Analysis theme={theme} setAddDamData={setAddDamData} />} />
+                <Route path="/rain gauge" element={<LeafletMap />} />
               </Routes>
             </Wrapper>
           </>
