@@ -13,8 +13,14 @@ import Button from '../AtomicDesign/Atom/Button/Button'
 import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
 import Media from '../AtomicDesign/Atom/Media/Media'
 import drop from "../../Assets/drop.png"
-const Analysis = ({theme}) => {
+import Input from '../AtomicDesign/Atom/Input/Input'
+import { Form } from 'react-router-dom'
+import CloseIcon from '../../Assets/icons/CloseIcon'
+import InputPopUp from '../AtomicDesign/Molecule/PopUp/InputPopUp'
+const Analysis = ({theme,setAddData}) => {
   const color = getColor({theme})
+
+  
 
   const [donutState, setDonutState] = useState({
           
@@ -268,7 +274,7 @@ const Analysis = ({theme}) => {
                 firstOptionClassName="dark:bg-[#121721f5]"
                 childClassName="dark:bg-[#121721f5]"
                 placeholder="Select Dam" />
-                <AddSolidIcon className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]' />
+                <AddSolidIcon className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]' onClick={()=>setAddData(true)} />
                 
             </Wrapper>
 

@@ -5,7 +5,8 @@ import Wrapper from "../../Atom/Wrapper/Wrapper"
 
 const InputPopUp = ({
     className,
-    children
+    children,
+    ...restProps
 }) => {
 
     const [isActive, setIsActive] = useState(false)
@@ -15,9 +16,9 @@ const InputPopUp = ({
     }, [setIsActive])
 
     return (
-        <Wrapper className={className}>
+        <Wrapper className={className} {...restProps}>
             <Wrapper
-                className={`w-[30%] max-h-[60%] border-[1px] bg-white dark:border-none dark:bg-[#121721f5] rounded-md flex flex-col items-center absolute transition-all ease-linear duration-300 ${isActive ? 'translate-y-0' : '-translate-y-[1720px]'}`}
+                className={`w-[30%] max-h-[60%] border-[1px] bg-white dark:border-none dark:bg-[#121721] rounded-md flex flex-col items-center absolute transition-all ease-linear duration-300 ${isActive ? 'translate-y-0' : '-translate-y-[1720px]'}`}
             >
                 {children}
             </Wrapper>
