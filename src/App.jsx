@@ -17,6 +17,7 @@ import Analysis from "./Components/Analysis/Analysis";
 import Home from "./Components/Home/Home";
 import AddDamData from "./Components/Analysis/Popup/AddDamData";
 import LeafletMap from "./Components/RainGauge/LeafletMap";
+import RainGauge from "./Components/RainGauge/RainGauge";
 
 const themes = ['blue', 'green']
 
@@ -25,11 +26,11 @@ function App() {
   const [addDamData,setAddDamData] = useState(false)
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return "dark"
+    return "light"
     //return savedTheme || 'default'; // Default to system preference
   });
 
-  const [theme, setTheme] = useState(themes[1])
+  const [theme, setTheme] = useState(themes[0])
   const { auth } = useContext(AuthContext)
 
   useEffect(() => {
@@ -90,7 +91,7 @@ function App() {
               <Routes>
                 <Route path="/dashboard" element={<DashBoard ></DashBoard>} />
                 <Route path="/analysis" element={<Analysis theme={theme} setAddDamData={setAddDamData} />} />
-                <Route path="/rain gauge" element={<LeafletMap />} />
+                <Route path="/rain gauge" element={<RainGauge />} />
               </Routes>
             </Wrapper>
           </>
