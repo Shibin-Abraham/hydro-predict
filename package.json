@@ -17,10 +17,12 @@
     "axios": "^1.7.9",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
+    "leaflet": "^1.9.4",
     "react": "^18.3.1",
     "react-apexcharts": "^1.7.0",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.1",
+    "react-leaflet": "^4.2.1",
     "react-otp-input": "^3.1.1",
     "react-router-dom": "^7.0.2",
     "recharts": "^2.14.1"

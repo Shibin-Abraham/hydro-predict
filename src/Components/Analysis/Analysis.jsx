@@ -17,7 +17,7 @@ import Input from '../AtomicDesign/Atom/Input/Input'
 import { Form } from 'react-router-dom'
 import CloseIcon from '../../Assets/icons/CloseIcon'
 import InputPopUp from '../AtomicDesign/Molecule/PopUp/InputPopUp'
-const Analysis = ({theme,setAddData}) => {
+const Analysis = ({theme,setAddDamData}) => {
   const color = getColor({theme})
 
   
@@ -274,7 +274,7 @@ const Analysis = ({theme,setAddData}) => {
                 firstOptionClassName="dark:bg-[#121721f5]"
                 childClassName="dark:bg-[#121721f5]"
                 placeholder="Select Dam" />
-                <AddSolidIcon className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]' onClick={()=>setAddData(true)} />
+                <AddSolidIcon className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]' onClick={()=>setAddDamData(true)} />
                 
             </Wrapper>
 
