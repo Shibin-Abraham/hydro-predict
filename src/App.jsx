@@ -16,14 +16,16 @@ import ResetPassword from "./Components/Auth/Login/ResetPassword";
 import Analysis from "./Components/Analysis/Analysis";
 import Home from "./Components/Home/Home";
 import AddDamData from "./Components/Analysis/Popup/AddDamData";
-import LeafletMap from "./Components/RainGauge/LeafletMap";
 import RainGauge from "./Components/RainGauge/RainGauge";
+import Map from "./Components/RainGauge/Popup/Map";
 
 const themes = ['blue', 'green']
 
 function App() {
 
   const [addDamData,setAddDamData] = useState(false)
+  const [openMap,setOpenMap] = useState(false)
+
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     return "light"
@@ -73,6 +75,9 @@ function App() {
       {
         addDamData&&<AddDamData setAddDamData={setAddDamData} />
       }
+      {
+        openMap&&<Map setOpenMap={setOpenMap} />
+      }
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -91,7 +96,7 @@ function App() {
               <Routes>
                 <Route path="/dashboard" element={<DashBoard ></DashBoard>} />
                 <Route path="/analysis" element={<Analysis theme={theme} setAddDamData={setAddDamData} />} />
-                <Route path="/rain gauge" element={<RainGauge />} />
+                <Route path="/rain gauge" element={<RainGauge theme={theme} setOpenMap={setOpenMap} />} />
               </Routes>
             </Wrapper>
           </>
