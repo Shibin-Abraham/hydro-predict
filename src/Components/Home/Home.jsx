@@ -399,4 +399,4 @@ const Home = () => {
     )
 }
 
-export default DashBoard
+export default Home
