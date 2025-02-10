@@ -12,8 +12,8 @@
         --color-danger:#ff0d3e;
         --color-danger-variant:#ff0d3d1f;
         --color-warning:#fd7418;
-        --color-yellow:#a9d800;
         --color-warning-variant:#fd74181f;
+        --color-alert:#dbfd04;
         --color-normal:#8575ff;
         --color-normal-variant:#8575ff1f;
         scroll-behavior: smooth;

@@ -86,8 +86,6 @@ const RainGauge = ({theme,setOpenMap}) => {
         },
       }
     },
-  
-  
 });
   
   const data =[215.00,192.11,175.23,66.66,60.00,0]
@@ -95,27 +93,27 @@ const RainGauge = ({theme,setOpenMap}) => {
   return (
     <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex gap-8 overflow-hidden">
         
-         <Wrapper className='w-[600px] h-full pb-4 pl-8'>
+         <Wrapper className='w-[600px] h-full pb-4 pl-8 pt-4'>
             <Wrapper className='w-full pt-4 flex items-center gap-4' >
                 <Button variant='primary' variantType='outline' className='text-xs'> Add New Gauge</Button>
                 <AddSolidIcon className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]'  />
                 <MapIcon onClick={()=>setOpenMap(true)} className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]'  />
             </Wrapper>
-            <Wrapper className='w-full pt-2 pb-4 h-[75vh] overflow-y-scroll flex justify-between gap-6 flex-wrap no-scrollbar'>
+            <Wrapper className='w-full pt-4 pb-4 h-[75vh] overflow-y-scroll flex justify-between gap-6 flex-wrap no-scrollbar'>
               {
                 data.map((data,index)=>{
                   const color = alertColor(data)
                 
                   return(
-                    <Wrapper key={index} className="w-64 h-56 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ">
-                      <Wrapper className='w-full h-12 flex items-center justify-between'>
+                    <Wrapper key={index} className="w-[265px] h-60 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ">
+                      <Wrapper className='w-full h-14 flex items-center justify-between'>
                             <Wrapper className='h-full flex items-center'>
                                 <CloudIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />
                                 <Typography tag="p" text='Idukki' className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
                             </Wrapper>
                             <Typography tag="p" text='Today' className='text-[#595959] dark:text-[#7d8da196] text-xs pr-6' />
                         </Wrapper>
-                        <Wrapper className="w-full flex items-start justify-between pt-2">
+                        <Wrapper className="w-full flex items-start justify-between pt-3">
                             <Wrapper className='h-full ml-6'>
                                 <Typography tag="p" className="text-lg font-bold mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="RainFall" />
                               <Typography tag="p" text={`${data} mm`} className="text-sm font-medium  mt-1" />
@@ -133,11 +131,15 @@ const RainGauge = ({theme,setOpenMap}) => {
             </Wrapper>
          </Wrapper>
 
-         <Wrapper className='w-[50%] h-full pb-4'>
+         <Wrapper className='w-[50%] h-full pb-4 flex flex-col gap-4'>
          <Typography tag="h4" className="text-lg font-bold mt-4" text="Idukki District RainFall" />
             <Wrapper className="w-full h-80 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden pt-4">
                 {/*<LeafletMap />*/}
                 <ReactApexChart options={state.options} series={state.series} type="bar" height={300} />
+            </Wrapper>
+            <Wrapper className="w-full h-48 flex gap-6">
+            <Wrapper className='w-[48%] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden pt-4'></Wrapper>
+            <Wrapper className='w-[48%] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden pt-4'></Wrapper>
             </Wrapper>
             
          </Wrapper>

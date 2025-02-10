@@ -20,8 +20,6 @@ import InputPopUp from '../AtomicDesign/Molecule/PopUp/InputPopUp'
 const Analysis = ({theme,setAddDamData}) => {
   const color = getColor({theme})
 
-  
-
   const [donutState, setDonutState] = useState({
           
     series: [44, 55, 41, 17, 15],
@@ -309,26 +307,6 @@ const Analysis = ({theme,setAddDamData}) => {
                     <Wrapper className="w-full h-full flex flex-col items-center justify-center">
                     <Typography tag="p" className="text-[#595959] dark:text-[#7d8da196] text-xs mt-6" text="Inflow 7 days" />
                     <ReactApexChart options={stateInflow.options} series={stateInflow.series} type="area" width='100%' height='100%' />
-                       
-                        {/* <Wrapper className='h-full ml-4 mt-1'>
-                            <Typography tag="p" className="text-lg font-medium mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="Idukki Dam Constant Metrics" />
-                            <Typography tag="p" className="text-xs font-medium  mt-2" >
-                            Maximum Water Level(MWL): <Typography tag='span' className="text-primary" text='734.1108 ' /> (meter)
-                            </Typography>
-                            <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Full Reservoir Level(FRL): <Typography tag='span' className="text-primary" text='732.4344 ' /> (meter)
-                            </Typography>
-                            <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Spillway Crest Level: <Typography tag='span' className="text-primary" text='723.2904 ' /> (meter)
-                            </Typography>
-                            <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Live Storage at FRL: <Typography tag='span' className="text-primary" text='1459.49 ' /> (Million Cubic Meters)
-                            </Typography>
-                            <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Rule Level: <Typography tag='span' className="text-primary" text='732.4344 ' /> (meter)
-                            </Typography>
-                        </Wrapper> */}
-                        
                     </Wrapper>
                 </Wrapper>
             </Wrapper>

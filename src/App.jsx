@@ -28,7 +28,7 @@ function App() {
 
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return "light"
+    return "dark"
     //return savedTheme || 'default'; // Default to system preference
   });
 

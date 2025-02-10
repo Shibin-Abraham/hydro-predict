@@ -5,7 +5,7 @@ export const alertColor = (value) => {
         case value >= 115:
             return 'color-orange';
         case value >= 65:
-            return 'color-yellow';
+            return 'yellow-400';
         default:
             return 'primary'; 
     }

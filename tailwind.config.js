@@ -20,7 +20,7 @@ export default {
         'color-red-variant': "var(--color-danger-variant)",
         'color-orange': "var(--color-warning)",
         'color-orange-variant': "var(--color-warning-variant)",
-        'color-yellow': "var(--color-yellow)",
+        'color-alert': "var(--color-alert)",
         'color-blue': "var(--color-normal)",
         'color-blue-variant': "var(--color-normal-variant)",
       },

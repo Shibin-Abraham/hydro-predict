@@ -33,7 +33,7 @@ const Gauge = ({ rainFall, speed = 50, maxRainFall = 250, maxHeight = 96 }) => {
                     <Typography text='135' className='text-[8px]' />
                     <Wrapper className='w-1 h-[1px] bg-[#595959] dark:bg-[#7d8da196]' />
                 </Wrapper>
-                <Wrapper className='flex items-center gap-[1px]'>  
+                <Wrapper className='flex items-center gap-[1px] '>  
                     <Typography text='65' className='text-[8px]' />
                     <Wrapper className='w-1 h-[1px] bg-[#595959] dark:bg-[#7d8da196]' />
                 </Wrapper>
