@@ -24,11 +24,13 @@ const Home = () => {
     })
 
     return (
-        <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex">
+        <Wrapper  className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex">
+            
 
-            <Wrapper className='w-[70%] h-full'>
+            <Wrapper  className='w-[70%] h-full'>
 
-                <Wrapper className='w-full h-[30%] flex items-center justify-between'>
+                <Wrapper  className='w-full h-[30%] flex items-center justify-between'>
+
 
                     <Wrapper className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-8 ml-8">
                         <Wrapper className='w-full h-[30%] flex items-center justify-between'>
@@ -399,4 +401,4 @@ const Home = () => {
     )
 }
 
-export default DashBoard
+export default Home
