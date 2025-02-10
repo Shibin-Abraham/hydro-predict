@@ -94,7 +94,7 @@ const LeafletMap = () => {
       {/* Dropdown for tile layer selection */}
       <select
         onChange={(e) => setSelectedLayer(e.target.value)}
-        className="absolute top-3 right-3 z-[1000] border-2 border-color-border dark:border-none dark:bg-[#121721f5] p-2 rounded shadow-md"
+        className="absolute bottom-3 left-3 z-[1000] border-2 border-color-border dark:border-none dark:bg-[#121721f5] p-2 rounded shadow-md"
       >
         {Object.keys(tileLayers).map((key) => (
           <option key={key} value={key}>

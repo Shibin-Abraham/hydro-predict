@@ -1,29 +1,145 @@
 
+import { useState } from 'react'
 import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
+import CloudIcon from '../../Assets/icons/CloudIcon'
 import Button from '../AtomicDesign/Atom/Button/Button'
+import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Gauge from '../AtomicDesign/Molecule/Gauge/Gauge'
+import { alertColor, rainAlert } from '../AtomicDesign/Molecule/Gauge/utils'
 import LeafletMap from './LeafletMap'
+import ReactApexChart from 'react-apexcharts'
+import { getColor } from '../Analysis/utils'
+import MapIcon from '../../Assets/icons/MapIcon'
 
 
-const RainGauge = () => {
+// eslint-disable-next-line react/prop-types
+const RainGauge = ({theme,setOpenMap}) => {
+  const color = getColor({theme})
+  const [state, setState] = useState({
+    series: [{
+      name: 'Rainfall',
+      data: [62, 55, 41, 67, 22, 43, 111, 123, 145, 131, 87, 165, 135]
+    }],
+    options: {
+      annotations: {
+        points: [{
+          x: 'today',
+          seriesIndex: 0,
+          label: {
+            borderColor: '#775DD0',
+            offsetY: 0,
+            style: {
+              color: '#fff',
+              background: '#775DD0',
+            },
+            text: 'High',
+          }
+        }]
+      },
+      chart: {
+        height: 350,
+        type: 'bar',
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 10,
+          columnWidth: '50%',
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        width: 0
+      },
+      
+      xaxis: {
+        labels: {
+          rotate: -45
+        },
+        categories: ['tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
+          'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'today'
+        ],
+        tickPlacement: 'on'
+      },
+      yaxis: {
+        title: {
+          text: 'Rainfall',
+        },
+      },
+      grid: {
+        borderColor: '#7d8da196', 
+        strokeDashArray: 3,    
+    },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'light',
+          type: "horizontal",
+          shadeIntensity: 0.25,
+          gradientToColors: undefined,
+          inverseColors: true,
+          opacityFrom: 0.85,
+          opacityTo: 0.85,
+          stops: [50, 0, 250]
+        },
+      }
+    },
+  
+  
+});
+  
+  const data =[215.00,192.11,175.23,66.66,60.00,0]
+  
   return (
-    <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex gap-6 overflow-hidden">
+    <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex gap-8 overflow-hidden">
         
-         <Wrapper className='w-[40%] h-full pb-4 pl-8'>
+         <Wrapper className='w-[600px] h-full pb-4 pl-8'>
             <Wrapper className='w-full pt-4 flex items-center gap-4' >
-                <Button variant='primary' variantType='outline' className='text-xs'>Add New Gauge</Button>
+                <Button variant='primary' variantType='outline' className='text-xs'> Add New Gauge</Button>
                 <AddSolidIcon className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]'  />
+                <MapIcon onClick={()=>setOpenMap(true)} className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]'  />
             </Wrapper>
-            <Wrapper className="w-80 h-60 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 flex items-center justify-center">
-                <Gauge rainFall={60} />
+            <Wrapper className='w-full pt-2 pb-4 h-[75vh] overflow-y-scroll flex justify-between gap-6 flex-wrap no-scrollbar'>
+              {
+                data.map((data,index)=>{
+                  const color = alertColor(data)
+                
+                  return(
+                    <Wrapper key={index} className="w-64 h-56 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ">
+                      <Wrapper className='w-full h-12 flex items-center justify-between'>
+                            <Wrapper className='h-full flex items-center'>
+                                <CloudIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />
+                                <Typography tag="p" text='Idukki' className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
+                            </Wrapper>
+                            <Typography tag="p" text='Today' className='text-[#595959] dark:text-[#7d8da196] text-xs pr-6' />
+                        </Wrapper>
+                        <Wrapper className="w-full flex items-start justify-between pt-2">
+                            <Wrapper className='h-full ml-6'>
+                                <Typography tag="p" className="text-lg font-bold mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="RainFall" />
+                              <Typography tag="p" text={`${data} mm`} className="text-sm font-medium  mt-1" />
+                                <Typography tag="p" text={`${rainAlert(data).level} rainfall`} className="text-xs mt-1" />
+                                <Typography tag="p" text={`${rainAlert(data).alert}`} className={`text-xs mt-1 text-${color}`} />
+                                <Typography tag="p" text="Data updated for the last 24 hours" className="text-[10px] leading-3 mt-3" />
+                            </Wrapper>
+                            <Gauge rainFall={data} />
+                        </Wrapper>
+                    </Wrapper>
+                  )
+                })
+              }
+                
             </Wrapper>
          </Wrapper>
 
          <Wrapper className='w-[50%] h-full pb-4'>
-            <Wrapper className="w-full h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2  overflow-hidden">
-                <LeafletMap />
+         <Typography tag="h4" className="text-lg font-bold mt-4" text="Idukki District RainFall" />
+            <Wrapper className="w-full h-80 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden pt-4">
+                {/*<LeafletMap />*/}
+                <ReactApexChart options={state.options} series={state.series} type="bar" height={300} />
             </Wrapper>
+            
          </Wrapper>
     </Wrapper>
   )
