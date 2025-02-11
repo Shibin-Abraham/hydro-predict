@@ -9,13 +9,11 @@ import Gauge from '../AtomicDesign/Molecule/Gauge/Gauge'
 import { alertColor, rainAlert } from '../AtomicDesign/Molecule/Gauge/utils'
 import LeafletMap from './LeafletMap'
 import ReactApexChart from 'react-apexcharts'
-import { getColor } from '../Analysis/utils'
 import MapIcon from '../../Assets/icons/MapIcon'
 
 
 // eslint-disable-next-line react/prop-types
-const RainGauge = ({theme,setOpenMap}) => {
-  const color = getColor({theme})
+const RainGauge = ({setOpenMap}) => {
   const [state, setState] = useState({
     series: [{
       name: 'Rainfall',
@@ -88,7 +86,7 @@ const RainGauge = ({theme,setOpenMap}) => {
     },
 });
   
-  const data =[215.00,192.11,175.23,66.66,60.00,0]
+  const data =[215.00,192.11,175.23,68,60.00,0]
   
   return (
     <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex gap-8 overflow-hidden">
@@ -102,7 +100,7 @@ const RainGauge = ({theme,setOpenMap}) => {
             <Wrapper className='w-full pt-4 pb-4 h-[75vh] overflow-y-scroll flex justify-between gap-6 flex-wrap no-scrollbar'>
               {
                 data.map((data,index)=>{
-                  const color = alertColor(data)
+                  const color = alertColor(data,'text')
                 
                   return(
                     <Wrapper key={index} className="w-[265px] h-60 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ">
@@ -118,7 +116,7 @@ const RainGauge = ({theme,setOpenMap}) => {
                                 <Typography tag="p" className="text-lg font-bold mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="RainFall" />
                               <Typography tag="p" text={`${data} mm`} className="text-sm font-medium  mt-1" />
                                 <Typography tag="p" text={`${rainAlert(data).level} rainfall`} className="text-xs mt-1" />
-                                <Typography tag="p" text={`${rainAlert(data).alert}`} className={`text-xs mt-1 text-${color}`} />
+                                <Typography tag="p" text={`${rainAlert(data).alert}`} className={`text-xs mt-1 ${color}`} />
                                 <Typography tag="p" text="Data updated for the last 24 hours" className="text-[10px] leading-3 mt-3" />
                             </Wrapper>
                             <Gauge rainFall={data} />
@@ -137,9 +135,44 @@ const RainGauge = ({theme,setOpenMap}) => {
                 {/*<LeafletMap />*/}
                 <ReactApexChart options={state.options} series={state.series} type="bar" height={300} />
             </Wrapper>
-            <Wrapper className="w-full h-48 flex gap-6">
-            <Wrapper className='w-[48%] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden pt-4'></Wrapper>
-            <Wrapper className='w-[48%] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden pt-4'></Wrapper>
+            <Wrapper className="w-full h-[30vh] flex gap-6">
+
+              <Wrapper className='w-[48%] h-full overflow-y-scroll no-scrollbar'>
+                  <Typography tag="h4" text='Total Raingauges 44' className="text-sm font-medium" />
+                  <Wrapper className='w-full h-10 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden flex items-center px-3'>
+                    <Typography tag="p" className="text-xs ">
+                        IDUKKI Dam Catchment – <Typography tag="span" text={'23'} className="text-xs text-primary"/> Rain Gauges
+                    </Typography>
+                  </Wrapper>
+                  <Wrapper className='w-full h-10 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden flex items-center px-3'>
+                    <Typography tag="p" className="text-xs ">
+                        LOWER PERIYAR Dam Catchment – <Typography tag="span" text={'23'} className="text-xs text-primary"/> Rain Gauges
+                    </Typography>
+                  </Wrapper>
+                  <Wrapper className='w-full h-10 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden flex items-center px-3'>
+                    <Typography tag="p" className="text-xs ">
+                        LOWER PERIYAR Dam Catchment – <Typography tag="span" text={'23'} className="text-xs text-primary"/> Rain Gauges
+                    </Typography>
+                  </Wrapper>
+                  <Wrapper className='w-full h-10 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden flex items-center px-3'>
+                    <Typography tag="p" className="text-xs ">
+                        LOWER PERIYAR Dam Catchment – <Typography tag="span" text={'23'} className="text-xs text-primary"/> Rain Gauges
+                    </Typography>
+                  </Wrapper>
+                  <Wrapper className='w-full h-10 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden flex items-center px-3'>
+                    <Typography tag="p" className="text-xs ">
+                        LOWER PERIYAR Dam Catchment – <Typography tag="span" text={'23'} className="text-xs text-primary"/> Rain Gauges
+                    </Typography>
+                  </Wrapper>
+                  <Wrapper className='w-full h-10 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden flex items-center px-3'>
+                    <Typography tag="p" className="text-xs ">
+                        LOWER PERIYAR Dam Catchment – <Typography tag="span" text={'23'} className="text-xs text-primary"/> Rain Gauges
+                    </Typography>
+                  </Wrapper>
+              </Wrapper>
+              <Wrapper className='w-[48%] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg overflow-hidden'>
+              
+              </Wrapper>
             </Wrapper>
             
          </Wrapper>

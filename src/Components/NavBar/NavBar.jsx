@@ -88,7 +88,7 @@ const NavBar = () => {
                         </NavLink>
                     </Wrapper>
 
-                    <Wrapper className="h-12 relative">
+                    {/*<Wrapper className="h-12 relative">
                         <NavLink to="/Map" className={({ isActive }) => {
                             return isActive ? "active" : null
                         }}>{
@@ -107,7 +107,7 @@ const NavBar = () => {
                                     </Wrapper>
                             }
                         </NavLink>
-                    </Wrapper>
+                    </Wrapper>*/}
 
                     <Wrapper className="h-12 relative">
                         <NavLink to="/Users" className={({ isActive }) => {

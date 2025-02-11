@@ -6,7 +6,8 @@ import { alertColor } from './utils';
 // eslint-disable-next-line react/prop-types
 const Gauge = ({ rainFall, speed = 50, maxRainFall = 250, maxHeight = 96 }) => {
     const [count, setCount] = useState(0);
-    const alert = alertColor(rainFall)
+    const alert = alertColor(rainFall,'bg')
+    console.log(alert)
 
 
     useEffect(() => {
@@ -40,11 +41,11 @@ const Gauge = ({ rainFall, speed = 50, maxRainFall = 250, maxHeight = 96 }) => {
             </Wrapper>
 
             <Wrapper className='w-7 h-24 border border-[#7d8da1] border-b-transparent absolute z-10 flex items-end justify-center top-[2px] rounded-t-sm'>
-                <Wrapper style={{ height: `${barHeight}px` }} className={`w-[80%] bg-${alert} rounded-t-sm`} />
+                <Wrapper style={{ height: `${barHeight}px` }} className={`w-[80%] rounded-t-sm ${alert}`} />
             </Wrapper>
 
             <Wrapper className='w-11 h-11 border border-[#7d8da1] border-t-transparent bottom-2 absolute rounded-full z-10 flex items-center justify-center'>
-                <Wrapper className={`bg-${!rainFall?'none':alert} h-[90%] w-[90%] rounded-full flex items-center justify-center`}>
+                <Wrapper className={`${!rainFall?'bg-none':alert} h-[90%] w-[90%] rounded-full flex items-center justify-center`}>
                     <Typography tag='span' text={`${count}mm`} className='text-[10px] text-black dark:text-white absolute' />
                 </Wrapper>
             </Wrapper>

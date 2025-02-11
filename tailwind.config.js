@@ -4,6 +4,18 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    // Background color classes
+    'bg-color-red',
+    'bg-color-orange',
+    'bg-color-yellow',
+    'bg-primary',
+    // Text color classes
+    'text-color-red',
+    'text-color-orange',
+    'text-color-yellow',
+    'text-primary',
+  ],
   theme: {
     extend: {
       colors: {
@@ -20,9 +32,9 @@ export default {
         'color-red-variant': "var(--color-danger-variant)",
         'color-orange': "var(--color-warning)",
         'color-orange-variant': "var(--color-warning-variant)",
-        'color-alert': "var(--color-alert)",
         'color-blue': "var(--color-normal)",
         'color-blue-variant': "var(--color-normal-variant)",
+        'color-yellow': "var(--color-alert)",
       },
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],

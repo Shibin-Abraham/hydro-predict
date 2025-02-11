@@ -1,13 +1,13 @@
-export const alertColor = (value) => {
+export const alertColor = (value,prefix ) => {
     switch (true) { 
         case value >= 205:
-            return 'color-red';
+            return `${prefix}-color-red`;
         case value >= 115:
-            return 'color-orange';
+            return `${prefix}-color-orange`;
         case value >= 65:
-            return 'yellow-400';
+            return `${prefix}-color-yellow`;
         default:
-            return 'primary'; 
+            return `${prefix}-primary`; 
     }
 };
 export const rainAlert = (value) => {

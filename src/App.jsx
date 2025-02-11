@@ -32,7 +32,7 @@ function App() {
     //return savedTheme || 'default'; // Default to system preference
   });
 
-  const [theme, setTheme] = useState(themes[0])
+  const [theme, setTheme] = useState(themes[1])
   const { auth } = useContext(AuthContext)
 
   useEffect(() => {
