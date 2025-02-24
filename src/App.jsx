@@ -18,6 +18,7 @@ import Home from "./Components/Home/Home";
 import AddDamData from "./Components/Analysis/Popup/AddDamData";
 import RainGauge from "./Components/RainGauge/RainGauge";
 import Map from "./Components/RainGauge/Popup/Map";
+import { getDamData } from "./API/Handler/getDataHandler";
 
 const themes = ['blue', 'green']
 
@@ -28,7 +29,7 @@ function App() {
 
   const [mode, setMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return "dark"
+    return "light"
     //return savedTheme || 'default'; // Default to system preference
   });
 
@@ -60,6 +61,9 @@ function App() {
   //const [auth, setAuth] = useState(false)
 
   const { error, success } = usePopUp()
+
+
+  
 
   return (
     <Wrapper className={`bg-[#ffffff] dark:bg-[#0d1117] w-screen h-screen font-roboto theme-${theme}`}>

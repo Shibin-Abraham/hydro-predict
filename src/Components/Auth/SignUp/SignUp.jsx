@@ -31,10 +31,11 @@ const SignUp = () => {
                 navigate('/verify', { replace: true, state: response?.data })
             }
         } catch (error) {
+            console.log("error", error.response)
             if (error.response?.data?.errors?.email) setError("email", { type: "server", message: error.response?.data?.errors?.email })
             if (error.response?.data?.errors?.password) setError("password", { type: "server", message: error.response?.data?.errors?.password })
             if (error.response?.data?.errors?.position) setError("position", { type: "server", message: error.response?.data?.errors?.position })
-            if (error.response?.data?.message) showError(error.response?.data?.message)
+                if (error.response?.data?.error) showError(error.response?.data?.error)
         } finally {
             setIsLoading(false)
         }

@@ -14,7 +14,6 @@ const InputPopUp = ({
     const [isActive, setIsActive] = useState(false)
     useEffect(() => {
         setTimeout(() => setIsActive(true), 1)
-        //setTimeout(() => { setIsActive(false); setForgotPassword(false) }, 9000)
     }, [setIsActive])
 
     return (

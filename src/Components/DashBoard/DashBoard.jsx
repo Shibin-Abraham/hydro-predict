@@ -11,104 +11,102 @@ import { ResponsiveLine } from '@nivo/line'
 import { data } from './utils'
 import './style.css'
 import TabBtn from "../AtomicDesign/Molecule/TabBtn/TabBtn"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
+import { getDamData } from "../../API/Handler/getDataHandler"
+import { usePopUp } from "../Contexts/PopUpContext"
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/scrollbar';
+import 'swiper/css/autoplay';
+import { Autoplay } from "swiper/modules"
 
 
 
 const DashBoard = () => {
+    const {showError } = usePopUp()
+    const [allDamData,setAllDamData] = useState([])
     const [btnState, setBtnState] = useState({
         redLevel: true,
         orangeLevel: false,
         blueLevel: false,
         normalLevel: false
     })
+    const fetchAllDamData = useCallback(async (params = {})=>{
+        try {
+            const {data} = await getDamData(params);
+            setAllDamData(data);
+        } catch (error) {
+            console.error("Error fetching dam data:", error);
+            if (error.response?.data?.error) showError(error.response?.data?.error)
+        }
+    },[])
+
+    useEffect(() => {
+        fetchAllDamData();
+      }, [fetchAllDamData])
+
+      console.log(allDamData)
+    
 
     return (
         <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex">
 
-            <Wrapper className='w-[70%] h-full'>
+            <Wrapper className='w-[62vw] pl-8 pt-8'>
+                <Swiper
+                    modules={[Autoplay]}
+                    autoplay={{ delay: 9000, disableOnInteraction: false }}
+                    loop={true}
+                    slidesPerView={3}
+                    className='w-full flex items-center'
+                    >
 
-                <Wrapper className='w-full h-[30%] flex items-center justify-between'>
+                    {
+                        allDamData?.map((item,index)=>{
+                            const liveStorage = item?.dam_data[0]?.live_storage??0
+                            const liveStorageAtFRL = item?.live_storage_at_FRL??0
 
-                    <Wrapper className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-8 ml-8">
-                        <Wrapper className='w-full h-[30%] flex items-center justify-between'>
-                            <Wrapper className='h-full flex items-center'>
-                                <MapPointerIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />
-                                <Typography tag="p" text='Idukki' className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
-                            </Wrapper>
-                            <FlagIcon className='size-4 text-[#595959] dark:text-[#7d8da196] mr-6' />
-                        </Wrapper>
-                        <Wrapper className="w-full h-[70%] flex items-start justify-between">
-                            <Wrapper className='h-full ml-6 mt-1'>
-                                <Typography tag="p" className="text-lg font-bold mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="Live Storage" />
-                                <Typography tag="p" text=" 317.54 / 444.85" className="text-sm font-medium  mt-1" />
-                                <Typography tag="p" text="Today 7:00 AM" className="text-xs mt-1" />
-                            </Wrapper>
-                            <Pichart
-                                percentage={60}
-                                className="w-24 h-24 grid place-items-center mr-4"
-                                subClassName="relative w-20 h-20 rounded-full grid place-items-center before:content-[''] before:absolute before:h-[84%]
-                                    before:w-[84%] before:bg-[#ffffff] before:dark:bg-[#121720] before:rounded-full"
-                                innerClassName="text-primary relative text-xs"
-                                speed={20}
-                            />
-                        </Wrapper>
-                    </Wrapper>
 
-                    <Wrapper className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-8 ml-8">
-                        <Wrapper className='w-full h-[30%] flex items-center justify-between'>
-                            <Wrapper className='h-full flex items-center'>
-                                <MapPointerIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />
-                                <Typography tag="p" text='Idukki' className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
-                            </Wrapper>
-                            <FlagIcon className='size-4 text-[#595959] dark:text-[#7d8da196] mr-6' />
-                        </Wrapper>
-                        <Wrapper className="w-full h-[70%] flex items-start justify-between">
-                            <Wrapper className='h-full ml-6 mt-1'>
-                                <Typography tag="p" className="text-lg font-bold mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="Live Storage" />
-                                <Typography tag="p" text=" 317.54 / 444.85" className="text-sm font-medium  mt-1" />
-                                <Typography tag="p" text="Today 7:00 AM" className="text-xs mt-1" />
-                            </Wrapper>
-                            <Pichart
-                                percentage={60}
-                                className="w-24 h-24 grid place-items-center mr-4"
-                                subClassName="relative w-20 h-20 rounded-full grid place-items-center before:content-[''] before:absolute before:h-[84%]
-                                    before:w-[84%] before:bg-[#ffffff] before:dark:bg-[#121720] before:rounded-full"
-                                innerClassName="text-primary relative text-xs"
-                                speed={20}
-                            />
-                        </Wrapper>
-                    </Wrapper>
+                            const percentage = (liveStorage / liveStorageAtFRL) * 100
 
-                    <Wrapper className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-8 ml-8">
-                        <Wrapper className='w-full h-[30%] flex items-center justify-between'>
-                            <Wrapper className='h-full flex items-center'>
-                                <MapPointerIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />
-                                <Typography tag="p" text='Idukki' className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
-                            </Wrapper>
-                            <FlagIcon className='size-4 text-[#595959] dark:text-[#7d8da196] mr-6' />
-                        </Wrapper>
-                        <Wrapper className="w-full h-[70%] flex items-start justify-between">
-                            <Wrapper className='h-full ml-6 mt-1'>
-                                <Typography tag="p" className="text-lg font-bold mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="Live Storage" />
-                                <Typography tag="p" text=" 317.54 / 444.85" className="text-sm font-medium  mt-1" />
-                                <Typography tag="p" text="Today 7:00 AM" className="text-xs mt-1" />
-                            </Wrapper>
-                            <Pichart
-                                percentage={60}
-                                className="w-24 h-24 grid place-items-center mr-4"
-                                subClassName="relative w-20 h-20 rounded-full grid place-items-center before:content-[''] before:absolute before:h-[84%]
-                                    before:w-[84%] before:bg-[#ffffff] before:dark:bg-[#121720] before:rounded-full"
-                                innerClassName="text-primary relative text-xs"
-                                speed={20}
-                            />
-                        </Wrapper>
-                    </Wrapper>
-                </Wrapper>
+                            
+
+                            return <SwiperSlide key={index}  >
+
+                            <Wrapper className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg">
+                                        <Wrapper className='w-full h-[30%] flex items-center justify-between'>
+                                            <Wrapper className='h-full flex items-center'>
+                                                <MapPointerIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />
+                                                <Typography tag="p" text={`${item.name[0].toUpperCase()}${item.name.slice(1)}`} className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
+                                            </Wrapper>
+                                            <FlagIcon className='size-4 text-[#595959] dark:text-[#7d8da196] mr-6' />
+                                        </Wrapper>
+                                        <Wrapper className="w-full h-[70%] flex items-start justify-between">
+                                            <Wrapper className='h-full ml-6 mt-1'>
+                                                <Typography tag="p" className="text-lg font-bold mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="Live Storage" />
+                                                <Typography tag="p" text={`${liveStorage} / ${liveStorageAtFRL}`} className="text-sm font-medium  mt-1" />
+                                                <Typography tag="p" text={`Today ${item?.dam_data[0]?.time??'null'}`} className="text-xs mt-1" />
+                                            </Wrapper>
+                                            <Pichart
+                                                percentage={percentage}
+                                                className="w-24 h-24 grid place-items-center mr-4"
+                                                subClassName="relative w-20 h-20 rounded-full grid place-items-center before:content-[''] before:absolute before:h-[84%]
+                                                    before:w-[84%] before:bg-[#ffffff] before:dark:bg-[#121720] before:rounded-full"
+                                                innerClassName="text-primary relative text-xs"
+                                                speed={20}
+                                            />
+                                        </Wrapper>
+                                        </Wrapper>
+                                    </SwiperSlide>
+                                   
+                        })
+                    }
+                    </Swiper>
+
 
                 <Typography tag="h4" className="text-lg font-bold mt-4 ml-8" text="Inflow Chart" />
                 <Wrapper className="w-full h-[60%] flex justify-between">
-                    <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-1 ml-8">
+                    <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg">
                         <ResponsiveLine
                             data={data}
                             margin={{ top: 20, right: 30, bottom: 50, left: 40 }}
