@@ -210,6 +210,54 @@ export const data = [
             }
         ]
     },
-
-
 ]
+
+export const damAlertColor = ({value,prefix,redLevel,orangeLevel,blueLevel,defaultLightColor,defaultDarkColor={}} ) => {
+    switch (true) { 
+        case parseFloat(value) >= parseFloat(redLevel) && parseFloat(value)!==0&&parseFloat(redLevel)!==0:
+            return `${prefix}-color-red`;
+        case parseFloat(value) >= parseFloat(orangeLevel)&& parseFloat(value)!==0&&parseFloat(orangeLevel)!==0:
+            return `${prefix}-color-orange`;
+        case parseFloat(value) >= parseFloat(blueLevel) && parseFloat(value)!==0&&parseFloat(blueLevel)!==0:
+            return `${prefix}-color-blue`;
+        default:
+            return `${prefix}-[${defaultLightColor}] ${defaultDarkColor?`dark:${prefix}-[${defaultDarkColor}]`:''}`; 
+    }
+};
+
+
+export const getDamAlerts=(dams)=> {
+    const result = [];
+    for (const dam of dams) {
+      if (dam.dam_data && dam.dam_data.length > 0) {
+        const first_data = {
+            ...dam.dam_data[0],
+            name:dam.name,
+            district:dam.district,
+            MWL:dam.MWL,
+            FRL:dam.FRL,
+            spillway_crest_level:dam.spillway_crest_level,
+            live_storage_at_FRL:dam.live_storage_at_FRL
+        };
+        const water_level = parseFloat(first_data.water_level);
+        const blue_level = parseFloat(first_data.blue_level);
+        const orange_level = parseFloat(first_data.orange_level);
+        const red_level = parseFloat(first_data.red_level);
+        let alert;
+  
+        if (water_level >= red_level) {
+          alert = "red";
+        } else if (water_level >= orange_level) {
+          alert = "orange";
+        } else if (water_level >= blue_level) {
+          alert = "blue";
+        } else {
+          alert = "no";
+        }
+  
+        const output_data = { ...first_data, alert: alert };
+        result.push(output_data);
+      }
+    }
+    return result;
+  }

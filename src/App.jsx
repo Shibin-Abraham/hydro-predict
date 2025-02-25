@@ -18,50 +18,22 @@ import Home from "./Components/Home/Home";
 import AddDamData from "./Components/Analysis/Popup/AddDamData";
 import RainGauge from "./Components/RainGauge/RainGauge";
 import Map from "./Components/RainGauge/Popup/Map";
-import { getDamData } from "./API/Handler/getDataHandler";
+import useThemeMode from "./Components/hooks/useThemeMode";
 
-const themes = ['blue', 'green']
 
 function App() {
 
   const [addDamData,setAddDamData] = useState(false)
   const [openMap,setOpenMap] = useState(false)
 
-  const [mode, setMode] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return "light"
-    //return savedTheme || 'default'; // Default to system preference
-  });
-
-  const [theme, setTheme] = useState(themes[1])
   const { auth } = useContext(AuthContext)
 
-  useEffect(() => {
-    if (mode === 'dark') {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else if (mode === 'light') {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    } else {
-      // Default: System Preference
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      if (mediaQuery.matches) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-      localStorage.setItem('theme', 'default');
-    }
-  }, [mode]);
+  const { mode, setMode, theme, setTheme } = useThemeMode();
 
-  const handleModeChange = (newTheme) => {
-    setMode(newTheme);
-  };
+
   //const [auth, setAuth] = useState(false)
 
   const { error, success } = usePopUp()
-
 
   
 
@@ -98,7 +70,7 @@ function App() {
             <Wrapper className='flex w-screen h-[87vh]' >
               <NavBar theme={theme} />
               <Routes>
-                <Route path="/dashboard" element={<DashBoard ></DashBoard>} />
+                <Route path="/dashboard" element={<DashBoard mode={mode} setMode={setMode}/>} />
                 <Route path="/analysis" element={<Analysis theme={theme} setAddDamData={setAddDamData} />} />
                 <Route path="/rain gauge" element={<RainGauge theme={theme} setOpenMap={setOpenMap} />} />
               </Routes>
