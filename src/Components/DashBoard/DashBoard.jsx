@@ -23,6 +23,8 @@ import 'swiper/css/autoplay';
 import { Autoplay } from "swiper/modules"
 import moment from "moment"
 import PichartCardSkeleton from "./loader/PichartCardSkeleton"
+import Skeleton from "react-loading-skeleton"
+import DamAlertCardSkeleton from "./loader/DamAlertCardSkeleton"
 
 
 
@@ -38,8 +40,7 @@ const DashBoard = ({mode,setMode}) => {
         try {
             const {data} = await getDamData(params);
             setAllDamData(data)
-            setDamAlertData(getDamAlerts(allDamData))
-            
+            setDamAlertData(getDamAlerts(data))
         } catch (error) {
             console.error("Error fetching dam data:", error);
             if (error.response?.data?.error) showError(error.response?.data?.error)
@@ -47,12 +48,35 @@ const DashBoard = ({mode,setMode}) => {
             setLoadingDamData(false)
             //setLoadingDamData(false)
         }
-    },[showError,allDamData])
+    },[showError])
 
     useEffect(() => {
         fetchAllDamData();
       }, [fetchAllDamData])
 
+      useEffect(() => {
+        if (!damAlertData.length) return;
+
+        // Only set initial tab if no tab is active
+        const hasActiveTab = Object.values(btnState).some(Boolean);
+        if (hasActiveTab) return;
+
+        const priorityOrder = [
+            { filter: filterRedAlert, stateKey: 'redLevel' },
+            { filter: filterOrangeAlert, stateKey: 'orangeLevel' },
+            { filter: filterBlueAlert, stateKey: 'blueLevel' },
+            { filter: filterNoAlert, stateKey: 'normalLevel' }
+        ];
+
+        const activeTab = priorityOrder.find(({ filter }) => 
+            filter(damAlertData).length > 0
+        );
+
+        if (activeTab) {
+            setBtnState({ [activeTab.stateKey]: true });
+        }
+    }, [damAlertData, btnState]);  
+    
       console.log(allDamData,filterRedAlert(damAlertData))
     
 
@@ -205,7 +229,7 @@ const DashBoard = ({mode,setMode}) => {
 
             </Wrapper>
             {/* alert section */}
-            <Wrapper className='w-[30%] h-full mr-5 ml-9'>
+            <Wrapper className='w-[30%] h-[85vh] mr-5 ml-9'>
                 <Wrapper className="w-full flex items-center">
                     <Typography tag="h4" className="text-lg font-bold" text="Alert" />
                     <TabBtn 
@@ -219,7 +243,12 @@ const DashBoard = ({mode,setMode}) => {
                             }} />
                 </Wrapper>
 
-                <Wrapper className="w-full h-48 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg overflow-y-scroll no-scrollbar">
+                <Wrapper className="w-full h-48 border-2 border-color-border dark:border-[#121721f5] rounded-lg overflow-y-scroll no-scrollbar">
+                    {
+                        loadingDamData 
+                        && 
+                        <DamAlertCardSkeleton mode={mode} />
+                    }
 
                     {
                         btnState?.redLevel && (<>
@@ -315,7 +344,7 @@ const DashBoard = ({mode,setMode}) => {
                             {
                                 filterNoAlert(damAlertData).map((item,index)=>{
                                     return(
-                                        <Wrapper key={index} className='w-[100%] h-16 flex items-center'>
+                                        <Wrapper key={index} className='w-[100%] h-16 flex items-center bg-[#57575740]'>
                                             <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
                                             <Wrapper className="w-[75%] flex items-center">
 
@@ -340,71 +369,77 @@ const DashBoard = ({mode,setMode}) => {
                             }
                             </>)
                     }
-
-    
-
-
                 </Wrapper>
 
                 <Typography tag="h4" className="text-lg font-bold mt-3" text="Rainfall Alert" />
-                <Wrapper className="w-full h-[55%] overflow-y-scroll no-scrollbar mt-2">
-                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                <Wrapper className="w-full h-[46vh] overflow-y-scroll no-scrollbar mt-2 flex flex-col gap-3">
+                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full bg-[#ff0d3e]  ml-auto mr-4' />
                     </Wrapper>
-                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full bg-[#ff0d3e]  ml-auto mr-4' />
                     </Wrapper>
-                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full bg-[#ff0d3e] ml-auto mr-4' />
                     </Wrapper>
-                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full bg-[#fd7418] ml-auto mr-4' />
                     </Wrapper>
-                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
-                        <FlagIcon className="size-4 ml-28 text-color-blue" />
+                        <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>
-                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
-                        <FlagIcon className="size-4 ml-28 text-color-blue" />
+                        <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>
-                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
-                        <FlagIcon className="size-4 ml-28 text-color-blue" />
+                        <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>
-                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                        <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>
-                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                        <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>
-                    <Wrapper className='w-full h-14 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-3'>
+                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                        <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>
+                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
+                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
+                        <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
+                    </Wrapper>
+                    
                 </Wrapper>
 
             </Wrapper>
