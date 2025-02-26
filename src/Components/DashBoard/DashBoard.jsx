@@ -9,7 +9,7 @@ import Pichart from "../AtomicDesign/Molecule/Pichart/Pichart"
 import iconDam from "../../Assets/dam.png"
 import drop from "../../Assets/drop.png"
 import { ResponsiveLine } from '@nivo/line'
-import { damAlertColor, data, getDamAlerts } from './utils'
+import { damAlertColor, data, getDamAlerts, transformDamData } from './utils'
 import './style.css'
 import TabBtn from "../AtomicDesign/Molecule/TabBtn/TabBtn"
 import { useCallback, useEffect, useState } from "react"
@@ -32,6 +32,7 @@ const DashBoard = ({mode,setMode}) => {
     const {showError } = usePopUp()
     const [allDamData,setAllDamData] = useState([])
     const [damAlertData,setDamAlertData] = useState([])
+    const [chartData,setChartData] = useState()
     const [loadingDamData,setLoadingDamData] = useState(true)
     const [btnState, setBtnState] = useState({
        
@@ -40,7 +41,9 @@ const DashBoard = ({mode,setMode}) => {
         try {
             const {data} = await getDamData(params);
             setAllDamData(data)
-            setDamAlertData(getDamAlerts(data))
+            setDamAlertData(getDamAlerts(data))// filter dam data for alerts
+            setChartData(transformDamData(data))
+            console.log('chart data +++++',chartData)//filter dam data for chart
         } catch (error) {
             console.error("Error fetching dam data:", error);
             if (error.response?.data?.error) showError(error.response?.data?.error)
@@ -77,7 +80,7 @@ const DashBoard = ({mode,setMode}) => {
         }
     }, [damAlertData, btnState]);  
     
-      console.log(allDamData,filterRedAlert(damAlertData))
+      //console.log(allDamData,filterRedAlert(damAlertData))
     
 
     return (
@@ -150,8 +153,9 @@ const DashBoard = ({mode,setMode}) => {
                 <Typography tag="h4" className="text-lg font-bold mt-4" text="Inflow Chart" />
                 <Wrapper className="w-full h-[60%] flex justify-between">
                     <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg">
-                        <ResponsiveLine
-                            data={data}
+                        {
+                            !loadingDamData && <ResponsiveLine
+                            data={chartData}
                             margin={{ top: 20, right: 30, bottom: 50, left: 40 }}
                             lineWidth={3}
                             xScale={{ type: 'point' }}
@@ -176,11 +180,11 @@ const DashBoard = ({mode,setMode}) => {
                                 truncateTickAt: 0,
                             }}
                             axisLeft={{
-                                tickSize: 10,
-                                tickPadding: 0,
-                                tickRotation: 0,
+                                tickValues:0,
+                                legend: 'Inflow',
+                                legendOffset: -10,
                                 legendPosition: 'middle',
-                                truncateTickAt: 20
+                                
                             }}
                             theme={{
                                 axis: {
@@ -213,6 +217,8 @@ const DashBoard = ({mode,setMode}) => {
                             useMesh={true}
 
                         />
+                        }
+                        
                     </Wrapper>
                     <Wrapper className="w-24 h-full flex flex-col items-center justify-center border-2 border-color-border dark:border-none
                      dark:bg-[#121721f5] rounded-lg">
@@ -356,7 +362,7 @@ const DashBoard = ({mode,setMode}) => {
                                                 <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
                                                 <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.blue_level} />
                                                 <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
-                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.orangeLevel} />
+                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.orange_level} />
                                                 <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
                                                 <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.red_level} />
                                             </Wrapper>

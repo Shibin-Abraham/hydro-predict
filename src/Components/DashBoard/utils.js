@@ -212,6 +212,34 @@ export const data = [
     },
 ]
 
+export const transformDamData = (damArray) => {
+    return damArray
+      .map(dam => {
+        const damName = dam.name.toUpperCase();
+        const damData = Array.isArray(dam.dam_data) ? dam.dam_data : [];
+  
+        // Filter and sort valid data points, then transform them
+        const validData = damData
+          .filter(entry => 
+            entry.date && entry.time && // Ensure required fields exist
+            entry.inflow !== undefined && !isNaN(parseFloat(entry.inflow)) // Valid y-value
+          )
+          .sort((a, b) => {
+            // Sort by date and time for chronological order
+            const dateA = new Date(`${a.date}T${a.time}`);
+            const dateB = new Date(`${b.date}T${b.time}`);
+            return dateA - dateB;
+          })
+          .map(entry => ({
+            x: entry.date, // Use the actual date as x
+            y: parseFloat(entry.inflow), // Inflow value as y
+          }));
+  
+        return { id: damName, data: validData };
+      })
+      .filter(dam => dam.data.length > 0); // Exclude dams with no valid data
+  };
+
 export const damAlertColor = ({value,prefix,redLevel,orangeLevel,blueLevel,defaultLightColor,defaultDarkColor={}} ) => {
     switch (true) { 
         case parseFloat(value) >= parseFloat(redLevel) && parseFloat(value)!==0&&parseFloat(redLevel)!==0:
