@@ -213,8 +213,7 @@ export const data = [
 ]
 
 export const transformDamData = (damArray) => {
-    return damArray
-      .map(dam => {
+    return damArray?.map(dam => {
         const damName = dam.name.toUpperCase();
         const damData = Array.isArray(dam.dam_data) ? dam.dam_data : [];
   
@@ -273,11 +272,11 @@ export const getDamAlerts=(dams)=> {
         const red_level = parseFloat(first_data.red_level);
         let alert;
   
-        if (water_level >= red_level) {
+        if (water_level >= red_level && water_level!==0 && red_level!==0) {
           alert = "red";
-        } else if (water_level >= orange_level) {
+        } else if (water_level >= orange_level && water_level!==0 && orange_level!==0) {
           alert = "orange";
-        } else if (water_level >= blue_level) {
+        } else if (water_level >= blue_level  && water_level!==0 && blue_level!==0) {
           alert = "blue";
         } else {
           alert = "no";

@@ -25,6 +25,7 @@ import moment from "moment"
 import PichartCardSkeleton from "./loader/PichartCardSkeleton"
 import Skeleton from "react-loading-skeleton"
 import DamAlertCardSkeleton from "./loader/DamAlertCardSkeleton"
+import ResposiveLineSkeleton from "./loader/ResposiveLineSkeleton"
 
 
 
@@ -34,27 +35,27 @@ const DashBoard = ({mode,setMode}) => {
     const [damAlertData,setDamAlertData] = useState([])
     const [chartData,setChartData] = useState()
     const [loadingDamData,setLoadingDamData] = useState(true)
-    const [btnState, setBtnState] = useState({
-       
-    })
+    const [btnState, setBtnState] = useState({})
+    const [hasError, setHasError] = useState(false)
     const fetchAllDamData = useCallback(async (params = {})=>{
         try {
             const {data} = await getDamData(params);
             setAllDamData(data)
             setDamAlertData(getDamAlerts(data))// filter dam data for alerts
-            setChartData(transformDamData(data))
-            console.log('chart data +++++',chartData)//filter dam data for chart
+            setChartData(transformDamData(data))//filter dam data for chart
+            setLoadingDamData(false)
         } catch (error) {
             console.error("Error fetching dam data:", error);
-            if (error.response?.data?.error) showError(error.response?.data?.error)
-        }finally{
-            setLoadingDamData(false)
-            //setLoadingDamData(false)
+            const errorMsg = error.response?.data?.error || error.response?.data?.message || 'An error occurred while fetching dam data.';
+            if (!hasError) {
+                showError(errorMsg);
+                setHasError(true);
+            }
         }
-    },[showError])
+    },[showError,hasError])
 
     useEffect(() => {
-        fetchAllDamData();
+        fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
       }, [fetchAllDamData])
 
       useEffect(() => {
@@ -94,7 +95,7 @@ const DashBoard = ({mode,setMode}) => {
                     slidesPerView={3}
                     className='w-full flex items-center'
                     >
-
+                        
                     {
                         allDamData?.map((item,index)=>{
                             const liveStorage = item?.dam_data[0]?.live_storage??0
@@ -126,7 +127,7 @@ const DashBoard = ({mode,setMode}) => {
                                                 <Wrapper className='h-full ml-6 mt-1'>
                                                     <Typography tag="p" className="text-lg font-bold mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="Live Storage" />
                                                     <Typography tag="p" text={`${liveStorage} / ${liveStorageAtFRL}`} className="text-sm font-medium  mt-1" />
-                                                    <Typography tag="p" text={`Today ${formattedTime}`} className="text-xs mt-1" />
+                                                    <Typography tag="p" text={`${item.dam_data[0]?.date} ${formattedTime}`} className="text-xs mt-1" />
                                                 </Wrapper>
                                                 <Pichart
                                                     percentage={percentage}
@@ -217,6 +218,9 @@ const DashBoard = ({mode,setMode}) => {
                             useMesh={true}
 
                         />
+                        }
+                        {
+                            loadingDamData &&<ResposiveLineSkeleton mode={mode} />
                         }
                         
                     </Wrapper>

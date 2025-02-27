@@ -1,6 +1,7 @@
-import React from 'react'
+
 import Wrapper from '../../AtomicDesign/Atom/Wrapper/Wrapper'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import PropTypes from 'prop-types'
 
 const DamAlertCardSkeleton = ({mode}) => {
     const baseColor = mode === 'dark' ? '#0d1117' : '#d1d9e0'
@@ -19,5 +20,9 @@ const DamAlertCardSkeleton = ({mode}) => {
     </SkeletonTheme>
   )
 }
+DamAlertCardSkeleton.propTypes = {
+  mode: PropTypes.string.isRequired,
+}
 
 export default DamAlertCardSkeleton
+
