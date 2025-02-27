@@ -19,6 +19,7 @@ import AddDamData from "./Components/Analysis/Popup/AddDamData";
 import RainGauge from "./Components/RainGauge/RainGauge";
 import Map from "./Components/RainGauge/Popup/Map";
 import useThemeMode from "./Components/hooks/useThemeMode";
+import Prediction from "./Components/Prediction/Prediction";
 
 
 function App() {
@@ -73,6 +74,7 @@ function App() {
                 <Route path="/dashboard" element={<DashBoard mode={mode} setMode={setMode}/>} />
                 <Route path="/analysis" element={<Analysis theme={theme} setAddDamData={setAddDamData} />} />
                 <Route path="/rain gauge" element={<RainGauge theme={theme} setOpenMap={setOpenMap} />} />
+                <Route path="/predict" element={<Prediction/>} />
               </Routes>
             </Wrapper>
           </>

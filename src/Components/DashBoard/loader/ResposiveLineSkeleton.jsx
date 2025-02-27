@@ -7,7 +7,7 @@ const ResposiveLineSkeleton = ({mode}) => {
     const highlightColor = mode === 'dark' ? '#5d6670aa' : '#f0f2f5'
   return (
     <SkeletonTheme baseColor={baseColor} highlightColor={highlightColor}>
-    <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg">
+    <Wrapper className="w-[98%] h-[96%] border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg ml-2">
         <Skeleton className='size-full' />
     </Wrapper>
     </SkeletonTheme>

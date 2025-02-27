@@ -9,7 +9,7 @@ import Pichart from "../AtomicDesign/Molecule/Pichart/Pichart"
 import iconDam from "../../Assets/dam.png"
 import drop from "../../Assets/drop.png"
 import { ResponsiveLine } from '@nivo/line'
-import { damAlertColor, data, getDamAlerts, transformDamData } from './utils'
+import { damAlertColor, data, getDamAlerts, getDamColor, transformDamData } from './utils'
 import './style.css'
 import TabBtn from "../AtomicDesign/Molecule/TabBtn/TabBtn"
 import { useCallback, useEffect, useState } from "react"
@@ -23,9 +23,9 @@ import 'swiper/css/autoplay';
 import { Autoplay } from "swiper/modules"
 import moment from "moment"
 import PichartCardSkeleton from "./loader/PichartCardSkeleton"
-import Skeleton from "react-loading-skeleton"
 import DamAlertCardSkeleton from "./loader/DamAlertCardSkeleton"
 import ResposiveLineSkeleton from "./loader/ResposiveLineSkeleton"
+import LegendSkeleton from "./loader/LegendSkeleton"
 
 
 
@@ -55,12 +55,11 @@ const DashBoard = ({mode,setMode}) => {
     },[showError,hasError])
 
     useEffect(() => {
-        fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
+        fetchAllDamData({offset:0}); //pass parameters- fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
       }, [fetchAllDamData])
 
       useEffect(() => {
         if (!damAlertData.length) return;
-
         // Only set initial tab if no tab is active
         const hasActiveTab = Object.values(btnState).some(Boolean);
         if (hasActiveTab) return;
@@ -153,87 +152,100 @@ const DashBoard = ({mode,setMode}) => {
 
                 <Typography tag="h4" className="text-lg font-bold mt-4" text="Inflow Chart" />
                 <Wrapper className="w-full h-[60%] flex justify-between">
-                    <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg">
+                    <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mr-4">
                         {
-                            !loadingDamData && <ResponsiveLine
-                            data={chartData}
-                            margin={{ top: 20, right: 30, bottom: 50, left: 40 }}
-                            lineWidth={3}
-                            xScale={{ type: 'point' }}
-                            yScale={{
-                                type: 'linear',
-                                min: 'auto',
-                                max: 'auto',
-                                stacked: true,
-                                reverse: false
-                            }}
-                            colors={['#ff0d3e', '#8575ff', '#66ff66', '#fd7418']}
-                            yFormat=" >-.2f"
-                            gridXValues={{}}
-                            axisTop={null}
-                            axisRight={null}
-                            axisBottom={{
-                                tickSize: 10,
-                                tickPadding: 0,
-                                tickRotation: 0,
-                                legendOffset: 36,
-                                legendPosition: 'middle',
-                                truncateTickAt: 0,
-                            }}
-                            axisLeft={{
-                                tickValues:0,
-                                legend: 'Inflow',
-                                legendOffset: -10,
-                                legendPosition: 'middle',
-                                
-                            }}
-                            theme={{
-                                axis: {
-                                    ticks: {
-                                        text: {
-                                            fill: '#7d8da196'
+                            !loadingDamData 
+                            && 
+                            <ResponsiveLine
+                                data={chartData}
+                                margin={{ top: 20, right: 30, bottom: 50, left: 40 }}
+                                lineWidth={3}
+                                xScale={{ type: 'point' }}
+                                yScale={{
+                                    type: 'linear',
+                                    min: 'auto',
+                                    max: 'auto',
+                                    stacked: true,
+                                    reverse: false
+                                }}
+                                colors={({ id }) => getDamColor(id)}
+                                yFormat=" >-.2f"
+                                gridXValues={{}}
+                                axisTop={null}
+                                axisRight={null}
+                                axisBottom={{
+                                    tickSize: 10,
+                                    tickPadding: 0,
+                                    tickRotation: 0,
+                                    legendOffset: 36,
+                                    legendPosition: 'middle',
+                                    truncateTickAt: 0,
+                                }}
+                                axisLeft={{
+                                    tickValues:0,
+                                    legend: 'Inflow',
+                                    legendOffset: -10,
+                                    legendPosition: 'middle',
+                                    
+                                }}
+                                theme={{
+                                    axis: {
+                                        ticks: {
+                                            text: {
+                                                fill: '#7d8da196'
+                                            }
+                                        },
+                                        legend: {
+                                            text: {
+                                                fill: '#7d8da196'
+                                            }
                                         }
                                     },
-                                    legend: {
-                                        text: {
-                                            fill: '#7d8da196'
+                                    grid: {
+                                        line: {
+                                            stroke: '#7d8da196',
+                                            strokeWidth: 1,   // Optional: Set grid line thickness
+                                            strokeDasharray: '4 4',
                                         }
                                     }
-                                },
-                                grid: {
-                                    line: {
-                                        stroke: '#7d8da196',
-                                        strokeWidth: 1,   // Optional: Set grid line thickness
-                                        strokeDasharray: '4 4',
-                                    }
-                                }
-                            }}
-                            pointSize={4}
-                            pointColor={{ theme: 'background' }}
-                            pointBorderWidth={4}
-                            pointBorderColor={{ from: 'serieColor' }}
-                            pointLabel="data.yFormatted"
-                            pointLabelYOffset={-12}
-                            enableTouchCrosshair={true}
-                            useMesh={true}
+                                }}
+                                pointSize={4}
+                                pointColor={{ theme: 'background' }}
+                                pointBorderWidth={4}
+                                pointBorderColor={{ from: 'serieColor' }}
+                                pointLabel="data.yFormatted"
+                                pointLabelYOffset={-12}
+                                enableTouchCrosshair={true}
+                                useMesh={true}
 
-                        />
+                            />
                         }
                         {
                             loadingDamData &&<ResposiveLineSkeleton mode={mode} />
                         }
                         
                     </Wrapper>
-                    <Wrapper className="w-24 h-full flex flex-col items-center justify-center border-2 border-color-border dark:border-none
-                     dark:bg-[#121721f5] rounded-lg">
-                        <Wrapper className='w-2 h-2 rounded-full bg-[#ff0d3e] mt-2' />
-                        <Typography tag="p" className="text-[10px] font-light mt-1" text="IDUKKI" />
-                        <Wrapper className='w-2 h-2 rounded-full bg-[#66ff66] mt-2' />
-                        <Typography tag="p" className="text-[10px] font-light mt-1" text="LOWER PERIYAR" />
-                        <Wrapper className='w-2 h-2 rounded-full bg-[#fd7418] mt-2' />
-                        <Typography tag="p" className="text-[10px] font-light mt-1" text="PONMUDI" />
-                        <Wrapper className='w-2 h-2 rounded-full bg-[#8575ff] mt-2' />
-                        <Typography tag="p" className="text-[10px] font-light mt-1" text="KALLARKUTTY" />
+                    <Wrapper className="w-24 h-full flex flex-col items-center justify-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg">
+                        {
+                        !loadingDamData
+                        ?
+                        chartData?.slice().reverse().map((dam, index) => (
+                            <Wrapper key={index} className="w-full flex flex-col items-center">
+                            <Wrapper 
+                                className='w-2 h-2 rounded-full mt-2' 
+                                style={{ backgroundColor: getDamColor(dam.id) }}
+                            />
+                            <Typography 
+                                tag="p" 
+                                className="text-[10px] font-light mt-1 text-center"
+                                text={dam.id}
+                            />
+                            </Wrapper>
+                        ))
+                        :
+                        <LegendSkeleton mode={mode} />
+                    }
+
                     </Wrapper>
                 </Wrapper>
 

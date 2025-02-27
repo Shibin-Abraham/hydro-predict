@@ -9,7 +9,7 @@ export default function useThemeMode() {
   });
 
   // Initialize theme to 'green' (matching the original code's themes[1])
-  const [theme, setTheme] = useState('green');
+  const [theme, setTheme] = useState('blue');
 
   // Effect to handle dark mode class and localStorage
   useEffect(() => {

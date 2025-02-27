@@ -232,6 +232,7 @@ export const transformDamData = (damArray) => {
           .map(entry => ({
             x: entry.date, // Use the actual date as x
             y: parseFloat(entry.inflow), // Inflow value as y
+            color: getDamColor(damName)
           }));
   
         return { id: damName, data: validData };
@@ -288,3 +289,19 @@ export const getDamAlerts=(dams)=> {
     }
     return result;
   }
+
+
+
+  export const getDamColor = (damName) => {
+    const upperName = damName?.toUpperCase();
+    return  generateRandomColor(upperName);
+  };
+  
+  const generateRandomColor = (seed) => {
+    // Generate consistent random color based on dam name
+    let hash = 0;
+    for (let i = 0; i < seed.length; i++) {
+      hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return `hsl(${hash % 360}, 70%, 50%)`;
+  };
