@@ -29,7 +29,7 @@ import LegendSkeleton from "./loader/LegendSkeleton"
 
 
 
-const DashBoard = ({mode,setMode}) => {
+const DashBoard = ({mode,setMode,setTheme}) => {
     const {showError } = usePopUp()
     const [allDamData,setAllDamData] = useState([])
     const [damAlertData,setDamAlertData] = useState([])
@@ -395,13 +395,13 @@ const DashBoard = ({mode,setMode}) => {
 
                 <Typography tag="h4" className="text-lg font-bold mt-3" text="Rainfall Alert" />
                 <Wrapper className="w-full h-[46vh] overflow-y-scroll no-scrollbar mt-2 flex flex-col gap-3">
-                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
+                    <Wrapper onClick={()=>setTheme('green')} className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full bg-[#ff0d3e]  ml-auto mr-4' />
                     </Wrapper>
-                    <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
+                    <Wrapper onClick={()=>setTheme('blue')} className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />

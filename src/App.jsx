@@ -71,7 +71,7 @@ function App() {
             <Wrapper className='flex w-screen h-[87vh]' >
               <NavBar theme={theme} />
               <Routes>
-                <Route path="/dashboard" element={<DashBoard mode={mode} setMode={setMode}/>} />
+                <Route path="/dashboard" element={<DashBoard mode={mode} setMode={setMode} setTheme={setTheme} />} />
                 <Route path="/analysis" element={<Analysis theme={theme} setAddDamData={setAddDamData} />} />
                 <Route path="/rain gauge" element={<RainGauge theme={theme} setOpenMap={setOpenMap} />} />
                 <Route path="/predict" element={<Prediction/>} />
