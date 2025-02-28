@@ -63,9 +63,7 @@ function App() {
           <Route path="/verify" element={<Verify />} />
           <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
-        {
-          auth.isAuthorized
-          &&
+        
           <>
             <TopBar theme={theme} />
             <Wrapper className='flex w-screen h-[87vh]' >
@@ -78,7 +76,7 @@ function App() {
               </Routes>
             </Wrapper>
           </>
-        }
+        
       </BrowserRouter>
     </Wrapper>
   )

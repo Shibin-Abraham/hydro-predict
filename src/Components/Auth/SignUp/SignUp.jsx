@@ -36,6 +36,7 @@ const SignUp = () => {
             if (error.response?.data?.errors?.password) setError("password", { type: "server", message: error.response?.data?.errors?.password })
             if (error.response?.data?.errors?.position) setError("position", { type: "server", message: error.response?.data?.errors?.position })
                 if (error.response?.data?.error) showError(error.response?.data?.error)
+                if (error.response?.data?.message) showError(error.response?.data?.message)
         } finally {
             setIsLoading(false)
         }

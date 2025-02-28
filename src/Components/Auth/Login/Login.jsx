@@ -5,13 +5,14 @@ import Button from "../../AtomicDesign/Atom/Button/Button"
 import Input from "../../AtomicDesign/Atom/Input/Input"
 import { NavLink, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
-import { useContext, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 //import { getsample } from "../../../API/Handler/sample"
 import { login, sendResetLink } from "../../../API/Handler/authHandler"
 import { AuthContext } from "../../Contexts/AuthContext"
 import { usePopUp } from "../../Contexts/PopUpContext"
 import InputPopUp from "../../AtomicDesign/Molecule/PopUp/InputPopUp"
 import CloseIcon from "../../../Assets/icons/CloseIcon"
+import { rememberMe } from "../../../API/Handler/userDataHandler"
 
 const Login = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -29,6 +30,18 @@ const Login = () => {
     const { showSuccess, showError } = usePopUp() //custom hook
 
     const navigate = useNavigate()
+
+    const fetchUser = useCallback(async ()=>{
+            try {
+                const {data} = await rememberMe();
+                console.log("remember me ",data)
+                updateAuth(data?.status, data?.token, data) //
+                navigate('/dashboard', { replace: true })
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+                
+            }
+        },[navigate,updateAuth])
     
 
     const onSubmit = async (data) => {
@@ -38,8 +51,11 @@ const Login = () => {
             const response = await login(data)
             console.log(response)
             if (response?.status === 200) {
-                //showSuccess(response?.data?.message)
-                updateAuth(true, response?.data?.toke, response?.data?.user) //
+                if(!response?.data?.user?.status) {
+                    showError("Access Denied, Please contact admin")
+                    return
+                }
+                updateAuth(response?.data?.user?.status, response?.data?.token, response?.data?.user) //
                 showSuccess(response?.data?.message)
                 navigate('/dashboard', { replace: true })
             }
@@ -77,6 +93,8 @@ const Login = () => {
             setIsResetLoading(false)
         }
     }
+
+    useEffect(()=>fetchUser,[fetchUser])
 
     return (
         <Wrapper className='w-screen h-screen flex items-center justify-center text-black dark:text-[#7d8da1]'>
@@ -209,3 +227,6 @@ const Login = () => {
 }
 
 export default Login
+
+
+
