@@ -39,7 +39,6 @@ const Login = () => {
                 navigate('/dashboard', { replace: true })
             } catch (error) {
                 console.error("Error fetching user data:", error);
-                
             }
         },[navigate,updateAuth])
     

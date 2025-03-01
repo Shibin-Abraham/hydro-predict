@@ -26,9 +26,6 @@ import PichartCardSkeleton from "./loader/PichartCardSkeleton"
 import DamAlertCardSkeleton from "./loader/DamAlertCardSkeleton"
 import ResposiveLineSkeleton from "./loader/ResposiveLineSkeleton"
 import LegendSkeleton from "./loader/LegendSkeleton"
-import { rememberMe } from "../../API/Handler/userDataHandler"
-import { AuthContext } from "../Contexts/AuthContext"
-import { useNavigate } from "react-router-dom"
 
 
 
@@ -41,20 +38,6 @@ const DashBoard = ({mode,setMode,setTheme}) => {
     const [btnState, setBtnState] = useState({})
     const [hasError, setHasError] = useState(false)
 
-    const navigate = useNavigate()
-    const { updateAuth } = useContext(AuthContext)
-
-    const fetchUser = useCallback(async ()=>{
-                try {
-                    const {data} = await rememberMe()
-                    console.log("remember me ",data)
-                    updateAuth(data?.status, data?.token, data) //
-                    navigate('/dashboard', { replace: true })
-                } catch (error) {
-                    console.error("Error fetching user data:", error)
-                    navigate('/login', { replace: true })
-                }
-            },[navigate,updateAuth])
 
     const fetchAllDamData = useCallback(async (params = {})=>{
         try {
@@ -78,9 +61,6 @@ const DashBoard = ({mode,setMode,setTheme}) => {
         fetchAllDamData({offset:0}) //pass parameters- fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
       }, [fetchAllDamData])
 
-      useEffect(() => {
-        fetchUser()
-      }, [])
 
       useEffect(() => {
         if (!damAlertData.length) return

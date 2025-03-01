@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
         token: null,
         user: null
     })
+    
 
     const updateAuth = (isAuthorized, token, user) => {
         setAuth({ isAuthorized, token, user, })

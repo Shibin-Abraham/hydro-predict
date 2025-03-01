@@ -20,6 +20,7 @@ import RainGauge from "./Components/RainGauge/RainGauge";
 import Map from "./Components/RainGauge/Popup/Map";
 import useThemeMode from "./Components/hooks/useThemeMode";
 import Prediction from "./Components/Prediction/Prediction";
+import ProtectedLayout from "./ProtectedLayout";
 
 
 function App() {
@@ -62,21 +63,39 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedLayout theme={theme}>
+                <DashBoard mode={mode} setMode={setMode} setTheme={setTheme} />
+              </ProtectedLayout>
+            }
+          />
+          <Route
+            path="/analysis"
+            element={
+              <ProtectedLayout theme={theme}>
+                <Analysis theme={theme} setAddDamData={setAddDamData} />
+              </ProtectedLayout>
+            }
+          />
+          <Route
+            path="/rain gauge"
+            element={
+              <ProtectedLayout theme={theme}>
+                <RainGauge theme={theme} setOpenMap={setOpenMap} />
+              </ProtectedLayout>
+            }
+          />
+          <Route
+            path="/predict"
+            element={
+              <ProtectedLayout theme={theme}>
+                <Prediction />
+              </ProtectedLayout>
+            }
+          />
         </Routes>
-        
-          <>
-            <TopBar theme={theme} />
-            <Wrapper className='flex w-screen h-[87vh]' >
-              <NavBar theme={theme} />
-              <Routes>
-                <Route path="/dashboard" element={<DashBoard mode={mode} setMode={setMode} setTheme={setTheme} />} />
-                <Route path="/analysis" element={<Analysis theme={theme} setAddDamData={setAddDamData} />} />
-                <Route path="/rain gauge" element={<RainGauge theme={theme} setOpenMap={setOpenMap} />} />
-                <Route path="/predict" element={<Prediction/>} />
-              </Routes>
-            </Wrapper>
-          </>
-        
       </BrowserRouter>
     </Wrapper>
   )
