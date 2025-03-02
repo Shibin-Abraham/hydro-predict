@@ -21,7 +21,7 @@ axiosInstance.interceptors.response.use(
     },
     (error) => {
         if (error.response && error.response.status === 401) {
-            console.error('Unauthorized! Check your API key and secret.');
+            console.error(error);
         }
         return Promise.reject(error);
     }

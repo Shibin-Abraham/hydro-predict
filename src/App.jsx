@@ -21,6 +21,7 @@ import Map from "./Components/RainGauge/Popup/Map";
 import useThemeMode from "./Components/hooks/useThemeMode";
 import Prediction from "./Components/Prediction/Prediction";
 import ProtectedLayout from "./ProtectedLayout";
+import InfoPopUp from "./Components/AtomicDesign/Molecule/PopUp/InfoPopUp";
 
 
 function App() {
@@ -28,14 +29,13 @@ function App() {
   const [addDamData,setAddDamData] = useState(false)
   const [openMap,setOpenMap] = useState(false)
 
-  const { auth } = useContext(AuthContext)
 
   const { mode, setMode, theme, setTheme } = useThemeMode();
 
 
   //const [auth, setAuth] = useState(false)
 
-  const { error, success } = usePopUp()
+  const { error, success,info } = usePopUp()
 
   
 
@@ -48,6 +48,9 @@ function App() {
         }
         {
           success !== null && <SuccessPopUp success={success} />
+        }
+        {
+          info !== null && <InfoPopUp info={info} />
         }
       </Wrapper>
       {

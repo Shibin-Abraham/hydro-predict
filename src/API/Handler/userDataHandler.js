@@ -6,7 +6,7 @@ export const rememberMe = async (token) => {
         const response = await axiosInstance.get('/remember-me', config);
         return response;
     } catch (error) {
-        console.error('Error getDamData :', error);
+        console.error('Error rememberMe :', error);
         throw error;
     }
 }

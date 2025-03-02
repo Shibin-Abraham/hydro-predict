@@ -9,6 +9,7 @@ export const PopUPProvider = ({ children }) => {
 
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
+    const [info, setInfo] = useState(null)
 
     const showError = (message) => {
         setError(message);
@@ -18,8 +19,12 @@ export const PopUPProvider = ({ children }) => {
         setSuccess(message);
         setTimeout(() => setSuccess(null), 7000);
     }
+    const showInfo=(message)=>{
+        setInfo(message)
+        setTimeout(() => setInfo(), 7000);
+    }
     return (
-        <PopUpContext.Provider value={{ error, showError, success, showSuccess }}>
+        <PopUpContext.Provider value={{ error, showError, success, showSuccess,info,showInfo }}>
             {children}
         </PopUpContext.Provider>
     )

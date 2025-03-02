@@ -13,6 +13,7 @@ import { AuthContext } from "../Contexts/AuthContext"
 const TopBar = ({ theme }) => {
     const { auth } = useContext(AuthContext)
 
+
     return (
         <Wrapper className='w-full h-[10vh] flex justify-between items-center'>
             <Wrapper className="w-56 pl-6 pr-6 mt-2">
@@ -28,6 +29,9 @@ const TopBar = ({ theme }) => {
             </Wrapper>
             <Wrapper className='w-full flex items-center justify-between'>
                 <BreadCrumb className='mt-2 pl-2 flex' childClassName='text-2xl font-bold text-black dark:text-[#7d8da1] mt-12 pl-2' />
+               
+                
+                
                 <Wrapper className='mr-6 mt-2 flex'>
                     <Wrapper className='w-8 h-8 mr-8 flex justify-center items-center relative'>
                         <BellIcon className='size-6 text-black dark:text-[#7d8da1] animate-tilte-bell rounded-full cursor-pointer' />
