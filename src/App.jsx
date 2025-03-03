@@ -94,7 +94,7 @@ function App() {
             path="/predict"
             element={
               <ProtectedLayout theme={theme}>
-                <Prediction />
+                <Prediction mode={mode} />
               </ProtectedLayout>
             }
           />
