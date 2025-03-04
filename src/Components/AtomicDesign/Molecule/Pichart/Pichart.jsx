@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import Wrapper from "../../Atom/Wrapper/Wrapper"
 
-const Pichart = ({ className, subClassName, innerClassName, percentage, speed = 25 }) => {
+const Pichart = ({ className, subClassName, innerClassName, percentage, speed = 25,variant }) => {
 
     const [count, setCount] = useState(0)
     useEffect(() => {
@@ -18,7 +18,7 @@ const Pichart = ({ className, subClassName, innerClassName, percentage, speed = 
             <Wrapper
                 className={subClassName}
                 style={{
-                    background: `conic-gradient(var(--color-primary) ${count * 3.6}deg, var(--color-tertiary) ${count * 3.6}deg)`,
+                    background: `${variant!=='gray'?`conic-gradient(var(--color-primary) ${count * 3.6}deg, var(--color-tertiary) ${count * 3.6}deg)`:`conic-gradient(var(--gray-dark) ${count * 3.6}deg, var(--gray-dark-variant) ${count * 3.6}deg)`}`,
                 }}
             >
                 <Wrapper className={innerClassName}>

@@ -17,6 +17,8 @@
         --color-alert:#c2c200;
         --color-normal:#8575ff;
         --color-normal-variant:#8575ff1f;
+        --gray-dark:#7d8da1e6;
+    --gray-dark-variant:#7d8da167;
         scroll-behavior: smooth;
     }
 }
@@ -27,6 +29,9 @@
     --color-secondary:hsl(247,100%,79%);
     --color-tertiary:hsla(247, 100%, 73%, 0.199);
     --color-tertiary-variant:hsla(247, 100%, 73%, 0.082);
+    --color-dark-gray:#7d8da196;
+    --color-light-gray:#595959;
+
 }
 .theme-green{
     --color-primary:hsl(120,100%,35%);
@@ -35,4 +40,6 @@
     --color-secondary:#66ff66;
     --color-tertiary:hsla(120, 100%, 70%, 0.17);
     --color-tertiary-variant:hsla(120, 100%, 70%, 0.068);
+    --color-dark-gray:#7d8da1b7;
+    --color-light-gray:#595959;
 }

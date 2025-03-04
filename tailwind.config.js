@@ -35,6 +35,8 @@ export default {
         'color-blue': "var(--color-normal)",
         'color-blue-variant': "var(--color-normal-variant)",
         'color-yellow': "var(--color-alert)",
+        'color-dark-gray': "var(--color-dark-gray)",
+        'color-light-gray': "var(--color-light-gray)",
       },
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],

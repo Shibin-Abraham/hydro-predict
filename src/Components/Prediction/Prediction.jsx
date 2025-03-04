@@ -8,6 +8,7 @@ import Input from "../AtomicDesign/Atom/Input/Input"
 import Form from "../AtomicDesign/Atom/Form/Form"
 import Button from "../AtomicDesign/Atom/Button/Button"
 import ReactApexChart from "react-apexcharts"
+import Pichart from "../AtomicDesign/Molecule/Pichart/Pichart"
 
 
 
@@ -160,18 +161,85 @@ const Prediction = ({mode}) => {
       </Wrapper>
       <Wrapper className='w-full h-[80vh] flex gap-4 pl-8'>
       <Wrapper className='w-[42vw] h-full pt-2 flex flex-col gap-3'>
-          <Wrapper className="w-full h-[25vh] flex justify-between">
-          <Wrapper className="w-[20vw] h-full flex border-2 dark:border border-primary  dark:bg-[#121721f5] rounded-lg overflow-hidden">
-            
-            <Wrapper className='w-full h-6 flex justify-end '>
-                <Wrapper className='w-20 h-full bg-primary rounded-bl-lg grid place-items-center'>
-                <Typography tag="h4" className="text-[10px] font-normal text-center text-white" text="AI Generated" />
+          <Wrapper className="w-full h-[25vh] flex items-center justify-between">
+            <Wrapper className="w-[20vw] h-full flex flex-col border-2 dark:border border-primary  dark:bg-[#121721f5] rounded-lg overflow-hidden">
+              <Wrapper className='w-full h-6 flex justify-between'>
+              <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1 text-primary" text="Today" />
+                  <Wrapper className='w-20 h-full bg-primary rounded-bl-lg grid place-items-center'>
+                  <Typography tag="h4" className="text-[10px] font-normal text-center text-white" text="AI Generated" />
+                  </Wrapper>
+              </Wrapper>
+              <Wrapper className='w-full h-full px-3'>
+                <Wrapper className='h-[16vh] w-full flex justify-between'>
+                  <Wrapper className='flex flex-col items-center'>
+                     <Pichart
+                      percentage={75}
+                      className="w-20 h-20 grid place-items-center"
+                      subClassName="relative w-16 h-16 rounded-full grid place-items-center before:content-[''] before:absolute before:h-[84%]
+                          before:w-[84%] before:bg-[#ffffff] before:dark:bg-[#121720] before:rounded-full"
+                      innerClassName="text-primary relative text-xs"
+                      speed={20}
+                    /> 
+                    <Typography tag="p" className="text-xs font-normal text-center" text="Predicted Water Level" />
+                  </Wrapper>    
+                  <Wrapper className='w-[60%] h-full flex flex-col items-end justify-center'>
+                  <Typography tag="p" className="text-xs font-normal text-center" text="Predicted Water Level" />
+                  <Wrapper>
+                  <Typography tag="p" className="text-lg font-bold text-center text-primary" text="720.22 m" />
+                  </Wrapper>
+                  
+                  <Typography tag="p" className="text-[10px] font-normal text-center pt-1" text="Inflow Value" />
+                  <Typography tag="p" className="text-xs font-semibold text-center" text="110.22 MCM" />
+                  
+                  </Wrapper>
                 </Wrapper>
+                <Wrapper className='w-full h-[1px] bg-[#595959] dark:bg-[#7d8da196]' />
+                <Typography tag="p" className="text-[10px] font-normal">
+                    Current Waterl Level <Typography tag="span" className="text-[10px] font-normal text-primary" text='710.90 m'/>
+                    , percentage <Typography tag="span" className="text-[10px] font-normal text-primary" text='82%'/>
+                  </Typography>
+              
+              </Wrapper>
             </Wrapper>
-          </Wrapper>
-          <Wrapper className="w-[20vw] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg">
-            hh
-          </Wrapper>
+            <Wrapper className="w-[20vw] h-full flex flex-col border-2 border-color-light-gray dark:border dark:border-color-dark-gray  dark:bg-[#121721f5] rounded-lg overflow-hidden">
+              <Wrapper className='w-full h-6 flex justify-between'>
+                  <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1" text="Tomarrow" />
+                  <Wrapper className='w-20 h-full bg-color-light-gray dark:bg-color-dark-gray rounded-bl-lg grid place-items-center'>
+                  <Typography tag="h4" className="text-[10px] font-normal text-center text-white" text="AI Generated" />
+                  </Wrapper>
+              </Wrapper>
+              <Wrapper className='w-full h-full px-3'>
+                <Wrapper className='h-[16vh] w-full flex justify-between'>
+                  <Wrapper className='flex flex-col items-center'>
+                     <Pichart
+                     variant='gray'
+                      percentage={75}
+                      className="w-20 h-20 grid place-items-center"
+                      subClassName="relative w-16 h-16 rounded-full grid place-items-center before:content-[''] before:absolute before:h-[84%]
+                          before:w-[84%] before:bg-[#ffffff] before:dark:bg-[#121720] before:rounded-full"
+                      innerClassName="text-color-dark-gray relative text-xs"
+                      speed={20}
+                    /> 
+                    <Typography tag="p" className="text-xs font-normal text-center" text="Predicted Water Level" />
+                  </Wrapper>    
+                  <Wrapper className='w-[60%] h-full flex flex-col items-end justify-center'>
+                  <Typography tag="p" className="text-xs font-normal text-center" text="Predicted Water Level" />
+                  <Wrapper>
+                  <Typography tag="p" className="text-lg font-bold text-center text-color-light-gray dark:text-color-dark-gray" text="720.22 m" />
+                  </Wrapper>
+                  
+                  <Typography tag="p" className="text-[10px] font-normal text-center pt-1" text="Inflow Value" />
+                  <Typography tag="p" className="text-xs font-semibold text-center" text="110.22 MCM" />
+                  
+                  </Wrapper>
+                </Wrapper>
+                <Wrapper className='block w-full h-[1px] bg-[#595959] dark:bg-[#7d8da196]' />
+                <Typography tag="p" className="text-[10px] font-normal">
+                    This Model has 84% of accuray, It can make mistakes
+                  </Typography>
+              
+              </Wrapper>
+            </Wrapper>
           </Wrapper>
           <Typography tag="h4" className="text-lg font-bold" text="Inflow Trends" />
           <Wrapper className="w-full h-[45vh] border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg pr-2">
