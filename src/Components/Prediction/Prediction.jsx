@@ -203,7 +203,7 @@ const Prediction = ({mode}) => {
             </Wrapper>
             <Wrapper className="w-[20vw] h-full flex flex-col border-2 border-color-light-gray dark:border dark:border-color-dark-gray  dark:bg-[#121721f5] rounded-lg overflow-hidden">
               <Wrapper className='w-full h-6 flex justify-between'>
-                  <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1" text="Tomarrow" />
+                  <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1" text="Tomorrow" />
                   <Wrapper className='w-20 h-full bg-color-light-gray dark:bg-color-dark-gray rounded-bl-lg grid place-items-center'>
                   <Typography tag="h4" className="text-[10px] font-normal text-center text-white" text="AI Generated" />
                   </Wrapper>

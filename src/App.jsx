@@ -22,6 +22,7 @@ import useThemeMode from "./Components/hooks/useThemeMode";
 import Prediction from "./Components/Prediction/Prediction";
 import ProtectedLayout from "./ProtectedLayout";
 import InfoPopUp from "./Components/AtomicDesign/Molecule/PopUp/InfoPopUp";
+import DamDataProvider from "./Components/Contexts/DamDataContext/DamDataProvider";
 
 
 function App() {
@@ -60,17 +61,21 @@ function App() {
         openMap&&<Map setOpenMap={setOpenMap} />
       }
       <BrowserRouter>
+      <DamDataProvider>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          
           <Route
             path="/dashboard"
             element={
               <ProtectedLayout theme={theme}>
+                
                 <DashBoard mode={mode} setMode={setMode} setTheme={setTheme} />
+             
               </ProtectedLayout>
             }
           />
@@ -78,7 +83,9 @@ function App() {
             path="/analysis"
             element={
               <ProtectedLayout theme={theme}>
+
                 <Analysis theme={theme} setAddDamData={setAddDamData} />
+            
               </ProtectedLayout>
             }
           />
@@ -98,7 +105,9 @@ function App() {
               </ProtectedLayout>
             }
           />
+          
         </Routes>
+        </DamDataProvider>
       </BrowserRouter>
     </Wrapper>
   )

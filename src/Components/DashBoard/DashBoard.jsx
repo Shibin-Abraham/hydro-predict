@@ -26,6 +26,7 @@ import PichartCardSkeleton from "./loader/PichartCardSkeleton"
 import DamAlertCardSkeleton from "./loader/DamAlertCardSkeleton"
 import ResposiveLineSkeleton from "./loader/ResposiveLineSkeleton"
 import LegendSkeleton from "./loader/LegendSkeleton"
+import DamDataContext from "../Contexts/DamDataContext/DamDataContext"
 
 
 
@@ -38,11 +39,14 @@ const DashBoard = ({mode,setMode,setTheme}) => {
     const [btnState, setBtnState] = useState({})
     const [hasError, setHasError] = useState(false)
 
+    const {setDamData} = useContext(DamDataContext)
+
 
     const fetchAllDamData = useCallback(async (params = {})=>{
         try {
             const {data} = await getDamData(params)
             setAllDamData(data)
+            setDamData(data)
             setDamAlertData(getDamAlerts(data))// filter dam data for alerts
             setChartData(transformDamData(data))//filter dam data for chart
             setLoadingDamData(false)
@@ -54,10 +58,9 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                 setHasError(true)
             }
         }
-    },[showError,hasError])
+    },[showError,hasError,setDamData])
 
     useEffect(() => {
-        
         fetchAllDamData({offset:0}) //pass parameters- fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
       }, [fetchAllDamData])
 

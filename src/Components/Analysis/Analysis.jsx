@@ -7,7 +7,7 @@ import Select from '../AtomicDesign/Atom/Input/Select'
 import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Pichart from '../AtomicDesign/Molecule/Pichart/Pichart'
-import {  useState } from 'react'
+import {  useContext, useState } from 'react'
 import { getColor,data } from './utils'
 import Button from '../AtomicDesign/Atom/Button/Button'
 import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
@@ -17,8 +17,13 @@ import Input from '../AtomicDesign/Atom/Input/Input'
 import { Form } from 'react-router-dom'
 import CloseIcon from '../../Assets/icons/CloseIcon'
 import InputPopUp from '../AtomicDesign/Molecule/PopUp/InputPopUp'
+import DamDataContext from '../Contexts/DamDataContext/DamDataContext'
 const Analysis = ({theme,setAddDamData}) => {
   const color = getColor({theme})
+  const [selectedDamId,setSelectedDamId] = useState()
+
+  const {damData} = useContext(DamDataContext)
+  console.log('analysis',damData)
 
   const [donutState, setDonutState] = useState({
           
@@ -267,7 +272,9 @@ const Analysis = ({theme,setAddDamData}) => {
     <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex overflow-hidden">
          <Wrapper className='w-[50%] h-full'>
             <Wrapper className='w-full ml-8 mt-4 flex items-center gap-4' >
-                <Select options={['idukki','madupetty','periyar','anayirankal']} 
+                <Select 
+                options={damData.map((data)=>data)} 
+                onChange={(e)=>console.log(e.target.value)}
                 className='w-28 h-6 bg-inherit rounded-md text-[#595959] dark:text-[#7d8da196] text-sm border border-color-border dark:border-[#161d29f5] outline-none' 
                 firstOptionClassName="dark:bg-[#121721f5]"
                 childClassName="dark:bg-[#121721f5]"
