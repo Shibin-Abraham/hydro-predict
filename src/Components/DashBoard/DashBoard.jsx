@@ -27,6 +27,7 @@ import DamAlertCardSkeleton from "./loader/DamAlertCardSkeleton"
 import ResposiveLineSkeleton from "./loader/ResposiveLineSkeleton"
 import LegendSkeleton from "./loader/LegendSkeleton"
 import DamDataContext from "../Contexts/DamDataContext/DamDataContext"
+import RainAlertSkeleton from "./loader/RainAlertSkeleton"
 
 
 
@@ -402,7 +403,9 @@ const DashBoard = ({mode,setMode,setTheme}) => {
 
                 <Typography tag="h4" className="text-lg font-bold mt-3" text="Rainfall Alert" />
                 <Wrapper className="w-full h-[46vh] overflow-y-scroll no-scrollbar mt-2 flex flex-col gap-3">
-                    <Wrapper onClick={()=>setTheme('green')} className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
+                    {
+                        loadingDamData?([1,2,3,4,5,6,7].map((_,index)=><RainAlertSkeleton key={index} mode={mode}/>)):<>
+                        <Wrapper onClick={()=>setTheme('green')} className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
@@ -468,6 +471,9 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>
+                        </>
+                    }
+                    
                     
                 </Wrapper>
 

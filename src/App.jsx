@@ -23,6 +23,7 @@ import Prediction from "./Components/Prediction/Prediction";
 import ProtectedLayout from "./ProtectedLayout";
 import InfoPopUp from "./Components/AtomicDesign/Molecule/PopUp/InfoPopUp";
 import DamDataProvider from "./Components/Contexts/DamDataContext/DamDataProvider";
+import Settings from "./Components/Settings/Settings";
 
 
 function App() {
@@ -102,6 +103,17 @@ function App() {
             element={
               <ProtectedLayout theme={theme}>
                 <Prediction mode={mode} />
+              </ProtectedLayout>
+            }
+          />
+
+          <Route
+            path="/settings"
+            element={
+              <ProtectedLayout theme={theme}>
+                
+                <Settings mode={mode} theme={theme} setMode={setMode} setTheme={setTheme} />
+             
               </ProtectedLayout>
             }
           />

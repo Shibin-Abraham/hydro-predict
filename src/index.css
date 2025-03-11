@@ -43,3 +43,25 @@
     --color-dark-gray:#7d8da1b7;
     --color-light-gray:#595959;
 }
+.theme-red {
+    --color-primary: hsl(0, 80%, 50%);
+    --color-primary-hover: hsl(0, 80%, 45%);
+    --color-primary-variant: hsla(0, 80%, 50%, 0.5);
+    --color-secondary: hsl(0, 80%, 70%);
+    --color-tertiary: hsla(0, 80%, 80%, 0.2);
+    --color-tertiary-variant: hsla(0, 80%, 80%, 0.1);
+    --color-dark-gray: #7d8da1;
+    --color-light-gray: #595959;
+    --fill-color: hsl(0, 80%, 40%);
+}
+.theme-gray {
+    --color-primary: hsl(0, 0%, 35%);
+    --color-primary-hover: hsl(0, 0%, 30%);
+    --color-primary-variant: hsla(0, 0%, 35%, 0.5);
+    --color-secondary: hsl(0, 0%, 60%);
+    --color-tertiary: hsla(0, 0%, 80%, 0.2);
+    --color-tertiary-variant: hsla(0, 0%, 80%, 0.1);
+    --color-dark-gray: hsl(0, 0%, 25%);
+    --color-light-gray: hsl(0, 0%, 75%);
+    --fill-color: hsl(0, 0%, 50%);
+}

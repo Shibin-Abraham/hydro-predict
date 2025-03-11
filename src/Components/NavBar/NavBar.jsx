@@ -15,10 +15,11 @@ import aiDark from '../../Assets/images/ai-dark.png'
 import aiLight from '../../Assets/images/ai-light.png'
 import Button from "../AtomicDesign/Atom/Button/Button"
 import SparklesIcon from "../../Assets/icons/SparklesIcon"
-import { useState } from "react"
+import { useContext, } from "react"
+import SettingsContext from "../Contexts/SettingsContext/SettingsContext"
 
 const NavBar = () => {
-    const [expand, setExpand] = useState(true)
+    const {expand} = useContext(SettingsContext)
     return (
         <Wrapper className={`h-full text-black dark:text-gray-300`}>
             <Wrapper className={`${expand ? 'w-40 ml-6 justify-between' : 'w-10'} h-full pt-8 flex flex-col`}>
@@ -171,7 +172,7 @@ const NavBar = () => {
                         </NavLink>
                     </Wrapper>
 
-                    <Wrapper className="h-12 relative" onClick={() => setExpand(!expand)}>
+                    <Wrapper className="h-12 relative" >
                         <NavLink to="/Settings" className={({ isActive }) => {
                             return isActive ? "active" : null
                         }}>{

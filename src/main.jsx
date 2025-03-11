@@ -4,12 +4,15 @@ import './index.css'
 import App from './App.jsx'
 import { PopUPProvider } from './Components/Contexts/PopUpContext.jsx'
 import { AuthProvider } from './Components/Contexts/AuthContext.jsx'
+import SettingsProvider from './Components/Contexts/SettingsContext/SettingsProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <PopUPProvider>
       <AuthProvider>
-        <App />
+        <SettingsProvider>
+          <App />
+        </SettingsProvider>
       </AuthProvider>
     </PopUPProvider>
 
