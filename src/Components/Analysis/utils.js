@@ -1,5 +1,8 @@
+import moment from "moment";
+import { damAlertColor } from "../DashBoard/utils";
+
 export const getColor = ({theme})=>{
-    console.log(theme)
+
     switch(theme) {
         case 'blue':
           return "#8575ff79"
@@ -16,6 +19,283 @@ export const data = [
   { day: '2023-01-03', value: 20 },
   // Add more data here
 ];
+export const donutStyles={
+          
+    series: [44, 55, 41, 17, 15],
+    options: {
+      chart: {
+        width: 400,
+        height:400,
+        type: 'donut',
+      },
+      colors: ['#ff0d3e', '#23d823', '#715ff8', '#F4C724', '#B833FF'],
+      labels: ['Water Level', 'Inflow', 'Power Discharge', 'Spillway release', 'Total Outflow'],
+      plotOptions: {
+        pie: {
+          startAngle: -90,
+          endAngle: 270
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      fill: {
+        type: 'gradient',
+      },
+      legend: {
+        position: 'right',  // Place legend to the right
+        floating: false,    
+        offsetY: -15,         // Center vertically
+        offsetX: -5, 
+        fontSize:'10px', 
+        formatter: function(val, opts) {
+          return " &nbsp;&nbsp;"+val + " - " + opts.w.globals.series[opts.seriesIndex]
+        }
+      },
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: 'center'
+          }
+        }
+      }]
+    },
+} 
+
+export const inflowStyles ={
+          
+    series: [{
+      name:'inflow',
+      data: [31.1, 40, 28, 151, 42, 109, 100]
+    }, {
+      name:'rainfall',
+      data: [11, 32, 45, 0, 34, 52, 41]
+    },],
+    options: {
+      chart: {
+        width:'100%',
+        height: '100%',
+        type: 'area',
+        toolbar: {
+          show: false 
+      },
+      offsetX:0,  
+      offsetY: -20
+      },
+      grid: {
+        show: true,  
+        borderColor: '#7d8da196', 
+        strokeDashArray: 3,   
+        yaxis: {
+          lines: {
+            show: true 
+          }
+        },
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      xaxis: {
+          type: 'datetime',
+          categories: [
+            '2018-09-19T00:00:00.000Z',
+            '2018-09-19T01:30:00.000Z',
+            '2018-09-19T02:30:00.000Z',
+            '2018-09-19T03:30:00.000Z',
+            '2018-09-19T04:30:00.000Z',
+            '2018-09-19T05:30:00.000Z',
+            '2018-09-19T06:30:00.000Z',
+          ],
+          labels: {
+            style: {
+              fontSize: '10px',
+            },
+          },
+        
+      },
+      
+      yaxis: {
+        show: false  // Hides the left-side Y-axis numbers
+    },
+      tooltip: {
+        x: {
+          format: 'dd/MM/yy HH:mm'
+        },
+      },
+      legend: {
+        show: false  // Hides the legend buttons
+    },
+    colors:['#715ff8','#23d823']
+    },
+}
+
+export const getWaterLevelStyles = ({color})=>({
+  series: [{
+    name: 'water level',
+    data: [40.3, 42.1, 55.0, 60.1, 55.0, 53.6, 53.2, 52.3, 59.4, 60.8, 65.5, 70.2]
+  }],
+
+  options: {
+    chart: {
+      height: '100%',
+      type: 'bar',
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 2,
+        dataLabels: {
+          position: 'top', // top, center, bottom
+        },
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function (val) {
+        return val + "%";
+      },
+      offsetY: -20,
+      style: {
+        fontSize: '12px',
+        colors: ["#595959"]
+      }
+    },
+    colors:[color],
+    xaxis: {
+      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      position: 'bottom',
+      axisBorder: {
+        show: false
+      },
+      axisTicks: {
+        show: false
+      },
+      crosshairs: {
+        fill: {
+          type: 'gradient',
+          gradient: {
+            colorFrom: color,
+            colorTo: "#ffffff",
+            stops: [0, 100],
+            opacityFrom: 0.4,
+            opacityTo: 0.5,
+          }
+        }
+      },
+      tooltip: {
+        enabled: true,
+      }
+    },
+    yaxis: {
+      axisBorder: {
+        show: false
+      },
+      axisTicks: {
+        show: false,
+      },
+      labels: {
+        show: false,
+        formatter: function (val) {
+          return val + "%";
+        }
+      }
+    },
+    grid: {
+      borderColor: '#7d8da196', 
+      strokeDashArray: 3,    
+  },
+  annotations: {
+    yaxis: [
+      {
+        y: 67,  
+        borderColor: '#FF0000',  // Line color
+        strokeDashArray: 3,  // Makes it a dashed line
+        label: {
+          borderColor: '#FF0000',
+          style: {
+            color: '#fff',
+            background: '#FF0000',
+            fontSize: '10px'
+          },
+          text: 'red level',
+        },
+      },
+      {
+        y: 50,  
+        borderColor: 'orange',  // Line color
+        strokeDashArray: 3,  // Makes it a dashed line
+        label: {
+          borderColor: 'orange',
+          style: {
+            color: '#fff',
+            background: 'orange',
+            fontSize: '10px'
+          },
+          text: 'orange level',
+          offsetX: -540,
+        },
+      },
+      {
+        y: 47,  
+        borderColor: 'blue',  // Line color
+        strokeDashArray: 3,  // Makes it a dashed line
+        label: {
+          borderColor: 'blue',
+          style: {
+            color: '#fff',
+            background: 'blue',
+            fontSize: '10px'
+          },
+          text: 'blue level',
+        },
+      },
+    ],
+  },
+  },
+})
+
+export const getCardData = ({item})=>{
+  console.log('item',item)
+  const liveStorage = parseFloat(item?.dam_data?.[0]?.live_storage) || 0;
+    const liveStorageAtFRL = parseFloat(item?.live_storage_at_FRL) || 0;
+
+    // Calculate percentage, default to 0 if liveStorageAtFRL is 0, and cap at 100
+    const percentage = liveStorageAtFRL > 0 ? Math.min((liveStorage / liveStorageAtFRL) * 100, 100) : 0;
+  const formattedTime = moment(item?.dam_data?.[0]?.time??0, 'HH:mm').format('hh:mm A');
+
+  const alertColor = damAlertColor({
+      prefix:'text',
+      value:item?.dam_data?.[0]?.water_level,
+      blueLevel:item?.dam_data?.[0]?.blue_level,
+      orangeLevel:item?.dam_data?.[0]?.orange_level,
+      redLevel:item?.dam_data?.[0]?.red_level,
+      defaultLightColor:'#595959',
+      defaultDarkColor:'#7d8da196',
+  })
+
+  const date = item?.dam_data?.[0]?.date
+  const name = item?.name
+
+  console.log('percentage',liveStorage / liveStorageAtFRL)
+
+  return {
+    liveStorage,
+    liveStorageAtFRL,
+    percentage,
+    formattedTime,
+    alertColor,
+    date,
+    name
+  }
+                            
+}
+
 /*
 <ResponsiveCalendar
               data={data}

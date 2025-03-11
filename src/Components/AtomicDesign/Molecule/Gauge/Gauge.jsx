@@ -7,8 +7,6 @@ import { alertColor } from './utils';
 const Gauge = ({ rainFall, speed = 50, maxRainFall = 250, maxHeight = 96 }) => {
     const [count, setCount] = useState(0);
     const alert = alertColor(rainFall,'bg')
-    console.log(alert)
-
 
     useEffect(() => {
         const interval = setInterval(() => {

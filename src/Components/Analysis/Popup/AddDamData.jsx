@@ -20,8 +20,8 @@ const { auth } = useContext(AuthContext)
     <InputPopUp className="w-full h-full bg-[#000000be] absolute flex items-center justify-center z-20" >
           <CloseIcon onClick={() => setAddDamData(false)} className="absolute size-5 text-[#595959] dark:text-[#7d8da196] top-4 right-4 hover:cursor-pointer" />
         <Wrapper className="w-full flex flex-col items-center justify-center p-0">
-                    <Wrapper onClick={handleToggle} className="w-full flex justify-center mt-4 cursor-pointer">
-                            <Wrapper className={`${auth?.user?.position.toUpperCase()==='ADMIN'?"w-[288px]":"w-[150px]"} relative h-6 bg-primary dark:bg-primary-variant rounded-3xl flex items-center`}>
+                    <Wrapper className="w-full flex justify-center mt-4 cursor-pointer">
+                            <Wrapper onClick={handleToggle} className={`${auth?.user?.position.toUpperCase()==='ADMIN'?"w-[288px]":"w-[150px]"} relative h-6 bg-primary dark:bg-primary-variant rounded-3xl flex items-center`}>
                                 {/* Moving white background */}
                                 {
                                     auth?.user?.position.toUpperCase()==='ADMIN'&&<Wrapper

@@ -7,8 +7,8 @@ import Select from '../AtomicDesign/Atom/Input/Select'
 import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Pichart from '../AtomicDesign/Molecule/Pichart/Pichart'
-import {  useContext, useState } from 'react'
-import { getColor,data } from './utils'
+import { useContext, useEffect, useState } from 'react'
+import { getColor,data, donutStyles, inflowStyles, getWaterLevelStyles, getCardData } from './utils'
 import Button from '../AtomicDesign/Atom/Button/Button'
 import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
 import Media from '../AtomicDesign/Atom/Media/Media'
@@ -18,254 +18,25 @@ import { Form } from 'react-router-dom'
 import CloseIcon from '../../Assets/icons/CloseIcon'
 import InputPopUp from '../AtomicDesign/Molecule/PopUp/InputPopUp'
 import DamDataContext from '../Contexts/DamDataContext/DamDataContext'
+
 const Analysis = ({theme,setAddDamData}) => {
   const color = getColor({theme})
-  const [selectedDamId,setSelectedDamId] = useState()
+  const [selectedDamId,setSelectedDamId] = useState(1) //default damid eg: 1-idukki
+
+  const [filteredDamData,setFilteredDamData] = useState()
 
   const {damData} = useContext(DamDataContext)
   console.log('analysis',damData)
 
-  const [donutState, setDonutState] = useState({
-          
-    series: [44, 55, 41, 17, 15],
-    options: {
-      chart: {
-        width: 400,
-        height:400,
-        type: 'donut',
-      },
-      colors: ['#ff0d3e', '#23d823', '#715ff8', '#F4C724', '#B833FF'],
-      labels: ['Water Level', 'Inflow', 'Power Discharge', 'Spillway release', 'Total Outflow'],
-      plotOptions: {
-        pie: {
-          startAngle: -90,
-          endAngle: 270
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      fill: {
-        type: 'gradient',
-      },
-      legend: {
-        position: 'right',  // Place legend to the right
-        floating: false,    
-        offsetY: -15,         // Center vertically
-        offsetX: -5, 
-        fontSize:'10px', 
-        formatter: function(val, opts) {
-          return " &nbsp;&nbsp;"+val + " - " + opts.w.globals.series[opts.seriesIndex]
-        }
-      },
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 200
-          },
-          legend: {
-            position: 'center'
-          }
-        }
-      }]
-    },
-});
+  const [donutState, setDonutState] = useState(donutStyles);
+  const [stateInflow, setStateInflow] = useState(inflowStyles);
+  const [state, setState] = useState(getWaterLevelStyles({color}));
 
-  const [stateInflow, setStateInflow] = useState({
-          
-    series: [{
-      name:'inflow',
-      data: [31.1, 40, 28, 151, 42, 109, 100]
-    }, {
-      name:'rainfall',
-      data: [11, 32, 45, 0, 34, 52, 41]
-    },],
-    options: {
-      chart: {
-        width:'100%',
-        height: '100%',
-        type: 'area',
-        toolbar: {
-          show: false 
-      },
-      offsetX:0,  
-      offsetY: -20
-      },
-      grid: {
-        show: true,  
-        borderColor: '#7d8da196', 
-        strokeDashArray: 3,   
-        yaxis: {
-          lines: {
-            show: true 
-          }
-        },
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: 'smooth'
-      },
-      xaxis: {
-          type: 'datetime',
-          categories: [
-            '2018-09-19T00:00:00.000Z',
-            '2018-09-19T01:30:00.000Z',
-            '2018-09-19T02:30:00.000Z',
-            '2018-09-19T03:30:00.000Z',
-            '2018-09-19T04:30:00.000Z',
-            '2018-09-19T05:30:00.000Z',
-            '2018-09-19T06:30:00.000Z',
-          ],
-          labels: {
-            style: {
-              fontSize: '10px',
-            },
-          },
-        
-      },
-      
-      yaxis: {
-        show: false  // Hides the left-side Y-axis numbers
-    },
-      tooltip: {
-        x: {
-          format: 'dd/MM/yy HH:mm'
-        },
-      },
-      legend: {
-        show: false  // Hides the legend buttons
-    },
-    colors:['#715ff8','#23d823']
-    },
-  
-  
-});
-    const [state, setState] = useState({
-        series: [{
-          name: 'water level',
-          data: [40.3, 42.1, 55.0, 60.1, 55.0, 53.6, 53.2, 52.3, 59.4, 60.8, 65.5, 70.2]
-        }],
+  const {liveStorage,liveStorageAtFRL,percentage,formattedTime,alertColor,date,name} = getCardData({item:filteredDamData?.[0]})
 
-        options: {
-          chart: {
-            height: '100%',
-            type: 'bar',
-          },
-          plotOptions: {
-            bar: {
-              borderRadius: 2,
-              dataLabels: {
-                position: 'top', // top, center, bottom
-              },
-            },
-          },
-          dataLabels: {
-            enabled: true,
-            formatter: function (val) {
-              return val + "%";
-            },
-            offsetY: -20,
-            style: {
-              fontSize: '12px',
-              colors: ["#595959"]
-            }
-          },
-          colors:[color],
-          xaxis: {
-            categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            position: 'bottom',
-            axisBorder: {
-              show: false
-            },
-            axisTicks: {
-              show: false
-            },
-            crosshairs: {
-              fill: {
-                type: 'gradient',
-                gradient: {
-                  colorFrom: color,
-                  colorTo: "#ffffff",
-                  stops: [0, 100],
-                  opacityFrom: 0.4,
-                  opacityTo: 0.5,
-                }
-              }
-            },
-            tooltip: {
-              enabled: true,
-            }
-          },
-          yaxis: {
-            axisBorder: {
-              show: false
-            },
-            axisTicks: {
-              show: false,
-            },
-            labels: {
-              show: false,
-              formatter: function (val) {
-                return val + "%";
-              }
-            }
-          },
-          grid: {
-            borderColor: '#7d8da196', 
-            strokeDashArray: 3,    
-        },
-        annotations: {
-          yaxis: [
-            {
-              y: 67,  
-              borderColor: '#FF0000',  // Line color
-              strokeDashArray: 3,  // Makes it a dashed line
-              label: {
-                borderColor: '#FF0000',
-                style: {
-                  color: '#fff',
-                  background: '#FF0000',
-                  fontSize: '10px'
-                },
-                text: 'red level',
-              },
-            },
-            {
-              y: 50,  
-              borderColor: 'orange',  // Line color
-              strokeDashArray: 3,  // Makes it a dashed line
-              label: {
-                borderColor: 'orange',
-                style: {
-                  color: '#fff',
-                  background: 'orange',
-                  fontSize: '10px'
-                },
-                text: 'orange level',
-                offsetX: -540,
-              },
-            },
-            {
-              y: 47,  
-              borderColor: 'blue',  // Line color
-              strokeDashArray: 3,  // Makes it a dashed line
-              label: {
-                borderColor: 'blue',
-                style: {
-                  color: '#fff',
-                  background: 'blue',
-                  fontSize: '10px'
-                },
-                text: 'blue level',
-              },
-            },
-          ],
-        },
-        },
-    });
+  useEffect(()=>{
+    setFilteredDamData(damData.filter((item)=>item.id===selectedDamId))
+  },[selectedDamId,damData])
 
 
   return (
@@ -274,11 +45,13 @@ const Analysis = ({theme,setAddDamData}) => {
             <Wrapper className='w-full ml-8 mt-4 flex items-center gap-4' >
                 <Select 
                 options={damData.map((data)=>data)} 
-                onChange={(e)=>console.log(e.target.value)}
+                onChange={(e)=>setSelectedDamId(parseInt(e.target.value))}
                 className='w-28 h-6 bg-inherit rounded-md text-[#595959] dark:text-[#7d8da196] text-sm border border-color-border dark:border-[#161d29f5] outline-none' 
                 firstOptionClassName="dark:bg-[#121721f5]"
                 childClassName="dark:bg-[#121721f5]"
-                placeholder="Select Dam" />
+                placeholder="Select Dam" 
+                defaultValue={selectedDamId}
+                />
                 <AddSolidIcon className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]' onClick={()=>setAddDamData(true)} />
                 
             </Wrapper>
@@ -288,18 +61,18 @@ const Analysis = ({theme,setAddDamData}) => {
                     <Wrapper className='w-full h-[30%] flex items-center justify-between'>
                         <Wrapper className='h-full flex items-center'>
                             <MapPointerIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />
-                            <Typography tag="p" text='Idukki' className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
+                            <Typography tag="p" text={name} className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
                         </Wrapper>
-                        <FlagIcon className='size-4 text-[#595959] dark:text-[#7d8da196] mr-6' />
+                        <FlagIcon className={`size-4 ${alertColor} mr-6`} />
                     </Wrapper>
                     <Wrapper className="w-full h-[70%] flex items-start justify-between">
                         <Wrapper className='h-full ml-6 mt-1'>
-                            <Typography tag="p" className="text-lg font-bold mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="Live Storage" />
-                            <Typography tag="p" text=" 317.54 / 444.85" className="text-sm font-medium  mt-1" />
-                            <Typography tag="p" text="Today 7:00 AM" className="text-xs mt-1" />
+                          <Typography tag="p" className="text-lg font-bold mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="Live Storage" />
+                          <Typography tag="p" text={`${liveStorage} / ${liveStorageAtFRL}`} className="text-sm font-medium  mt-1" />
+                          <Typography tag="p" text={`${date} ${formattedTime}`} className="text-xs mt-1" />
                         </Wrapper>
                         <Pichart
-                            percentage={60}
+                            percentage={percentage}
                             className="w-24 h-24 grid place-items-center mr-4"
                             subClassName="relative w-20 h-20 rounded-full grid place-items-center before:content-[''] before:absolute before:h-[84%]
                                 before:w-[84%] before:bg-[#ffffff] before:dark:bg-[#121720] before:rounded-full"
