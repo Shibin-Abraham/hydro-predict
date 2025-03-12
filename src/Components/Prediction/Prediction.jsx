@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Wrapper from "../AtomicDesign/Atom/Wrapper/Wrapper"
 
 import { usePopUp } from "../Contexts/PopUpContext"
@@ -9,11 +9,13 @@ import Form from "../AtomicDesign/Atom/Form/Form"
 import Button from "../AtomicDesign/Atom/Button/Button"
 import ReactApexChart from "react-apexcharts"
 import Pichart from "../AtomicDesign/Molecule/Pichart/Pichart"
+import SettingsContext from "../Contexts/SettingsContext/SettingsContext"
 
 
 
 // eslint-disable-next-line react/prop-types
 const Prediction = ({mode}) => {
+  const {expand} = useContext(SettingsContext)
   const [state, setState] = useState({
           
     series: [
@@ -146,8 +148,8 @@ const Prediction = ({mode}) => {
              
             
   return (
-    <Wrapper className='w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg overflow-hidden '>
-      <Wrapper className='w-full pl-8 pt-3 flex items-center gap-4 ' >
+    <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg overflow-hidden ${expand?'pl-8':'pl-16'}`}>
+      <Wrapper className={`w-full pt-3 flex items-center gap-4`}>
           <Select options={['idukki']} 
           className='w-28 h-6 bg-inherit rounded-md text-[#595959] dark:text-[#7d8da196] text-sm border border-color-border dark:border-[#161d29f5] outline-none' 
           firstOptionClassName="dark:bg-[#121721f5]"
@@ -159,7 +161,7 @@ const Prediction = ({mode}) => {
           childClassName="dark:bg-[#121721f5]"
           placeholder="Select Model" />
       </Wrapper>
-      <Wrapper className='w-full h-[80vh] flex gap-4 pl-8'>
+      <Wrapper className='w-full h-[80vh] flex gap-4'>
       <Wrapper className='w-[42vw] h-full pt-2 flex flex-col gap-3'>
           <Wrapper className="w-full h-[25vh] flex items-center justify-between">
             <Wrapper className="w-[20vw] h-full flex flex-col border-2 dark:border border-primary  dark:bg-[#121721f5] rounded-lg overflow-hidden">

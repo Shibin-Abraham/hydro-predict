@@ -18,6 +18,7 @@ import { Form } from 'react-router-dom'
 import CloseIcon from '../../Assets/icons/CloseIcon'
 import InputPopUp from '../AtomicDesign/Molecule/PopUp/InputPopUp'
 import DamDataContext from '../Contexts/DamDataContext/DamDataContext'
+import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
 
 const Analysis = ({theme,setAddDamData}) => {
   const color = getColor({theme})
@@ -26,11 +27,13 @@ const Analysis = ({theme,setAddDamData}) => {
   const [filteredDamData,setFilteredDamData] = useState()
 
   const {damData} = useContext(DamDataContext)
-  console.log('analysis',damData)
+  console.log('filterd dam analysis',filteredDamData)
 
-  const [donutState, setDonutState] = useState(donutStyles);
+  const [donutState, setDonutState] = useState(donutStyles({data:filteredDamData?.[0]}));
   const [stateInflow, setStateInflow] = useState(inflowStyles);
-  const [state, setState] = useState(getWaterLevelStyles({color}));
+  const [state, setState] = useState(getWaterLevelStyles({color,data:filteredDamData?.[0]}));
+
+  const{expand} = useContext(SettingsContext)
 
   const {liveStorage,liveStorageAtFRL,percentage,formattedTime,alertColor,date,name} = getCardData({item:filteredDamData?.[0]})
 
@@ -38,11 +41,18 @@ const Analysis = ({theme,setAddDamData}) => {
     setFilteredDamData(damData.filter((item)=>item.id===selectedDamId))
   },[selectedDamId,damData])
 
+  useEffect(() => {
+    if (filteredDamData?.[0]) {
+      setState(getWaterLevelStyles({ color, data: filteredDamData[0] }));
+      setDonutState(donutStyles({data:filteredDamData?.[0]}))
+    }
+  }, [filteredDamData, color]);
+
 
   return (
-    <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex overflow-hidden">
+    <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex overflow-hidden ${expand?'pl-8':'pl-16'}`}>
          <Wrapper className='w-[50%] h-full'>
-            <Wrapper className='w-full ml-8 mt-4 flex items-center gap-4' >
+            <Wrapper className='w-full  mt-4 flex items-center gap-4' >
                 <Select 
                 options={damData.map((data)=>data)} 
                 onChange={(e)=>setSelectedDamId(parseInt(e.target.value))}
@@ -57,7 +67,7 @@ const Analysis = ({theme,setAddDamData}) => {
             </Wrapper>
 
             <Wrapper className='w-full h-[30%] flex items-center justify-between'>
-                <Wrapper className="w-80 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ml-8">
+                <Wrapper className="w-80 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ">
                     <Wrapper className='w-full h-[30%] flex items-center justify-between'>
                         <Wrapper className='h-full flex items-center'>
                             <MapPointerIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />
@@ -82,7 +92,7 @@ const Analysis = ({theme,setAddDamData}) => {
                     </Wrapper>
                 </Wrapper>
 
-                <Wrapper className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ml-8">
+                <Wrapper className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2">
                     
                     <Wrapper className="w-full h-full flex flex-col items-center justify-center">
                     <Typography tag="p" className="text-[#595959] dark:text-[#7d8da196] text-xs mt-6" text="Inflow 7 days" />
@@ -90,9 +100,9 @@ const Analysis = ({theme,setAddDamData}) => {
                     </Wrapper>
                 </Wrapper>
             </Wrapper>
-            <Typography tag="h4" className="text-lg font-bold mt-2 ml-8" text="Water Level" />
+            <Typography tag="h4" className="text-lg font-bold mt-2" text="Water Level" />
             <Wrapper className="w-full h-[50%] flex justify-between" >
-            <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ml-8">
+            <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2">
             <ReactApexChart 
                     options={state.options}
                     series={state.series}  
@@ -108,42 +118,42 @@ const Analysis = ({theme,setAddDamData}) => {
           <Wrapper className='w-[60%] h-full'>
               <Typography tag="h4" className="text-lg font-bold mt-2 ml-8" text="Readings" />
               <Wrapper className='pt-4 w-[350px] h-44 flex justify-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ml-8'>
-                <ReactApexChart options={donutState.options} series={donutState.series} type="donut" width={300} height={300} />
+                <ReactApexChart options={donutState.options} series={donutState.series} type="donut" width={300} height={400} />
               </Wrapper>
-              <Typography tag="h4" className="text-lg font-bold mt-6 ml-8" text="Dam Constant Metrics" />
-              <Wrapper className='h-full ml-4 mt-1 flex flex-col gap-3'>
+              <Typography tag="h4" className="text-lg font-bold mt-6 pl-8" text="Dam Constant Metrics" />
+              <Wrapper className='h-full pl-8 mt-1 flex flex-col gap-3'>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium" >
-                            Maximum Water Level(MWL): <Typography tag='span' className="text-primary" text='734.1108 ' /> (meter)
+                            Maximum Water Level(MWL): <Typography tag='span' className="text-primary" text={filteredDamData?.[0].MWL} /> (meter)
                       </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Full Reservoir Level(FRL): <Typography tag='span' className="text-primary" text='732.4344 ' /> (meter)
+                            Full Reservoir Level(FRL): <Typography tag='span' className="text-primary" text={filteredDamData?.[0].FRL} /> (meter)
                       </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Spillway Crest Level: <Typography tag='span' className="text-primary" text='723.2904 ' /> (meter)
+                            Spillway Crest Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0].spillway_crest_level} /> (meter)
                       </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Live Storage at FRL: <Typography tag='span' className="text-primary" text='1459.49 ' /> (Million Cubic Meters)
+                            Live Storage at FRL: <Typography tag='span' className="text-primary" text={filteredDamData?.[0].live_storage_at_FRL} /> (Million Cubic Meters)
                         </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                         <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Rule Level: <Typography tag='span' className="text-primary" text='732.4344 ' /> (meter)
+                            Rule Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0].dam_data?.[0].rule_level} /> (meter)
                         </Typography>
                  </Wrapper>  
                  <Wrapper className='w-[90%] h-12 flex items-center'>
                         <Wrapper className='size-3 bg-color-blue rounded-full'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2" text='732.4344 ' />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0].dam_data?.[0].blue_level} />
                         <Wrapper className='size-3 bg-color-orange rounded-full ml-4'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2" text='732.4344 ' />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0].dam_data?.[0].orange_level} />
                         <Wrapper className='size-3 bg-color-red rounded-full ml-4'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2" text='732.4344 ' />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0].dam_data?.[0].red_level} />
                         
                  </Wrapper>             
               </Wrapper>

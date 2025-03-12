@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
 import CloudIcon from '../../Assets/icons/CloudIcon'
 import Button from '../AtomicDesign/Atom/Button/Button'
@@ -10,10 +10,13 @@ import { alertColor, rainAlert } from '../AtomicDesign/Molecule/Gauge/utils'
 import LeafletMap from './LeafletMap'
 import ReactApexChart from 'react-apexcharts'
 import MapIcon from '../../Assets/icons/MapIcon'
+import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
 
 
 // eslint-disable-next-line react/prop-types
 const RainGauge = ({setOpenMap}) => {
+  const {expand} = useContext(SettingsContext)
+
   const [state, setState] = useState({
     series: [{
       name: 'Rainfall',
@@ -91,7 +94,7 @@ const RainGauge = ({setOpenMap}) => {
   return (
     <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex gap-8 overflow-hidden">
         
-         <Wrapper className='w-[600px] h-full pb-4 pl-8 pt-4'>
+         <Wrapper className={`w-[600px] h-full pb-4 pt-4 ${expand?'pl-8':'pl-10'}`}>
             <Wrapper className='w-full pt-4 flex items-center gap-4' >
                 <Button variant='primary' variantType='outline' className='text-xs'> Add New Gauge</Button>
                 <AddSolidIcon className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]'  />

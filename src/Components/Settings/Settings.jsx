@@ -3,10 +3,13 @@ import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import MoonIcon from '../../Assets/icons/MoonIcon'
 import SunIcon from '../../Assets/icons/SunIcon'
+import { useContext } from 'react'
+import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
 
 const Settings = ({ mode, setMode, theme, setTheme }) => {
+  const {expand,setExpand} = useContext(SettingsContext)
   return (
-    <Wrapper className='w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg overflow-hidden p-8'>
+    <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg overflow-hidden ${expand?'p-8':'py-8 pl-16 pr-8'}`}>
         <Wrapper className='w-2/4 h-full pt-3 flex flex-col gap-8'>
         {/* Theme */}
             <Wrapper className='flex items-start justify-between'>
@@ -63,14 +66,39 @@ const Settings = ({ mode, setMode, theme, setTheme }) => {
             <Wrapper className='flex items-start justify-between'>
                 <Wrapper>
                 <Typography tag="h4" text={`Navigation Panel`} className='text-lg ml-1' />
-                <Typography tag="h4" text={`Change navigation panel`} className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
+                <Typography tag="h4" text={`Change navigation panel style`} className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
                 </Wrapper>
-                <Wrapper className='w-64 flex flex-col gap-1'>
-                  <Typography tag="h4" text={mode} className='text-sm ml-1 capitalize' />
-                  <Wrapper className='flex gap-2 pl-1'>
-                    
+                <Wrapper className='w-64 flex flex-col gap-2'>
+                  <Typography tag="h4" text='Expand navigation' className='text-sm ml-1 capitalize' />
+                  <Wrapper className='flex cursor-pointer'>
+                    <Wrapper
+                      onClick={() => setExpand(prev => !prev)}
+                      className={`w-[49px] h-5 rounded-xl border relative cursor-pointer ${expand?'border-primary-variant':'border-[#595959] dark:border-[#7d8da196]'}`}
+                    >
+                      <Wrapper
+                        className={`absolute top-1/2 -translate-y-1/2 size-3 rounded-full transform transition-transform duration-300 ease-in-out ${
+                          expand ? 'translate-x-8 bg-primary' : 'translate-x-1 bg-[#595959] dark:bg-[#7d8da196]'
+                        }`}
+                      />
+                    </Wrapper>
                   </Wrapper>
                 </Wrapper>
+            </Wrapper>
+            {/* copyright */}
+            <Wrapper className='flex items-start justify-between mt-auto'>
+                <Wrapper>
+                  <Typography tag="h4" text={`Privacy & Cookies Policy`} className='text-lg ml-1' />
+                  <Typography 
+                    tag="h4" 
+                    text={`We prioritize your privacy by responsibly using cookies to enhance our HydroPredict system.
+                    Our approach ensures your data is securely processed and transparently managed, offering a 
+                    seamless and trusted experience.`} 
+                    className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1 mt-2'
+                  >
+                    <Typography tag="span" text={` more info...`} className='text-sm text-primary cursor-pointer' />
+                  </Typography>
+                </Wrapper>
+                
             </Wrapper>
 
         </Wrapper>  

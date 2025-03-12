@@ -19,13 +19,19 @@ export const data = [
   { day: '2023-01-03', value: 20 },
   // Add more data here
 ];
-export const donutStyles={
-          
-    series: [44, 55, 41, 17, 15],
+export const donutStyles=({data})=>{
+  const waterLevel = parseFloat(data?.dam_data?.[0].water_level)
+  const inflow = parseFloat(data?.dam_data?.[0].inflow)
+  const powerHouseDischarge = parseFloat(data?.dam_data?.[0].power_house_discharge)
+  const spillwayRelease = parseFloat(data?.dam_data?.[0].spillway_release)
+  const totalOutflow = powerHouseDischarge+spillwayRelease
+  
+  return{      
+    series: [waterLevel, inflow, powerHouseDischarge, spillwayRelease, totalOutflow],
     options: {
       chart: {
-        width: 400,
-        height:400,
+        width: 600,
+        height:600,
         type: 'donut',
       },
       colors: ['#ff0d3e', '#23d823', '#715ff8', '#F4C724', '#B833FF'],
@@ -65,6 +71,7 @@ export const donutStyles={
       }]
     },
 } 
+}
 
 export const inflowStyles ={
           
@@ -88,9 +95,14 @@ export const inflowStyles ={
       },
       grid: {
         show: true,  
-        borderColor: '#7d8da196', 
+        borderColor: '#7d8da121', 
         strokeDashArray: 3,   
         yaxis: {
+          lines: {
+            show: true 
+          }
+        },
+        xaxis: {
           lines: {
             show: true 
           }
@@ -136,132 +148,140 @@ export const inflowStyles ={
     },
 }
 
-export const getWaterLevelStyles = ({color})=>({
-  series: [{
-    name: 'water level',
-    data: [40.3, 42.1, 55.0, 60.1, 55.0, 53.6, 53.2, 52.3, 59.4, 60.8, 65.5, 70.2]
-  }],
-
-  options: {
-    chart: {
-      height: '100%',
-      type: 'bar',
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 2,
-        dataLabels: {
-          position: 'top', // top, center, bottom
+export const getWaterLevelStyles = ({color,data})=>{
+  const redLevel = data?.dam_data?.[0].red_level || "0"
+  // const orangeLevel = data?.dam_data?.[0].orange_level
+  // const blueLevel = data?.dam_data?.[0].blue_level
+  const seriesData = (data?.dam_data?.map(item => item.water_level) || [0,0,0,0,0,0]).reverse();
+const categories = (data?.dam_data?.map(item => item.date) || ['null','null','null','null','null','null']).reverse();
+console.log('seriesdata',seriesData)
+  return {
+    series: [{
+      name: 'water level',
+      data: seriesData, //[40.3, 42.1, 55.0, 60.1, 55.0, 53.6, 53.2, 52.3, 59.4, 60.8, 65.5, 70.2]
+    }],
+  
+    options: {
+      chart: {
+        height: '100%',
+        type: 'bar',
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 2,
+          dataLabels: {
+            position: 'top', // top, center, bottom
+          },
         },
       },
-    },
-    dataLabels: {
-      enabled: true,
-      formatter: function (val) {
-        return val + "%";
+      dataLabels: {
+        enabled: true,
+        formatter: function (val) {
+          return val + " m";
+        },
+        offsetY: -20,
+        style: {
+          fontSize: '12px',
+          colors: ["#595959"]
+        }
       },
-      offsetY: -20,
-      style: {
-        fontSize: '12px',
-        colors: ["#595959"]
-      }
-    },
-    colors:[color],
-    xaxis: {
-      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      position: 'bottom',
-      axisBorder: {
-        show: false
+      colors:[color],
+      xaxis: {
+        categories: categories, //["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        position: 'bottom',
+        axisBorder: {
+          show: false
+        },
+        axisTicks: {
+          show: false
+        },
+        crosshairs: {
+          fill: {
+            type: 'gradient',
+            gradient: {
+              colorFrom: color,
+              colorTo: "#ffffff",
+              stops: [0, 100],
+              opacityFrom: 0.4,
+              opacityTo: 0.5,
+            }
+          }
+        },
+        tooltip: {
+          enabled: true,
+        }
       },
-      axisTicks: {
-        show: false
-      },
-      crosshairs: {
-        fill: {
-          type: 'gradient',
-          gradient: {
-            colorFrom: color,
-            colorTo: "#ffffff",
-            stops: [0, 100],
-            opacityFrom: 0.4,
-            opacityTo: 0.5,
+      yaxis: {
+        axisBorder: {
+          show: false
+        },
+        axisTicks: {
+          show: false,
+        },
+        labels: {
+          show: false,
+          formatter: function (val) {
+            return val + " m";
           }
         }
       },
-      tooltip: {
-        enabled: true,
-      }
+      grid: {
+        borderColor: '#7d8da121', 
+        strokeDashArray: 3,    
     },
-    yaxis: {
-      axisBorder: {
-        show: false
-      },
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        show: false,
-        formatter: function (val) {
-          return val + "%";
-        }
-      }
+    annotations: {
+      yaxis: [
+        {
+          y: redLevel,  
+          borderColor: '#FF0000',  // Line color
+          strokeDashArray: 3,  // Makes it a dashed line
+          label: {
+            borderColor: '#FF0000',
+            style: {
+              color: '#fff',
+              background: '#FF0000',
+              fontSize: '10px'
+            },
+            text: 'red level',
+          },
+        },
+        // {
+        //   y: orangeLevel,  
+        //   borderColor: 'orange',  // Line color
+        //   strokeDashArray: 1,  // Makes it a dashed line
+        //   label: {
+        //     borderColor: 'orange',
+        //     style: {
+        //       color: '#fff',
+        //       background: 'orange',
+        //       fontSize: '10px'
+        //     },
+        //     text: 'orange level',
+        //     offsetX: -540,
+        //   },
+        // },
+        // {
+        //   y: blueLevel,  
+        //   borderColor: 'blue',  // Line color
+        //   strokeDashArray: 3,  // Makes it a dashed line
+        //   label: {
+        //     borderColor: 'blue',
+        //     style: {
+        //       color: '#fff',
+        //       background: 'blue',
+        //       fontSize: '10px'
+        //     },
+        //     text: 'blue level',
+        //     offsetX: -100,
+        //   },
+        // },
+      ],
     },
-    grid: {
-      borderColor: '#7d8da196', 
-      strokeDashArray: 3,    
-  },
-  annotations: {
-    yaxis: [
-      {
-        y: 67,  
-        borderColor: '#FF0000',  // Line color
-        strokeDashArray: 3,  // Makes it a dashed line
-        label: {
-          borderColor: '#FF0000',
-          style: {
-            color: '#fff',
-            background: '#FF0000',
-            fontSize: '10px'
-          },
-          text: 'red level',
-        },
-      },
-      {
-        y: 50,  
-        borderColor: 'orange',  // Line color
-        strokeDashArray: 3,  // Makes it a dashed line
-        label: {
-          borderColor: 'orange',
-          style: {
-            color: '#fff',
-            background: 'orange',
-            fontSize: '10px'
-          },
-          text: 'orange level',
-          offsetX: -540,
-        },
-      },
-      {
-        y: 47,  
-        borderColor: 'blue',  // Line color
-        strokeDashArray: 3,  // Makes it a dashed line
-        label: {
-          borderColor: 'blue',
-          style: {
-            color: '#fff',
-            background: 'blue',
-            fontSize: '10px'
-          },
-          text: 'blue level',
-        },
-      },
-    ],
-  },
-  },
-})
+    },
+  }
+}
 
 export const getCardData = ({item})=>{
-  console.log('item',item)
   const liveStorage = parseFloat(item?.dam_data?.[0]?.live_storage) || 0;
     const liveStorageAtFRL = parseFloat(item?.live_storage_at_FRL) || 0;
 
@@ -282,7 +302,7 @@ export const getCardData = ({item})=>{
   const date = item?.dam_data?.[0]?.date
   const name = item?.name
 
-  console.log('percentage',liveStorage / liveStorageAtFRL)
+
 
   return {
     liveStorage,

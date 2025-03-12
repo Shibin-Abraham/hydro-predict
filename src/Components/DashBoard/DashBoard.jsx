@@ -28,6 +28,7 @@ import ResposiveLineSkeleton from "./loader/ResposiveLineSkeleton"
 import LegendSkeleton from "./loader/LegendSkeleton"
 import DamDataContext from "../Contexts/DamDataContext/DamDataContext"
 import RainAlertSkeleton from "./loader/RainAlertSkeleton"
+import SettingsContext from "../Contexts/SettingsContext/SettingsContext"
 
 
 
@@ -41,6 +42,7 @@ const DashBoard = ({mode,setMode,setTheme}) => {
     const [hasError, setHasError] = useState(false)
 
     const {setDamData} = useContext(DamDataContext)
+    const{expand} = useContext(SettingsContext)
 
 
     const fetchAllDamData = useCallback(async (params = {})=>{
@@ -92,9 +94,9 @@ const DashBoard = ({mode,setMode,setTheme}) => {
     
 
     return (
-        <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex">
+        <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex ${expand?'pl-8':'pl-16'}`}>
 
-            <Wrapper className='w-[62vw] pl-8 pt-8'>
+            <Wrapper className='w-[62vw] pt-8'>
                 <Swiper
                     modules={[Autoplay]}
                     autoplay={{ delay: 9000, disableOnInteraction: false }}
@@ -159,7 +161,7 @@ const DashBoard = ({mode,setMode,setTheme}) => {
 
 
                 <Typography tag="h4" className="text-lg font-bold mt-4" text="Inflow Chart" />
-                <Wrapper className="w-full h-[60%] flex justify-between">
+                <Wrapper className="w-full h-[60%] flex justify-between pr-6">
                     <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mr-4">
                         {
                             !loadingDamData 
@@ -259,7 +261,7 @@ const DashBoard = ({mode,setMode,setTheme}) => {
 
             </Wrapper>
             {/* alert section */}
-            <Wrapper className='w-[30%] h-[85vh] mr-5 ml-9'>
+            <Wrapper className='w-[30%] h-[85vh] mr-5 '>
                 <Wrapper className="w-full flex items-center">
                     <Typography tag="h4" className="text-lg font-bold" text="Alert" />
                     <TabBtn 
