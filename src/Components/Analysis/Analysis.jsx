@@ -27,7 +27,7 @@ const Analysis = ({theme,setAddDamData}) => {
   const [filteredDamData,setFilteredDamData] = useState()
 
   const {damData} = useContext(DamDataContext)
-  console.log('filterd dam analysis',filteredDamData)
+  console.log('filterd dam analysis',damData)
 
   const [donutState, setDonutState] = useState(donutStyles({data:filteredDamData?.[0]}));
   const [stateInflow, setStateInflow] = useState(inflowStyles);
@@ -48,13 +48,12 @@ const Analysis = ({theme,setAddDamData}) => {
     }
   }, [filteredDamData, color]);
 
-
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex overflow-hidden ${expand?'pl-8':'pl-16'}`}>
          <Wrapper className='w-[50%] h-full'>
             <Wrapper className='w-full  mt-4 flex items-center gap-4' >
                 <Select 
-                options={damData.map((data)=>data)} 
+                options={damData.filter((data)=>data.dam_data.length!==0)} 
                 onChange={(e)=>setSelectedDamId(parseInt(e.target.value))}
                 className='w-28 h-6 bg-inherit rounded-md text-[#595959] dark:text-[#7d8da196] text-sm border border-color-border dark:border-[#161d29f5] outline-none' 
                 firstOptionClassName="dark:bg-[#121721f5]"
@@ -300,7 +299,6 @@ const Analysis = ({theme,setAddDamData}) => {
                     </Typography>
                     <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
           </Wrapper>
-          
           
           </Wrapper>
           </Wrapper>
