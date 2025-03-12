@@ -25,21 +25,16 @@ import InfoPopUp from "./Components/AtomicDesign/Molecule/PopUp/InfoPopUp";
 import DamDataProvider from "./Components/Contexts/DamDataContext/DamDataProvider";
 import Settings from "./Components/Settings/Settings";
 
-
 function App() {
 
   const [addDamData,setAddDamData] = useState(false)
   const [openMap,setOpenMap] = useState(false)
 
-
   const { mode, setMode, theme, setTheme } = useThemeMode();
-
 
   //const [auth, setAuth] = useState(false)
 
   const { error, success,info } = usePopUp()
-
-  
 
   return (
     <Wrapper className={`bg-[#ffffff] dark:bg-[#0d1117] w-screen h-screen font-roboto theme-${theme}`}>
@@ -82,6 +77,16 @@ function App() {
           />
           <Route
             path="/analysis"
+            element={
+              <ProtectedLayout theme={theme}>
+
+                <Analysis mode={mode} theme={theme} setAddDamData={setAddDamData} />
+            
+              </ProtectedLayout>
+            }
+          />
+          <Route
+            path="/analysis/damdata/"
             element={
               <ProtectedLayout theme={theme}>
 

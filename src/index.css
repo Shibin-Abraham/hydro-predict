@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base{
     :root{
         --color-primary: hsl(0,0%,0%);
@@ -44,7 +43,7 @@
     --color-light-gray:#595959;
 }
 .theme-red {
-    --color-primary: hsl(0, 80%, 50%);
+    --color-primary: #cf2020;
     --color-primary-hover: hsl(0, 80%, 45%);
     --color-primary-variant: hsla(0, 80%, 50%, 0.5);
     --color-secondary: hsl(0, 80%, 70%);
@@ -55,7 +54,7 @@
     --fill-color: hsl(0, 80%, 40%);
 }
 .theme-gray {
-    --color-primary: hsl(0, 0%, 35%);
+    --color-primary: #595959;
     --color-primary-hover: hsl(0, 0%, 30%);
     --color-primary-variant: hsla(0, 0%, 35%, 0.5);
     --color-secondary: hsl(0, 0%, 60%);
@@ -64,4 +63,15 @@
     --color-dark-gray: hsl(0, 0%, 25%);
     --color-light-gray: hsl(0, 0%, 75%);
     --fill-color: hsl(0, 0%, 50%);
+}
+.theme-purple {
+    --color-primary: #8040bf;
+    --color-primary-hover: hsl(270, 50%, 42%);
+    --color-primary-variant: hsla(270, 50%, 50%, 0.5);
+    --color-secondary: hsl(270, 50%, 65%);
+    --color-tertiary: hsla(270, 50%, 80%, 0.2);
+    --color-tertiary-variant: hsla(270, 50%, 80%, 0.1);
+    --color-dark-gray: hsl(270, 20%, 25%);
+    --color-light-gray: hsl(270, 20%, 75%);
+    --fill-color: hsl(270, 50%, 55%);
 }

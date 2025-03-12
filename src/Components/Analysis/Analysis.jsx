@@ -14,24 +14,28 @@ import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
 import Media from '../AtomicDesign/Atom/Media/Media'
 import drop from "../../Assets/drop.png"
 import Input from '../AtomicDesign/Atom/Input/Input'
-import { Form } from 'react-router-dom'
+import { Form, useLocation, useNavigate, useParams } from 'react-router-dom'
 import CloseIcon from '../../Assets/icons/CloseIcon'
 import InputPopUp from '../AtomicDesign/Molecule/PopUp/InputPopUp'
 import DamDataContext from '../Contexts/DamDataContext/DamDataContext'
 import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
 
-const Analysis = ({theme,setAddDamData}) => {
+const Analysis = ({mode,theme,setAddDamData}) => {
   const color = getColor({theme})
+  // const location = useLocation();******
+  // const { id } = location.state || {};******
   const [selectedDamId,setSelectedDamId] = useState(1) //default damid eg: 1-idukki
 
   const [filteredDamData,setFilteredDamData] = useState()
+
+  //const navigate = useNavigate();******
 
   const {damData} = useContext(DamDataContext)
   console.log('filterd dam analysis',damData)
 
   const [donutState, setDonutState] = useState(donutStyles({data:filteredDamData?.[0]}));
   const [stateInflow, setStateInflow] = useState(inflowStyles);
-  const [state, setState] = useState(getWaterLevelStyles({color,data:filteredDamData?.[0]}));
+  const [state, setState] = useState(getWaterLevelStyles({mode,color,data:filteredDamData?.[0]}));
 
   const{expand} = useContext(SettingsContext)
 
@@ -43,10 +47,10 @@ const Analysis = ({theme,setAddDamData}) => {
 
   useEffect(() => {
     if (filteredDamData?.[0]) {
-      setState(getWaterLevelStyles({ color, data: filteredDamData[0] }));
+      setState(getWaterLevelStyles({mode, color, data: filteredDamData[0] }));
       setDonutState(donutStyles({data:filteredDamData?.[0]}))
     }
-  }, [filteredDamData, color]);
+  }, [filteredDamData, color,mode]);
 
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex overflow-hidden ${expand?'pl-8':'pl-16'}`}>
@@ -62,7 +66,7 @@ const Analysis = ({theme,setAddDamData}) => {
                 defaultValue={selectedDamId}
                 />
                 <AddSolidIcon className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]' onClick={()=>setAddDamData(true)} />
-                
+                {/* <Button onClick={()=>navigate('/analysis/damdata', { state: { id:'1' } })}>navigate {id}</Button> ******/}
             </Wrapper>
 
             <Wrapper className='w-full h-[30%] flex items-center justify-between'>

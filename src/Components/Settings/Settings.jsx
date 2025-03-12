@@ -35,11 +35,17 @@ const Settings = ({ mode, setMode, theme, setTheme }) => {
 
                         </Wrapper>
                     </Wrapper>
+                    <Wrapper onClick={()=>setTheme('purple')} className={`p-2 rounded-md cursor-pointer ${theme==='purple'?'bg-[#a5c0e213]':''}`}>
+                        <Wrapper className='size-4 rounded-full border-2 border-[#6f2db1]'>
+
+                        </Wrapper>
+                    </Wrapper>
                     <Wrapper onClick={()=>setTheme('gray')} className={`p-2 rounded-md cursor-pointer ${theme==='gray'?'bg-[#a5c0e213]':''}`}>
                         <Wrapper className='size-4 rounded-full border-2 border-[#373636]'>
 
                         </Wrapper>
                     </Wrapper>
+                    
                   </Wrapper>
                 </Wrapper>
             </Wrapper>

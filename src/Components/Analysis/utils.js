@@ -8,6 +8,12 @@ export const getColor = ({theme})=>{
           return "#8575ff79"
         case 'green':
           return "#00b30079"
+        case 'red':
+          return "#f0757579"
+        case 'purple':
+          return "#8040bf79"
+        case 'gray':
+          return "#59595979"
         default:
           // code block
       }
@@ -148,13 +154,13 @@ export const inflowStyles ={
     },
 }
 
-export const getWaterLevelStyles = ({color,data})=>{
+export const getWaterLevelStyles = ({mode,color,data})=>{
   const redLevel = data?.dam_data?.[0].red_level || "0"
   // const orangeLevel = data?.dam_data?.[0].orange_level
   // const blueLevel = data?.dam_data?.[0].blue_level
   const seriesData = (data?.dam_data?.map(item => item.water_level) || [0,0,0,0,0,0]).reverse();
 const categories = (data?.dam_data?.map(item => item.date) || ['null','null','null','null','null','null']).reverse();
-console.log('seriesdata',seriesData)
+console.log('seriesdata',seriesData,mode)
   return {
     series: [{
       name: 'water level',
@@ -165,6 +171,9 @@ console.log('seriesdata',seriesData)
       chart: {
         height: '100%',
         type: 'bar',
+      },
+      tooltip: {
+        theme: mode
       },
       plotOptions: {
         bar: {
@@ -301,8 +310,6 @@ export const getCardData = ({item})=>{
 
   const date = item?.dam_data?.[0]?.date
   const name = item?.name
-
-
 
   return {
     liveStorage,
