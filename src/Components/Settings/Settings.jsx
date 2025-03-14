@@ -58,10 +58,10 @@ const Settings = ({ mode, setMode, theme, setTheme }) => {
                 <Wrapper className='w-64 flex flex-col gap-1'>
                   <Typography tag="h4" text={mode} className='text-sm ml-1 capitalize' />
                   <Wrapper className='flex gap-2 pl-1'>
-                    <Wrapper onClick={()=>setMode('dark')} className={`p-2 rounded-md ${mode==='dark'?'bg-[#595a5b3a]':''}`}>
+                    <Wrapper onClick={()=>setMode('dark')} className={`p-2 rounded-md cursor-pointer ${mode==='dark'?'bg-[#595a5b3a]':''}`}>
                         <MoonIcon className={`size-5 ${mode==='dark'?'text-black':''}`} />
                     </Wrapper>
-                    <Wrapper onClick={()=>setMode('light')} className={`p-2 rounded-md ${mode==='light'?'bg-[#595a5b3a]':''}`}>
+                    <Wrapper onClick={()=>setMode('light')} className={`p-2 rounded-md cursor-pointer ${mode==='light'?'bg-[#595a5b3a]':''}`}>
                         <SunIcon className={`size-5 ${mode==='light'?'text-black':'text-white'}`} />
                     </Wrapper>
                     

@@ -11,7 +11,7 @@ import { signUp } from "../../../API/Handler/authHandler"
 import { usePopUp } from "../../Contexts/PopUpContext"
 
 const SignUp = () => {
-    const options = ['Admin', 'Employee']
+    const options = [{name:'Admin'}, {name:'Employee'}]
     const [isLoading, setIsLoading] = useState(false)
     const { register, setError, handleSubmit, watch, formState: { errors } } = useForm()
     const password = watch("password")
@@ -173,7 +173,6 @@ const SignUp = () => {
                         </NavLink>
                     </Typography>
                 </Wrapper>
-
             </Form>
         </Wrapper>
     )

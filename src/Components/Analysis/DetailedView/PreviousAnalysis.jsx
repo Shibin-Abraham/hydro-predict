@@ -1,27 +1,24 @@
 /* eslint-disable react/prop-types */
 
 import ReactApexChart from 'react-apexcharts'
-import FlagIcon from '../../Assets/icons/FlagIcon'
-import MapPointerIcon from '../../Assets/icons/MapPointerIcon'
-import Select from '../AtomicDesign/Atom/Input/Select'
-import Typography from '../AtomicDesign/Atom/Typography/Typography'
-import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
-import Pichart from '../AtomicDesign/Molecule/Pichart/Pichart'
+import FlagIcon from '../../../Assets/icons/FlagIcon'
+import MapPointerIcon from '../../../Assets/icons/MapPointerIcon'
+import Typography from '../../AtomicDesign/Atom/Typography/Typography'
+import Wrapper from '../../AtomicDesign/Atom/Wrapper/Wrapper'
+import Pichart from '../../AtomicDesign/Molecule/Pichart/Pichart'
 import { useContext, useEffect, useState } from 'react'
-import { getColor,data, donutStyles, inflowStyles, getWaterLevelStyles, getCardData } from './utils'
-import Button from '../AtomicDesign/Atom/Button/Button'
-import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
-import Media from '../AtomicDesign/Atom/Media/Media'
-import drop from "../../Assets/drop.png"
-import Input from '../AtomicDesign/Atom/Input/Input'
-import { Form, useLocation, useNavigate, useParams } from 'react-router-dom'
-import DamDataContext from '../Contexts/DamDataContext/DamDataContext'
-import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
-import { LuHistory } from 'react-icons/lu'
+import { getColor, donutStyles, inflowStyles, getWaterLevelStyles, getCardData } from '../utils'
+import Media from '../../AtomicDesign/Atom/Media/Media'
+import drop from "../../../Assets/drop.png"
+import { useLocation, useNavigate } from 'react-router-dom'
+import DamDataContext from '../../Contexts/DamDataContext/DamDataContext'
+import SettingsContext from '../../Contexts/SettingsContext/SettingsContext'
 
-const Analysis = ({mode,theme,setAddDamData}) => {
-  const color = getColor({theme})
-  const [selectedDamId,setSelectedDamId] = useState(1) //default damid eg: 1-idukki
+const PreviousAnalysis = ({mode,theme}) => {
+  const color = getColor({theme}) 
+
+  const location = useLocation()
+    const { id } = location.state || {}
 
   const [filteredDamData,setFilteredDamData] = useState()
 
@@ -39,8 +36,8 @@ const Analysis = ({mode,theme,setAddDamData}) => {
   const {liveStorage,liveStorageAtFRL,percentage,formattedTime,alertColor,date,name} = getCardData({item:filteredDamData?.[0]})
 
   useEffect(()=>{
-    setFilteredDamData(damData.filter((item)=>item.id===selectedDamId))
-  },[selectedDamId,damData])
+    setFilteredDamData(damData.filter((item)=>item.id===id))
+  },[id,damData])
 
   useEffect(() => {
     if (filteredDamData?.[0]) {
@@ -53,20 +50,11 @@ const Analysis = ({mode,theme,setAddDamData}) => {
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex overflow-hidden ${expand?'pl-8':'pl-16'}`}>
          <Wrapper className='w-[50%] h-full'>
             <Wrapper className='w-full  mt-4 flex items-center gap-4' >
-                <Select 
-                options={damData.filter((data)=>data.dam_data.length!==0)} 
-                onChange={(e)=>setSelectedDamId(parseInt(e.target.value))}
-                className='w-28 h-6 bg-inherit rounded-md text-sm border border-color-border dark:border-[#161d29f5] outline-none cursor-pointer' 
-                firstOptionClassName="dark:bg-[#121721f5]"
-                childClassName="dark:bg-[#121721f5]"
-                placeholder="Select Dam" 
-                defaultValue={selectedDamId}
-                />
-                <Button onClick={()=>navigate('/analysis/previous', { state: { id:selectedDamId } })} className='h-6 text-[12px] font-normal border border-color-border dark:border-[#161d29f5] hover:bg-[#7d8da1f6] hover:text-white'>
-                <LuHistory />
-                  Previous year
-                  </Button>
-                <AddSolidIcon className='size-7 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData(true)} />
+            <Typography tag="p" className='font-medium text-base capitalize' >
+                Same day previous year - 
+                <Typography tag='span' className='text-primary pl-1' text={name} />
+                
+            </Typography>
                 {/* <Button onClick={()=>navigate('/analysis/damdata', { state: { id:'1' } })}>navigate {id}</Button> ******/}
             </Wrapper>
 
@@ -315,4 +303,4 @@ const Analysis = ({mode,theme,setAddDamData}) => {
   )
 }
 
-export default Analysis
+export default PreviousAnalysis

@@ -24,6 +24,9 @@ import ProtectedLayout from "./ProtectedLayout";
 import InfoPopUp from "./Components/AtomicDesign/Molecule/PopUp/InfoPopUp";
 import DamDataProvider from "./Components/Contexts/DamDataContext/DamDataProvider";
 import Settings from "./Components/Settings/Settings";
+import Inflow from "./Components/Analysis/DetailedView/Inflow";
+import WaterLevel from "./Components/Analysis/DetailedView/WaterLevel";
+import PreviousAnalysis from "./Components/Analysis/DetailedView/PreviousAnalysis";
 
 function App() {
 
@@ -86,11 +89,31 @@ function App() {
             }
           />
           <Route
-            path="/analysis/damdata/"
+            path="/analysis/inflow/"
             element={
               <ProtectedLayout theme={theme}>
 
-                <Analysis theme={theme} setAddDamData={setAddDamData} />
+                <Inflow theme={theme} setAddDamData={setAddDamData} />
+            
+              </ProtectedLayout>
+            }
+          />
+          <Route
+            path="/analysis/water-level/"
+            element={
+              <ProtectedLayout theme={theme}>
+
+                <WaterLevel theme={theme} setAddDamData={setAddDamData} />
+            
+              </ProtectedLayout>
+            }
+          />
+          <Route
+            path="/analysis/previous/"
+            element={
+              <ProtectedLayout theme={theme}>
+
+                <PreviousAnalysis mode={mode} theme={theme} setAddDamData={setAddDamData} />
             
               </ProtectedLayout>
             }
