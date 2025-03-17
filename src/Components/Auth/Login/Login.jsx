@@ -42,7 +42,6 @@ const Login = () => {
             }
         },[navigate,updateAuth])
     
-
     const onSubmit = async (data) => {
         console.log(data)
         setIsLoading(true)
@@ -60,9 +59,9 @@ const Login = () => {
             }
         } catch (error) {
             console.log(error)
-            if (error.response?.data?.error) showError(error.response?.data?.error)
-            if (error.response?.data?.errors?.email) setError("email", { type: "server", message: error.response?.data?.errors?.email })
-            if (error.response?.data?.errors?.password) setError("password", { type: "server", message: error.response?.data?.errors?.password })
+            if (error?.response?.data?.error) showError(error.response?.data?.error)
+            if (error?.response?.data?.errors?.email) setError("email", { type: "server", message: error.response?.data?.errors?.email })
+            if (error?.response?.data?.errors?.password) setError("password", { type: "server", message: error.response?.data?.errors?.password })
         } finally {
             setIsLoading(false)
         }
@@ -225,6 +224,3 @@ const Login = () => {
 }
 
 export default Login
-
-
-

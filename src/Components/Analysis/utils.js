@@ -319,33 +319,35 @@ export const getCardData = ({item})=>{
     alertColor,
     date,
     name
-  }
-                            
+  }               
 }
 
-/*
-<ResponsiveCalendar
-              data={data}
-              width={600}
-              from="2023-01-01"
-              to="2023-12-31"
-              emptyColor="#595959"
-              colors={[ '#61cdbb', '#97e3d5', '#e8c1a0', '#f47560' ]}
-              margin={{ top: 0, right: 0, bottom: 40, left: 40 }}
-              yearSpacing={40}
-              monthBorderColor="#000000"
-              dayBorderWidth={2}
-              dayBorderColor="#000000"
-              legends={[
-                  {
-                      anchor: 'bottom-right',
-                      direction: 'row',
-                      translateY: 36,
-                      itemCount: 4,
-                      itemWidth: 36,
-                      itemHeight: 36,
-                      itemsSpacing: 14,
-                      itemDirection: 'right-to-left'
-                  }
-              ]}
-        />*/
+export const feetToMeter = (value) => {
+  return value * 0.3048;
+};
+
+export const getPreviousYearDate=(inputDate)=>{
+  // Split input into day, month, year (format: DD-MM-YYYY)
+  const [day, month, year] = inputDate.split('-').map(Number);
+  console.log(day,month,year)
+  
+  // Calculate the previous year
+  const previousYear = year - 1;
+  
+  // Create a tentative date for the same day/month in the previous year
+  const tentativeDate = new Date(previousYear, month - 1, day);
+  console.log(tentativeDate)
+  
+  // Check if the month rolled over (e.g., Feb 29 → March 1 in non-leap years)
+  if (tentativeDate.getMonth() !== month - 1) {
+      // If invalid, adjust to the last day of the target month in the previous year
+      tentativeDate.setDate(0); // 0th day of the next month = last day of target month
+  }
+  
+  // Format the result back to DD-MM-YYYY
+  const formattedDay = String(tentativeDate.getDate()).padStart(2, '0');
+  const formattedMonth = String(tentativeDate.getMonth() + 1).padStart(2, '0');
+  const formattedYear = tentativeDate.getFullYear();
+  
+  return `${formattedDay}-${formattedMonth}-${formattedYear}`;
+}

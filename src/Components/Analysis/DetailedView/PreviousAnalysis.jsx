@@ -13,6 +13,9 @@ import drop from "../../../Assets/drop.png"
 import { useLocation, useNavigate } from 'react-router-dom'
 import DamDataContext from '../../Contexts/DamDataContext/DamDataContext'
 import SettingsContext from '../../Contexts/SettingsContext/SettingsContext'
+import Input from '../../AtomicDesign/Atom/Input/Input'
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css";
 
 const PreviousAnalysis = ({mode,theme}) => {
   const color = getColor({theme}) 
@@ -21,6 +24,7 @@ const PreviousAnalysis = ({mode,theme}) => {
     const { id } = location.state || {}
 
   const [filteredDamData,setFilteredDamData] = useState()
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const navigate = useNavigate();
 
@@ -49,12 +53,19 @@ const PreviousAnalysis = ({mode,theme}) => {
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex overflow-hidden ${expand?'pl-8':'pl-16'}`}>
          <Wrapper className='w-[50%] h-full'>
-            <Wrapper className='w-full  mt-4 flex items-center gap-4' >
+            <Wrapper className='w-full mt-4 flex items-center gap-4' >
             <Typography tag="p" className='font-medium text-base capitalize' >
                 Same day previous year - 
                 <Typography tag='span' className='text-primary pl-1' text={name} />
-                
             </Typography>
+            <DatePicker  
+              selected={selectedDate} 
+              onChange={(date) => setSelectedDate(date)} 
+              maxDate={new Date()} 
+              dateFormat="d MMMM, yyyy"
+              className='font-medium text-sm w-36 outline-none pl-1 rounded-md bg-transparent border border-color-border'
+             />
+
                 {/* <Button onClick={()=>navigate('/analysis/damdata', { state: { id:'1' } })}>navigate {id}</Button> ******/}
             </Wrapper>
 

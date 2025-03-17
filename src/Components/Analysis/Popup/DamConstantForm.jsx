@@ -5,22 +5,46 @@ import Input from "../../AtomicDesign/Atom/Input/Input";
 import Typography from "../../AtomicDesign/Atom/Typography/Typography";
 import Select from "../../AtomicDesign/Atom/Input/Select";
 import Wrapper from "../../AtomicDesign/Atom/Wrapper/Wrapper";
+import { addNewDam } from "../../../API/Handler/setDataHandler";
+import { feetToMeter } from "../utils";
+import { useState } from "react";
+import { usePopUp } from "../../Contexts/PopUpContext";
 
-const DamConstantForm = () => {
+// eslint-disable-next-line react/prop-types
+const DamConstantForm = ({setAddDamData}) => {
+  const [isLoading,setIsLoading] = useState(false)
+  const { showSuccess, showError } = usePopUp()
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (data) => {
     console.log(data);
-  };
-
-  // Regex to validate only numeric digits.
-  const decimalNumberPattern = {
-    value: /^[0-9]+(\.[0-9]+)?$/,
-    message: "Only accept numbers (decimals allowed)",
+    setIsLoading(true)
+    const damData = {
+      name: data.damName,
+      district: data.district,
+      MWL: data.MWLUnit === 'feet' ? feetToMeter(parseFloat(data.MWL)) : parseFloat(data.MWL),
+      FRL: data.FRLUnit === 'feet' ? feetToMeter(parseFloat(data.FRL)) : parseFloat(data.FRL),
+      spillway_crest_level: data.SpillwayUnit === 'feet' ? feetToMeter(parseFloat(data.spillway)) : parseFloat(data.spillway),
+      live_storage_at_FRL: parseFloat(data.liveStorage)
+    };
+    try {
+      const response = await addNewDam(damData);
+      console.log(response);
+      showSuccess("New dam added successfully!")
+      setAddDamData(prev=>prev.state=false)
+    } catch (error) {
+      console.log(error)
+      if (error?.response?.data?.errors?.name) setError("damName", { type: "server", message: error.response?.data?.errors?.name })
+      if (error?.response?.data?.error) showError(error.response?.data?.error)
+    }finally{
+      setIsLoading(false)
+    }
+    
   };
 
   return (
@@ -57,14 +81,15 @@ const DamConstantForm = () => {
           className="w-full h-full rounded-md border-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm"
         />
         <Select
+          defaultValue ='meter'
           options={[{id:'meter', name: "meter" }, {id:'feet', name: "feet" }]}
           placeholder="Units"
-          className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-sm cursor-pointer"
+          className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-xs cursor-pointer"
           firstOptionClassName="text-[#7d8da1] dark:bg-black"
           childClassName="dark:bg-black"
-          {...register("MWLUnit",{ 
-    defaultValue: "meter" // Add this to all unit registers
-  })}
+          {...register("MWLUnit", { 
+            defaultValue: "meter" // Add this to all unit registers
+          })}
         />
       </Wrapper>
       {errors.MWL && (
@@ -87,12 +112,15 @@ const DamConstantForm = () => {
           className="w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm"
         />
         <Select
-            options={[{id:'meter', name: "meter" }, {id:'feet', name: "feet" }]}
+          defaultValue ='meter'
+          options={[{id:'meter', name: "meter" }, {id:'feet', name: "feet" }]}
           placeholder="Units"
-          className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-sm cursor-pointer"
+          className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-xs cursor-pointer"
           firstOptionClassName="text-[#7d8da1] dark:bg-black"
           childClassName="dark:bg-black"
-          {...register("FRLUnit")}
+          {...register("FRLUnit", { 
+            defaultValue: "meter" // Add this to all unit registers
+          })}
         />
       </Wrapper>
       {errors.FRL && (
@@ -115,12 +143,15 @@ const DamConstantForm = () => {
           className="w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm"
         />
         <Select
-           options={[{id:'meter', name: "meter" }, {id:'feet', name: "feet" }]}
+          defaultValue ='meter'
+          options={[{id:'meter', name: "meter" }, {id:'feet', name: "feet" }]}
           placeholder="Units"
-          className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-sm cursor-pointer"
+          className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-xs cursor-pointer"
           firstOptionClassName="text-[#7d8da1] dark:bg-black"
           childClassName="dark:bg-black"
-          {...register("SpillwayUnit")}
+          {...register("SpillwayUnit", { 
+            defaultValue: "meter" // Add this to all unit registers
+          })}
         />
       </Wrapper>
       {errors.spillway && (
@@ -143,12 +174,15 @@ const DamConstantForm = () => {
           className="w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm"
         />
         <Select
-            options={[{id:'MCM', name: "MCM" },]}
+          defaultValue ='MCM'
+          options={[{id:'MCM', name: "MCM" },]}
           placeholder="Units"
-          className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-sm cursor-pointer"
+          className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-xs cursor-pointer"
           firstOptionClassName="text-[#7d8da1] dark:bg-black"
           childClassName="dark:bg-black"
-          {...register("StorageAtFRLUnit")}
+          {...register("StorageAtFRLUnit", { 
+            defaultValue: "MCM" // Add this to all unit registers
+          })}
         />
       </Wrapper>
       {errors.liveStorage && (
@@ -179,6 +213,7 @@ const DamConstantForm = () => {
         type="submit"
         className="w-full mt-5 h-11 bg-primary dark:bg-primary-variant text-white hover:bg-primary-hover"
         containerClass="text-sm flex items-center justify-center gap-3"
+        isLoading={isLoading}
       >
         submit
       </Button>
@@ -187,3 +222,8 @@ const DamConstantForm = () => {
 };
 
 export default DamConstantForm;
+
+const decimalNumberPattern = {
+  value: /^[0-9]+(\.[0-9]+)?$/,
+  message: "Only accept numbers (decimals allowed)",
+};

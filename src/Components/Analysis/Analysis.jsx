@@ -8,7 +8,7 @@ import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Pichart from '../AtomicDesign/Molecule/Pichart/Pichart'
 import { useContext, useEffect, useState } from 'react'
-import { getColor,data, donutStyles, inflowStyles, getWaterLevelStyles, getCardData } from './utils'
+import { getColor,data, donutStyles, inflowStyles, getWaterLevelStyles, getCardData, getPreviousYearDate } from './utils'
 import Button from '../AtomicDesign/Atom/Button/Button'
 import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
 import Media from '../AtomicDesign/Atom/Media/Media'
@@ -24,6 +24,7 @@ const Analysis = ({mode,theme,setAddDamData}) => {
   const [selectedDamId,setSelectedDamId] = useState(1) //default damid eg: 1-idukki
 
   const [filteredDamData,setFilteredDamData] = useState()
+  console.log("------------------",getPreviousYearDate('29-02-2024'))
 
   const navigate = useNavigate();
 
@@ -66,7 +67,7 @@ const Analysis = ({mode,theme,setAddDamData}) => {
                 <LuHistory />
                   Previous year
                   </Button>
-                <AddSolidIcon className='size-7 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData(true)} />
+                <AddSolidIcon className='size-7 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData({state:true,damId:selectedDamId})} />
                 {/* <Button onClick={()=>navigate('/analysis/damdata', { state: { id:'1' } })}>navigate {id}</Button> ******/}
             </Wrapper>
 

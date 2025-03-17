@@ -30,7 +30,7 @@ import PreviousAnalysis from "./Components/Analysis/DetailedView/PreviousAnalysi
 
 function App() {
 
-  const [addDamData,setAddDamData] = useState(false)
+  const [addDamData,setAddDamData] = useState({state:false,damId:undefined})
   const [openMap,setOpenMap] = useState(false)
 
   const { mode, setMode, theme, setTheme } = useThemeMode();
@@ -54,7 +54,7 @@ function App() {
         }
       </Wrapper>
       {
-        addDamData&&<AddDamData setAddDamData={setAddDamData} />
+        addDamData.state&&<AddDamData addDamData={addDamData} setAddDamData={setAddDamData}  />
       }
       {
         openMap&&<Map setOpenMap={setOpenMap} />
