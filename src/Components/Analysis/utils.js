@@ -26,10 +26,10 @@ export const data = [
   // Add more data here
 ];
 export const donutStyles=({data})=>{
-  const waterLevel = parseFloat(data?.dam_data?.[0].water_level)
-  const inflow = parseFloat(data?.dam_data?.[0].inflow)
-  const powerHouseDischarge = parseFloat(data?.dam_data?.[0].power_house_discharge)
-  const spillwayRelease = parseFloat(data?.dam_data?.[0].spillway_release)
+  const waterLevel = parseFloat(data?.dam_data?.[0]?.water_level)
+  const inflow = parseFloat(data?.dam_data?.[0]?.inflow)
+  const powerHouseDischarge = parseFloat(data?.dam_data?.[0]?.power_house_discharge)
+  const spillwayRelease = parseFloat(data?.dam_data?.[0]?.spillway_release)
   const totalOutflow = powerHouseDischarge+spillwayRelease
   
   return{      
@@ -155,12 +155,11 @@ export const inflowStyles ={
 }
 
 export const getWaterLevelStyles = ({mode,color,data})=>{
-  const redLevel = data?.dam_data?.[0].red_level || "0"
+  const redLevel = data?.dam_data?.[0]?.red_level || "0"
   // const orangeLevel = data?.dam_data?.[0].orange_level
   // const blueLevel = data?.dam_data?.[0].blue_level
   const seriesData = (data?.dam_data?.map(item => item.water_level) || [0,0,0,0,0,0]).reverse();
 const categories = (data?.dam_data?.map(item => item.date) || ['null','null','null','null','null','null']).reverse();
-console.log('seriesdata',seriesData,mode)
   return {
     series: [{
       name: 'water level',
@@ -329,14 +328,12 @@ export const feetToMeter = (value) => {
 export const getPreviousYearDate=(inputDate)=>{
   // Split input into day, month, year (format: DD-MM-YYYY)
   const [day, month, year] = inputDate.split('-').map(Number);
-  console.log(day,month,year)
-  
+
   // Calculate the previous year
   const previousYear = year - 1;
   
   // Create a tentative date for the same day/month in the previous year
   const tentativeDate = new Date(previousYear, month - 1, day);
-  console.log(tentativeDate)
   
   // Check if the month rolled over (e.g., Feb 29 → March 1 in non-leap years)
   if (tentativeDate.getMonth() !== month - 1) {

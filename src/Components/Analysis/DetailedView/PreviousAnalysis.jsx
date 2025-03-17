@@ -6,30 +6,32 @@ import MapPointerIcon from '../../../Assets/icons/MapPointerIcon'
 import Typography from '../../AtomicDesign/Atom/Typography/Typography'
 import Wrapper from '../../AtomicDesign/Atom/Wrapper/Wrapper'
 import Pichart from '../../AtomicDesign/Molecule/Pichart/Pichart'
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { getColor, donutStyles, inflowStyles, getWaterLevelStyles, getCardData } from '../utils'
 import Media from '../../AtomicDesign/Atom/Media/Media'
 import drop from "../../../Assets/drop.png"
 import { useLocation, useNavigate } from 'react-router-dom'
 import DamDataContext from '../../Contexts/DamDataContext/DamDataContext'
 import SettingsContext from '../../Contexts/SettingsContext/SettingsContext'
-import Input from '../../AtomicDesign/Atom/Input/Input'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
+import { getDamData } from '../../../API/Handler/getDataHandler'
+import moment from 'moment'
+import { SwiperSlide } from 'swiper/react'
+import PichartCardSkeleton from '../../DashBoard/loader/PichartCardSkeleton'
+import { BsDatabaseFillSlash } from 'react-icons/bs'
 
 const PreviousAnalysis = ({mode,theme}) => {
   const color = getColor({theme}) 
+  const [loadingDamData,setLoadingDamData] = useState(false)
 
   const location = useLocation()
-    const { id } = location.state || {}
+    const { id,previousDate } = location.state || {}
 
   const [filteredDamData,setFilteredDamData] = useState()
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date(previousDate));
 
   const navigate = useNavigate();
-
-  const {damData} = useContext(DamDataContext)
-  console.log('filterd dam analysis',damData)
 
   const [donutState, setDonutState] = useState(donutStyles({data:filteredDamData?.[0]}));
   const [stateInflow, setStateInflow] = useState(inflowStyles);
@@ -39,16 +41,56 @@ const PreviousAnalysis = ({mode,theme}) => {
 
   const {liveStorage,liveStorageAtFRL,percentage,formattedTime,alertColor,date,name} = getCardData({item:filteredDamData?.[0]})
 
-  useEffect(()=>{
-    setFilteredDamData(damData.filter((item)=>item.id===id))
-  },[id,damData])
+  const fetchAllDamData = useCallback(async (params = {})=>{
+          try {
+              setLoadingDamData(true)
+              const {data} = await getDamData(params)
+              setFilteredDamData(data.filter((item)=>item.id===id))
+          } catch (error) {
+              console.error("Error fetching dam data:", error)
+          }finally{
+            setLoadingDamData(false)
+          }
+      },[id])
+  
+  useEffect(() => {
+      fetchAllDamData({date:moment(previousDate).format('YYYY-MM-DD'),id:id}) //pass parameters- fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
+    }, [fetchAllDamData,id,previousDate])
 
   useEffect(() => {
-    if (filteredDamData?.[0]) {
+    if (filteredDamData?.[0]&&filteredDamData?.[0].dam_data.length!==0) {
       setState(getWaterLevelStyles({mode, color, data: filteredDamData[0] }));
       setDonutState(donutStyles({data:filteredDamData?.[0]}))
     }
   }, [filteredDamData, color,mode]);
+
+  useEffect(() => {
+    if (selectedDate) {
+      fetchAllDamData({
+        date: moment(selectedDate).format('YYYY-MM-DD'),
+        id: id
+      });
+    }
+  }, [fetchAllDamData, id, selectedDate]);
+
+  if (!filteredDamData || filteredDamData?.length === 0 || !filteredDamData?.[0]?.dam_data || filteredDamData?.[0]?.dam_data?.length === 0) {
+    return <Wrapper className='pl-8 pt-8 text-[#595959] dark:text-[#7d8da1]'>
+              <Wrapper className='w-full flex items-center gap-4' >
+                <Typography tag="p" className='font-medium text-base capitalize' >
+                    Same day previous year - 
+                    <Typography tag='span' className='text-primary pl-1' text={name} />
+                </Typography>
+                <DatePicker  
+                  selected={selectedDate} 
+                  onChange={(date) => setSelectedDate(date)} 
+                  maxDate={new Date()} 
+                  dateFormat="d MMMM, yyyy"
+                  className='font-medium text-sm w-36 outline-none pl-1 rounded-md bg-transparent border border-color-border'
+                />
+            </Wrapper>
+          <Typography tag='h5' className='pt-4 text-lg'>{filteredDamData?.[0]?.dam_data?.length===0?<><BsDatabaseFillSlash className='size-12' /> Empty</>:'fetching data...'}</Typography>
+          </Wrapper>
+      }
 
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex overflow-hidden ${expand?'pl-8':'pl-16'}`}>
@@ -70,7 +112,8 @@ const PreviousAnalysis = ({mode,theme}) => {
             </Wrapper>
 
             <Wrapper className='w-full h-[30%] flex items-center justify-between'>
-                <Wrapper className="w-80 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ">
+            
+                <Wrapper className="w-[48%] h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ">
                     <Wrapper className='w-full h-[30%] flex items-center justify-between'>
                         <Wrapper className='h-full flex items-center'>
                             <MapPointerIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />
@@ -95,7 +138,7 @@ const PreviousAnalysis = ({mode,theme}) => {
                     </Wrapper>
                 </Wrapper>
 
-                <Wrapper onDoubleClick={()=>navigate('/analysis/inflow', { state: { id:'1' } })} className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 cursor-pointer">
+                <Wrapper onDoubleClick={()=>navigate('/analysis/inflow', { state: { id:'1' } })} className="w-[48%] h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 cursor-pointer">
                     
                     <Wrapper className="w-full h-full flex flex-col items-center justify-center">
                     <Typography tag="p" className="text-[#595959] dark:text-[#7d8da196] text-xs mt-6" text="Inflow 7 days" />
@@ -129,36 +172,36 @@ const PreviousAnalysis = ({mode,theme}) => {
               <Wrapper className='h-full pl-8 mt-1 flex flex-col gap-3'>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium" >
-                            Maximum Water Level(MWL): <Typography tag='span' className="text-primary" text={filteredDamData?.[0].MWL} /> (meter)
+                            Maximum Water Level(MWL): <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.MWL} /> (meter)
                       </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Full Reservoir Level(FRL): <Typography tag='span' className="text-primary" text={filteredDamData?.[0].FRL} /> (meter)
+                            Full Reservoir Level(FRL): <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.FRL} /> (meter)
                       </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Spillway Crest Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0].spillway_crest_level} /> (meter)
+                            Spillway Crest Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.spillway_crest_level} /> (meter)
                       </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Live Storage at FRL: <Typography tag='span' className="text-primary" text={filteredDamData?.[0].live_storage_at_FRL} /> (Million Cubic Meters)
+                            Live Storage at FRL: <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.live_storage_at_FRL} /> (Million Cubic Meters)
                         </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                         <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Rule Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0].dam_data?.[0].rule_level} /> (meter)
+                            Rule Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.dam_data?.[0]?.rule_level} /> (meter)
                         </Typography>
                  </Wrapper>  
                  <Wrapper className='w-[90%] h-12 flex items-center'>
                         <Wrapper className='size-3 bg-color-blue rounded-full'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0].dam_data?.[0].blue_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.blue_level} />
                         <Wrapper className='size-3 bg-color-orange rounded-full ml-4'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0].dam_data?.[0].orange_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.orange_level} />
                         <Wrapper className='size-3 bg-color-red rounded-full ml-4'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0].dam_data?.[0].red_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.red_level} />
                         
                  </Wrapper>             
               </Wrapper>

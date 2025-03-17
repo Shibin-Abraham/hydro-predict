@@ -18,13 +18,14 @@ import { Form, useLocation, useNavigate, useParams } from 'react-router-dom'
 import DamDataContext from '../Contexts/DamDataContext/DamDataContext'
 import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
 import { LuHistory } from 'react-icons/lu'
+import moment from 'moment'
 
 const Analysis = ({mode,theme,setAddDamData}) => {
   const color = getColor({theme})
   const [selectedDamId,setSelectedDamId] = useState(1) //default damid eg: 1-idukki
 
   const [filteredDamData,setFilteredDamData] = useState()
-  console.log("------------------",getPreviousYearDate('29-02-2024'))
+  const previousDate = getPreviousYearDate(moment(filteredDamData?.[0].dam_data[0].date).format('DD-MM-YYYY'))
 
   const navigate = useNavigate();
 
@@ -63,7 +64,7 @@ const Analysis = ({mode,theme,setAddDamData}) => {
                 placeholder="Select Dam" 
                 defaultValue={selectedDamId}
                 />
-                <Button onClick={()=>navigate('/analysis/previous', { state: { id:selectedDamId } })} className='h-6 text-[12px] font-normal border border-color-border dark:border-[#161d29f5] hover:bg-[#7d8da1f6] hover:text-white'>
+                <Button onClick={()=>navigate('/analysis/previous', { state: { id:selectedDamId,previousDate:previousDate } })} className='h-6 text-[12px] font-normal border border-color-border dark:border-[#161d29f5] hover:bg-[#7d8da1f6] hover:text-white'>
                 <LuHistory />
                   Previous year
                   </Button>
@@ -72,7 +73,7 @@ const Analysis = ({mode,theme,setAddDamData}) => {
             </Wrapper>
 
             <Wrapper className='w-full h-[30%] flex items-center justify-between'>
-                <Wrapper className="w-80 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ">
+                <Wrapper className="w-[48%] h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ">
                     <Wrapper className='w-full h-[30%] flex items-center justify-between'>
                         <Wrapper className='h-full flex items-center'>
                             <MapPointerIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />
@@ -97,7 +98,7 @@ const Analysis = ({mode,theme,setAddDamData}) => {
                     </Wrapper>
                 </Wrapper>
 
-                <Wrapper onDoubleClick={()=>navigate('/analysis/inflow', { state: { id:'1' } })} className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 cursor-pointer">
+                <Wrapper onDoubleClick={()=>navigate('/analysis/inflow', { state: { id:'1' } })} className="w-[48%] h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 cursor-pointer">
                     
                     <Wrapper className="w-full h-full flex flex-col items-center justify-center">
                     <Typography tag="p" className="text-[#595959] dark:text-[#7d8da196] text-xs mt-6" text="Inflow 7 days" />
