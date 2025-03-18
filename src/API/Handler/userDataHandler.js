@@ -10,3 +10,14 @@ export const rememberMe = async (token) => {
         throw error;
     }
 }
+
+export const getAllUsers = async (token) => {
+    try {
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+        const response = await axiosInstance.get('/users', config);
+        return response;
+    } catch (error) {
+        console.error('Error getAllUsers :', error);
+        throw error;
+    }
+}

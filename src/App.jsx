@@ -27,6 +27,7 @@ import Settings from "./Components/Settings/Settings";
 import Inflow from "./Components/Analysis/DetailedView/Inflow";
 import WaterLevel from "./Components/Analysis/DetailedView/WaterLevel";
 import PreviousAnalysis from "./Components/Analysis/DetailedView/PreviousAnalysis";
+import Users from "./Components/Users/Users";
 
 function App() {
 
@@ -123,6 +124,16 @@ function App() {
             element={
               <ProtectedLayout theme={theme}>
                 <RainGauge theme={theme} setOpenMap={setOpenMap} />
+              </ProtectedLayout>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <ProtectedLayout theme={theme}>
+                
+                <Users mode={mode} setMode={setMode} setTheme={setTheme} />
+             
               </ProtectedLayout>
             }
           />
