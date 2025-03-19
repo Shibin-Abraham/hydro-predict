@@ -4,15 +4,25 @@ import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import Button from '../AtomicDesign/Atom/Button/Button'
 import Settings from '../../Assets/icons/Settings'
-import { getAllUsers } from '../../API/Handler/userDataHandler'
+import { getAllUsers, getDamHandlingUsers, updateUserActivation } from '../../API/Handler/userDataHandler'
 import { AuthContext } from '../Contexts/AuthContext'
+import Media from '../AtomicDesign/Atom/Media/Media'
+import iconDam from "../../Assets/dam.png"
+import { MdAssignmentAdd } from "react-icons/md";
+import { FaUsersViewfinder } from 'react-icons/fa6'
+import DamDataContext from '../Contexts/DamDataContext/DamDataContext'
+import UserCardLoader from './loader/UserCardLoader'
 
-const Users = () => {
-    const [activate,setActive] = useState(false)
+const Users = ({mode}) => {
+    const [isLoading,setIsLoading] = useState(null)
+    const [loadingUsersData,setLoadingUsersData] = useState(true)
+    const [openTooltip,setOpenTooltip] = useState(null)
     const {expand} = useContext(SettingsContext)
     const [users,setUsers] = useState([])
+    const [damHandlingUsers,setDamHandlingUsers] = useState([])
 
     const { auth } = useContext(AuthContext)
+    const {damData} = useContext(DamDataContext)
 
 const fetchUsers = useCallback(async ()=>{
     try {
@@ -20,23 +30,56 @@ const fetchUsers = useCallback(async ()=>{
         setUsers(data)
     } catch (error) {
         console.log(error)
+    }finally{
+        setLoadingUsersData(false)
     }
 },[])
 
-useEffect(()=>{fetchUsers()},[])
+const fetchDamHandlingUsers = useCallback(async ()=>{
+    try {
+        const {data} =await getDamHandlingUsers()
+        console.log(data)
+        setDamHandlingUsers(data)
+        console.log('dd',await damHandlingUsers)
+    } catch (error) {
+        console.log(error)
+    }
+},[])
+
+const handleActivation = async (userId, activate) => {
+    try {
+        await updateUserActivation({userId, activate});
+        fetchUsers();
+    } catch (error) {
+        console.error('Error updating activation status:', error);
+    }finally{
+        setIsLoading(null)
+    }
+  }
+
+useEffect(()=>{
+    fetchUsers()
+    fetchDamHandlingUsers()
+},[])
 
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg overflow-hidden ${expand?'pl-8':'pl-16'}`}>
       <Wrapper className={`w-full pt-3 flex items-center gap-4`}>
       </Wrapper>
-      <Wrapper className='w-full h-[80vh] pt-8'>
-        <Wrapper className='w-[45%] h-full flex flex-col gap-6'>
+      <Wrapper className='w-full h-[80vh] pt-8 flex gap-8'>
+        <Wrapper className='w-[65%] h-full flex flex-col gap-6 overflow-y-scroll no-scrollbar'>
+            {
+                loadingUsersData
+                &&
+                [1,2,3,4,5,6].map((_,index)=><UserCardLoader key={index} mode={mode} />)
+            }
             {
                 users?.map(({id,name,email,position,status},index)=>{
+                    if(position.toUpperCase()==='ADMIN') return
                     const nameParts = name.split(' ');
                     const profileName = nameParts[0][0] + (nameParts[1] ? nameParts[1][0] : '');
                     return (
-                        <Wrapper key={index} className='w-full rounded-md h-16 border-2 border-color-border dark:border-none dark:bg-[#121721f5] flex justify-between gap-4 items-center px-4'>
+                        <Wrapper key={index} className='w-full rounded-md h-16 border-2 border-color-border dark:border-none dark:bg-[#121721f5] flex justify-between gap-4 items-center px-4 py-2'>
                             <Wrapper className='flex items-center gap-2'>
                                 <Wrapper className='size-10 rounded-full bg-primary-variant flex items-center justify-center'>
                                     <Typography text={profileName.toUpperCase()} className='text-base font-semibold' />
@@ -57,21 +100,61 @@ useEffect(()=>{fetchUsers()},[])
                             </Wrapper>
 
                             {
-                                auth.user.id!==id&&<Wrapper className='w-24 flex gap-2 items-center justify-between'>
+                                auth.user.id!==id&&
+                                <Wrapper className='w-24 h-full flex gap-2 items-center justify-between relative'>
                                 {
-                                    status?
-                                    <Button onClick={()=>setActive(prev=>!prev)} variant='primary' variantType='outline' className='h-6 px-2' >
-                                        <Typography text='Remove' className='text-xs font-thin' />
+                                    <Button 
+                                        isLoading={isLoading===index} 
+                                        onlyLoader={true} 
+                                        onClick={
+                                            ()=>{handleActivation(id, !status)
+                                            setIsLoading(index)
+                                        }} 
+                                        variant='primary' 
+                                        variantType='outline' 
+                                        className={`${status?'h-6 px-2':'h-6 border text-color-light-gray hover:text-white dark:hover:bg-color-dark-gray hover:bg-color-light-gray dark:text-color-dark-gray border-color-light-gray dark:border-color-dark-gray'}`} 
+                                        >
+                                        <Typography text={`${status?'Remove':'Activate'}`} className='text-xs font-thin' />
                                     </Button>
-                                    :
-                                    <Button onClick={()=>setActive(prev=>!prev)} variantType='outline' className='h-6 px-2 border text-color-light-gray hover:text-white dark:hover:bg-color-dark-gray hover:bg-color-light-gray dark:text-color-dark-gray border-color-light-gray dark:border-color-dark-gray' >
-                                        <Typography text='Activate' className='text-xs font-thin' />
-                                    </Button>
+                                    
+                                }
+                                {
+                                    openTooltip===index
+                                    &&
+                                    <Wrapper className={`w-20 h-6 absolute ${index!==0?'-top-5':'-bottom-5'} -right-4 rounded-lg text-xs bg-[#595959] dark:bg-[#7d8da1] text-color-red pt-1 px-2 cursor-pointer`}>
+                                        <Wrapper className={`size-3 rotate-45 absolute bg-[#595959] dark:bg-[#7d8da1] ${index!==0?'-bottom-[2px]':'-top-[2px]'} right-5`} />
+                                        <Typography text='Delete User' className='absolute text-center hover:underline' />
+                                    </Wrapper>
                                 }
                                 
-                                <Settings className='size-6 cursor-pointer' />
+                                <Settings onClick={()=>setOpenTooltip(prev=>prev===index?null:index)} className='size-6 cursor-pointer' />
                             </Wrapper>
                             }
+                        </Wrapper>
+                    )
+                })
+            } 
+        </Wrapper>
+
+        <Wrapper className='w-[30%] h-full flex flex-wrap justify-between items-start gap-4 overflow-y-auto no-scrollbar content-start'>
+        {
+                damData?.map((dam,index)=>{
+                    const damHandling = damHandlingUsers.filter((data)=>data?.dam?.id===dam?.id)
+                    return(
+                        <Wrapper key={index} className='w-full rounded-md h-16 border-2 border-color-border dark:border-none dark:bg-[#121721f5] flex justify-between gap-4 items-center px-4'>
+                            <Wrapper className='flex'>
+                                <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant rounded-md" imgClass="rounded-none" />
+                                <Wrapper>
+                                    <Typography tag="p" className="text-sm ml-2 capitalize" text={dam?.name} />
+                                    <Typography tag="p" className="text-xs ml-2 dark:text-[#7d8da196] leading-3" text={`users: `} >
+                                        <Typography tag='span' className={`text-xs ${damHandling?.[0]?.dam?.users?.length!==(undefined)?'text-primary':'text-color-red'}`} text={damHandling?.[0]?.dam?.users?.length??'0'} />
+                                    </Typography>
+                                </Wrapper>
+                            </Wrapper>
+                            <Wrapper className='flex gap-3'>
+                                <MdAssignmentAdd className='size-5 cursor-pointer hover:text-primary-hover' />
+                                <FaUsersViewfinder className='size-5 cursor-pointer hover:text-primary-hover' />
+                            </Wrapper>
                         </Wrapper>
                     )
                 })

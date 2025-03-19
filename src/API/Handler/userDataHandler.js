@@ -21,3 +21,23 @@ export const getAllUsers = async (token) => {
         throw error;
     }
 }
+
+export const updateUserActivation = async ({userId, activate}) => {
+    try {
+        const response = await axiosInstance.put(`/users/${userId}/activate`, { activate });
+        return response;
+    } catch (error) {
+        console.error('Error updating user activation:', error);
+        throw error;
+    }
+}
+
+export const getDamHandlingUsers = async () => {
+    try {
+        const response = await axiosInstance.get('/dam/handling-users');
+        return response;
+    } catch (error) {
+        console.error('Error getDamHandlingUsers:', error);
+        throw error;
+    }
+}

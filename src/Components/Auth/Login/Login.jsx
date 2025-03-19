@@ -35,6 +35,10 @@ const Login = () => {
             try {
                 const {data} = await rememberMe();
                 console.log("remember me ",data)
+                if(!data?.status){
+                    showError("Access Denied, Please contact admin")
+                    return
+                }
                 updateAuth(data?.status, data?.token, data) //
                 navigate('/dashboard', { replace: true })
             } catch (error) {

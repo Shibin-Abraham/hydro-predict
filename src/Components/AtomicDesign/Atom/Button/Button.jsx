@@ -9,6 +9,7 @@ const Button = ({
     className,
     children,
     isLoading,
+    onlyLoader,
     containerClass = "flex items-center justify-center gap-3",
     ...restProps
 }) => {
@@ -23,7 +24,7 @@ const Button = ({
                             className='w-full h-full '
                             spinnerClassName='w-5 h-5 border-[2px] border-[#575353] border-t-white rounded-[50%] animate-spin'
                         />
-                        processing...
+                        {!onlyLoader&&'processing...'}
                     </> : children
                 }
             </span>
