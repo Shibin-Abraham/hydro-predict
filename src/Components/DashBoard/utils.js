@@ -223,12 +223,6 @@ export const transformDamData = (damArray) => {
             entry.date && entry.time && // Ensure required fields exist
             entry.inflow !== undefined && !isNaN(parseFloat(entry.inflow)) // Valid y-value
           )
-          .sort((a, b) => {
-            // Sort by date and time for chronological order
-            const dateA = new Date(`${a.date}T${a.time}`);
-            const dateB = new Date(`${b.date}T${b.time}`);
-            return dateA - dateB;
-          })
           .map(entry => ({
             x: entry.date, // Use the actual date as x
             y: parseFloat(entry.inflow), // Inflow value as y
@@ -252,7 +246,6 @@ export const damAlertColor = ({value,prefix,redLevel,orangeLevel,blueLevel,defau
             return `${prefix}-[${defaultLightColor}] ${defaultDarkColor?`dark:${prefix}-[${defaultDarkColor}]`:''}`; 
     }
 };
-
 
 export const getDamAlerts=(dams)=> {
     const result = [];
@@ -289,8 +282,6 @@ export const getDamAlerts=(dams)=> {
     }
     return result;
   }
-
-
 
   export const getDamColor = (damName) => {
     const upperName = damName?.toUpperCase();

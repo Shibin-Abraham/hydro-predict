@@ -1,17 +1,13 @@
-import { useContext, useEffect, useState } from "react"
-
+import {  useState } from "react"
 import Wrapper from "./Components/AtomicDesign/Atom/Wrapper/Wrapper";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DashBoard from "./Components/DashBoard/DashBoard";
-import NavBar from "./Components/NavBar/NavBar";
-import TopBar from "./Components/TopBar/TopBar";
 import SignUp from "./Components/Auth/SignUp/SignUp";
 import Login from "./Components/Auth/Login/Login";
 import Verify from "./Components/Auth/Varify/Verify";
 import ErrorPopUp from "./Components/AtomicDesign/Molecule/PopUp/ErrorPopUp";
 import { usePopUp } from "./Components/Contexts/PopUpContext";
 import SuccessPopUp from "./Components/AtomicDesign/Molecule/PopUp/SuccessPopUp";
-import { AuthContext } from "./Components/Contexts/AuthContext";
 import ResetPassword from "./Components/Auth/Login/ResetPassword";
 import Analysis from "./Components/Analysis/Analysis";
 import Home from "./Components/Home/Home";
@@ -28,11 +24,13 @@ import Inflow from "./Components/Analysis/DetailedView/Inflow";
 import WaterLevel from "./Components/Analysis/DetailedView/WaterLevel";
 import PreviousAnalysis from "./Components/Analysis/DetailedView/PreviousAnalysis";
 import Users from "./Components/Users/Users";
+import UserAssignment from "./Components/Users/Popup/UserAssignment";
 
 function App() {
 
   const [addDamData,setAddDamData] = useState({state:false,damId:undefined})
   const [openMap,setOpenMap] = useState(false)
+  const [openUserAssignment,setOpenUserAssignment] = useState({state:false,damHandlingUsers:[],users:[],damId:undefined,dmaName:''})
 
   const { mode, setMode, theme, setTheme } = useThemeMode();
 
@@ -59,6 +57,9 @@ function App() {
       }
       {
         openMap&&<Map setOpenMap={setOpenMap} />
+      }
+      {
+        openUserAssignment.state&&<UserAssignment openUserAssignment={openUserAssignment} setOpenUserAssignment={setOpenUserAssignment} />
       }
       <BrowserRouter>
       <DamDataProvider>
@@ -132,7 +133,7 @@ function App() {
             element={
               <ProtectedLayout theme={theme}>
                 
-                <Users mode={mode} setMode={setMode} setTheme={setTheme} />
+                <Users mode={mode} setMode={setMode} setTheme={setTheme} setOpenUserAssignment={setOpenUserAssignment} />
              
               </ProtectedLayout>
             }

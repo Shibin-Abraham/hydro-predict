@@ -11,8 +11,6 @@ import ReactApexChart from "react-apexcharts"
 import Pichart from "../AtomicDesign/Molecule/Pichart/Pichart"
 import SettingsContext from "../Contexts/SettingsContext/SettingsContext"
 
-
-
 // eslint-disable-next-line react/prop-types
 const Prediction = ({mode}) => {
   const {expand} = useContext(SettingsContext)
@@ -138,7 +136,6 @@ const Prediction = ({mode}) => {
       },
     },
   
-  
 });
 
   const {showInfo} = usePopUp()
@@ -146,16 +143,15 @@ const Prediction = ({mode}) => {
     showInfo('Predictions are estimates only. They are based on historical data.')
   }, [showInfo])
              
-            
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg overflow-hidden ${expand?'pl-8':'pl-16'}`}>
       <Wrapper className={`w-full pt-3 flex items-center gap-4`}>
-          <Select options={['idukki']} 
+          <Select options={[{id:1,name:'idukki',}]} 
           className='w-28 h-6 bg-inherit rounded-md text-[#595959] dark:text-[#7d8da196] text-sm border border-color-border dark:border-[#161d29f5] outline-none' 
           firstOptionClassName="dark:bg-[#121721f5]"
           childClassName="dark:bg-[#121721f5]"
           placeholder="Select Dam" />
-          <Select options={['XGBRegressor','Lasso']} 
+          <Select options={[{id:2,name:'XGBRegressor'},{id:3,name:'Lasso'}]} 
           className='w-28 h-6 bg-inherit rounded-md text-[#595959] dark:text-[#7d8da196] text-sm border border-color-border dark:border-[#161d29f5] outline-none' 
           firstOptionClassName="dark:bg-[#121721f5]"
           childClassName="dark:bg-[#121721f5]"
@@ -363,7 +359,6 @@ const Prediction = ({mode}) => {
                       />
                     </Wrapper>
 
-                
                     <Wrapper className='w-full'>
                       <Typography tag="p" text="Latest Inflow" className=" text-sm" />
                       <Input type='text'
@@ -389,13 +384,11 @@ const Prediction = ({mode}) => {
         
       </Wrapper>
 
-        
     </Wrapper>
   )
 }
 
 export default Prediction
-
 
 const generateDayWiseTimeSeries = (baseTimestamp, count, yrange) => {
   let i = 0;

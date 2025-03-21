@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useCallback, useContext, useEffect, useState } from 'react'
 import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
 import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
@@ -13,7 +14,7 @@ import { FaUsersViewfinder } from 'react-icons/fa6'
 import DamDataContext from '../Contexts/DamDataContext/DamDataContext'
 import UserCardLoader from './loader/UserCardLoader'
 
-const Users = ({mode}) => {
+const Users = ({mode,setOpenUserAssignment}) => {
     const [isLoading,setIsLoading] = useState(null)
     const [loadingUsersData,setLoadingUsersData] = useState(true)
     const [openTooltip,setOpenTooltip] = useState(null)
@@ -65,8 +66,9 @@ useEffect(()=>{
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg overflow-hidden ${expand?'pl-8':'pl-16'}`}>
       <Wrapper className={`w-full pt-3 flex items-center gap-4`}>
+       <Typography tag="h4" text={`User Access Control`} className='text-base ml-1' />
       </Wrapper>
-      <Wrapper className='w-full h-[80vh] pt-8 flex gap-8'>
+      <Wrapper className='w-full h-[80vh] pt-2 flex gap-8'>
         <Wrapper className='w-[65%] h-full flex flex-col gap-6 overflow-y-scroll no-scrollbar'>
             {
                 loadingUsersData
@@ -137,9 +139,11 @@ useEffect(()=>{
         </Wrapper>
 
         <Wrapper className='w-[30%] h-full flex flex-wrap justify-between items-start gap-4 overflow-y-auto no-scrollbar content-start'>
+        <Typography tag="h4" text={`Dam User Assignments`} className='text-base ml-1' />
         {
                 damData?.map((dam,index)=>{
                     const damHandling = damHandlingUsers.filter((data)=>data?.dam?.id===dam?.id)
+                    
                     return(
                         <Wrapper key={index} className='w-full rounded-md h-16 border-2 border-color-border dark:border-none dark:bg-[#121721f5] flex justify-between gap-4 items-center px-4'>
                             <Wrapper className='flex'>
@@ -153,13 +157,15 @@ useEffect(()=>{
                             </Wrapper>
                             <Wrapper className='flex gap-3'>
                                 <MdAssignmentAdd className='size-5 cursor-pointer hover:text-primary-hover' />
-                                <FaUsersViewfinder className='size-5 cursor-pointer hover:text-primary-hover' />
+                                <FaUsersViewfinder onClick={
+                                    ()=>setOpenUserAssignment({state:true,damHandlingUsers:damHandlingUsers,users:users,damId:dam?.id,damName:dam?.name})} 
+                                    className='size-5 cursor-pointer hover:text-primary-hover' 
+                                />
                             </Wrapper>
                         </Wrapper>
                     )
                 })
             }
-            
         </Wrapper>
 
       </Wrapper>
