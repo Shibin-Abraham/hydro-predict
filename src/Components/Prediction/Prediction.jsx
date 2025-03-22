@@ -259,9 +259,9 @@ const Prediction = ({mode}) => {
                       />
                     </Wrapper>
                     <Wrapper className='w-[47%]'>
-                      <Typography tag="p" text="Latest Inflow" className=" text-sm" />
+                      <Typography tag="p" text="Yesterday's inflow" className=" text-sm" />
                       <Input type='text'
-                          placeholder='Enter the latest inflow value'
+                          placeholder="Enter yesterday's inflow"
                           autoComplete='off'
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
@@ -272,9 +272,9 @@ const Prediction = ({mode}) => {
               
                 <Wrapper className='flex gap-3 justify-between'>
                     <Wrapper className='w-[47%]'>
-                      <Typography tag="p" text="Latest Inflow" className=" text-sm" />
+                      <Typography tag="p" text="Day before yesterday's inflow" className=" text-sm" />
                       <Input type='text'
-                          placeholder='Enter the latest inflow value'
+                          placeholder="Enter day before yesterday's inflow"
                           autoComplete='off'
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
@@ -282,9 +282,9 @@ const Prediction = ({mode}) => {
                       />
                     </Wrapper>
                     <Wrapper className='w-[47%]'>
-                      <Typography tag="p" text="Latest Inflow" className=" text-sm" />
+                      <Typography tag="p" text="Latest total rainfall" className=" text-sm" />
                       <Input type='text'
-                          placeholder='Enter the latest inflow value'
+                          placeholder="Enter latest total rainfall"
                           autoComplete='off'
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
@@ -294,9 +294,9 @@ const Prediction = ({mode}) => {
                 </Wrapper>
                 <Wrapper className='flex gap-3 justify-between'>
                     <Wrapper className='w-[47%]'>
-                      <Typography tag="p" text="Latest Inflow" className=" text-sm" />
+                      <Typography tag="p" text="Yesterday's rainfall" className=" text-sm" />
                       <Input type='text'
-                          placeholder='Enter the latest inflow value'
+                          placeholder="Enter yesterday's rainfall"
                           autoComplete='off'
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
@@ -304,9 +304,9 @@ const Prediction = ({mode}) => {
                       />
                     </Wrapper>
                     <Wrapper className='w-[47%]'>
-                      <Typography tag="p" text="Latest Inflow" className=" text-sm" />
+                      <Typography tag="p" text="Day before yesterday's rainfall" className=" text-sm" />
                       <Input type='text'
-                          placeholder='Enter the latest inflow value'
+                          placeholder="Enter day before yesterday's rainfall"
                           autoComplete='off'
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
@@ -317,9 +317,9 @@ const Prediction = ({mode}) => {
 
                 <Wrapper className='flex gap-3 justify-between'>
                     <Wrapper className='w-[47%]'>
-                      <Typography tag="p" text="Latest Inflow" className=" text-sm" />
+                      <Typography tag="p" text="3-day average inflow" className=" text-sm" />
                       <Input type='text'
-                          placeholder='Enter the latest inflow value'
+                          placeholder="Enter 3-day average inflow"
                           autoComplete='off'
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
@@ -327,9 +327,9 @@ const Prediction = ({mode}) => {
                       />
                     </Wrapper>
                     <Wrapper className='w-[47%]'>
-                      <Typography tag="p" text="Latest Inflow" className=" text-sm" />
+                      <Typography tag="p" text="Enter 7-day average inflow" className=" text-sm" />
                       <Input type='text'
-                          placeholder='Enter the latest inflow value'
+                          placeholder="Enter 7-day average inflow"
                           autoComplete='off'
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
@@ -338,9 +338,9 @@ const Prediction = ({mode}) => {
                     </Wrapper>
                 </Wrapper>
                 <Wrapper className='w-full'>
-                      <Typography tag="p" text="Latest Inflow" className=" text-sm" />
+                      <Typography tag="p" text="3-day average rainfall" className=" text-sm" />
                       <Input type='text'
-                          placeholder='Enter the latest inflow value'
+                          placeholder="Enter 3-day average rainfall"
                           autoComplete='off'
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
@@ -349,9 +349,9 @@ const Prediction = ({mode}) => {
                     </Wrapper>
 
                     <Wrapper className='w-full'>
-                      <Typography tag="p" text="Latest Inflow" className=" text-sm" />
+                      <Typography tag="p" text="7-day average rainfall" className=" text-sm" />
                       <Input type='text'
-                          placeholder='Enter the latest inflow value'
+                          placeholder="Enter 7-day average rainfall"
                           autoComplete='off'
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
@@ -360,9 +360,9 @@ const Prediction = ({mode}) => {
                     </Wrapper>
 
                     <Wrapper className='w-full'>
-                      <Typography tag="p" text="Latest Inflow" className=" text-sm" />
+                      <Typography tag="p" text="Current month (1-12)" className=" text-sm" />
                       <Input type='text'
-                          placeholder='Enter the latest inflow value'
+                          placeholder="Enter current month (1-12)"
                           autoComplete='off'
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm

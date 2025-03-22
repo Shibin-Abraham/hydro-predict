@@ -415,49 +415,49 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                     </Wrapper>
                     <Wrapper onClick={()=>setTheme('blue')} className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
-                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="kattappana" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full bg-[#ff0d3e]  ml-auto mr-4' />
                     </Wrapper>
                     <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
-                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="kadamakuzhy" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full bg-[#ff0d3e] ml-auto mr-4' />
                     </Wrapper>
                     <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
-                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="udumbanchola" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full bg-[#fd7418] ml-auto mr-4' />
                     </Wrapper>
                     <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
-                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="thattathikudy" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>
                     <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
-                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="aladi" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>
                     <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
-                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="meenmutty" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>
                     <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
-                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="kulamavu" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>
                     <Wrapper className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
-                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="IDUKKI" />
+                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text="anavilasam" />
                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text="Rainfall-12.11mm" />
                         <Wrapper className='w-2 h-2 rounded-full ml-auto mr-4' />
                     </Wrapper>

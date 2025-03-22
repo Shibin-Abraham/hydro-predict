@@ -8,17 +8,17 @@ import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Pichart from '../AtomicDesign/Molecule/Pichart/Pichart'
 import { useContext, useEffect, useState } from 'react'
-import { getColor,data, donutStyles, inflowStyles, getWaterLevelStyles, getCardData, getPreviousYearDate } from './utils'
+import { getColor, donutStyles, inflowStyles, getWaterLevelStyles, getCardData, getPreviousYearDate } from './utils'
 import Button from '../AtomicDesign/Atom/Button/Button'
 import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
 import Media from '../AtomicDesign/Atom/Media/Media'
 import drop from "../../Assets/drop.png"
-import Input from '../AtomicDesign/Atom/Input/Input'
-import { Form, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import DamDataContext from '../Contexts/DamDataContext/DamDataContext'
 import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
 import { LuHistory } from 'react-icons/lu'
 import moment from 'moment'
+import { BiCloudUpload } from 'react-icons/bi'
 
 const Analysis = ({mode,theme,setAddDamData}) => {
   const color = getColor({theme})
@@ -69,6 +69,7 @@ const Analysis = ({mode,theme,setAddDamData}) => {
                   Previous year
                   </Button>
                 <AddSolidIcon className='size-7 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData({state:true,damId:selectedDamId})} />
+                <BiCloudUpload className='size-7' />
                 {/* <Button onClick={()=>navigate('/analysis/damdata', { state: { id:'1' } })}>navigate {id}</Button> ******/}
             </Wrapper>
 
