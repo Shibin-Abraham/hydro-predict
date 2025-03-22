@@ -16,7 +16,7 @@ const UserCardLoader = ({mode}) => {
             <Skeleton className='ml-14' width={200} height={12} />
             <Skeleton className='ml-10' circle width={10} height={10} />
             <Skeleton className='ml-[1px]' width={30} height={10} />
-            <Skeleton className='ml-24' width={50} height={25} />
+            <Skeleton className='ml-10' width={50} height={25} />
         </Wrapper>
     </SkeletonTheme>
   )

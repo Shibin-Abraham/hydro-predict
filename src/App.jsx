@@ -30,7 +30,7 @@ function App() {
 
   const [addDamData,setAddDamData] = useState({state:false,damId:undefined})
   const [openMap,setOpenMap] = useState(false)
-  const [openUserAssignment,setOpenUserAssignment] = useState({state:false,damHandlingUsers:[],users:[],damId:undefined,dmaName:''})
+  const [openUserAssignment,setOpenUserAssignment] = useState({state:false,users:[],damId:undefined,dmaName:'',fetchDamHandlingUsers:()=>{}})
 
   const { mode, setMode, theme, setTheme } = useThemeMode();
 

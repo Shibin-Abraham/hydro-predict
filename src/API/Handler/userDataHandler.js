@@ -32,9 +32,11 @@ export const updateUserActivation = async ({userId, activate}) => {
     }
 }
 
-export const getDamHandlingUsers = async () => {
+export const getDamHandlingUsers = async ({dam_id}) => {
     try {
-        const response = await axiosInstance.get('/dam/handling-users');
+        const params = {};
+        if (dam_id !== undefined) params.dam_id = dam_id;
+        const response = await axiosInstance.get('/dam/handling-users',{ params });
         return response;
     } catch (error) {
         console.error('Error getDamHandlingUsers:', error);
