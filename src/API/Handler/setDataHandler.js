@@ -29,3 +29,13 @@ export const deleteDamHandlingUser = async (data) => {
         throw error;
     }
 }
+
+export const checkDamHandlingUser = async (data) => {
+    try {
+        const response = await axiosInstance.post('/dam/handling-user/check', data);
+        return response;
+    } catch (error) {
+        console.error('Error on checkDamHandlingUser(post) :', error);
+        throw error;
+    }
+}

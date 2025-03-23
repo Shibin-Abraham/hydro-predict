@@ -39,6 +39,7 @@ function App() {
   const { error, success,info } = usePopUp()
 
   return (
+    <DamDataProvider>
     <Wrapper className={`bg-[#ffffff] dark:bg-[#0d1117] w-screen h-screen font-roboto theme-${theme}`}>
 
       <Wrapper className='left-[50%] min-h-12 rounded-md fixed z-50 flex flex-col items-center justify-end '>
@@ -62,7 +63,6 @@ function App() {
         openUserAssignment.state&&<UserAssignment openUserAssignment={openUserAssignment} setOpenUserAssignment={setOpenUserAssignment} />
       }
       <BrowserRouter>
-      <DamDataProvider>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
@@ -159,9 +159,9 @@ function App() {
           />
           
         </Routes>
-        </DamDataProvider>
       </BrowserRouter>
     </Wrapper>
+    </DamDataProvider>
   )
 }
 

@@ -19,7 +19,7 @@ const { auth } = useContext(AuthContext)
   return (
     <InputPopUp className="w-full h-full bg-[#000000be] absolute flex items-center justify-center z-20" >
           <CloseIcon onClick={() => setAddDamData(prev=>prev.state=false)} className="absolute z-20 size-5 text-[#595959] dark:text-[#7d8da196] top-4 right-4 hover:cursor-pointer" />
-        <Wrapper className="w-full flex flex-col items-center justify-center px-4 pt-4 overflow-y-scroll no-scrollbar">
+        <Wrapper className="w-full flex flex-col items-center justify-start content-start px-4 pt-4 overflow-y-scroll no-scrollbar">
                     <Wrapper className="w-full flex justify-center cursor-pointer absolute top-2 z-10">
                             <Wrapper onClick={handleToggle} className={`${auth?.user?.position.toUpperCase()==='ADMIN'?"w-[288px]":"w-[150px]"} relative h-6 bg-primary dark:bg-primary-variant rounded-3xl flex items-center`}>
                                 {/* Moving white background */}
@@ -51,7 +51,7 @@ const { auth } = useContext(AuthContext)
                         </Wrapper>
                         {
                             auth?.user?.position.toUpperCase()==='ADMIN'?
-                          !toggleBtn?<DamConstantForm setAddDamData={setAddDamData} />:<DailyUpdatesForm />:<DailyUpdatesForm />
+                          !toggleBtn?<DamConstantForm setAddDamData={setAddDamData} />:<DailyUpdatesForm damId={addDamData.damId} />:<DailyUpdatesForm damId={addDamData.damId} />
                         }
             
         </Wrapper>

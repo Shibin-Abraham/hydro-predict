@@ -9,6 +9,7 @@ import { addNewDam } from "../../../API/Handler/setDataHandler";
 import { feetToMeter } from "../utils";
 import { useState } from "react";
 import { usePopUp } from "../../Contexts/PopUpContext";
+import { decimalNumberPattern } from "./utils";
 
 // eslint-disable-next-line react/prop-types
 const DamConstantForm = ({setAddDamData}) => {
@@ -68,7 +69,7 @@ const DamConstantForm = ({setAddDamData}) => {
       )}
 
       {/* Maximum Water Level */}
-      <Typography tag="p" text="Maximum Water Level (MWL)" className="text-sm pt-1" />
+      <Typography tag="p" text="Maximum Water Level (MWL)" className="text-sm pt-2" />
       <Wrapper className="w-full h-10 relative">
         <Input
           type="text"
@@ -99,7 +100,7 @@ const DamConstantForm = ({setAddDamData}) => {
       )}
 
       {/* Full Reservoir Level */}
-      <Typography tag="p" text="Full Reservoir Level (FRL)" className="text-sm pt-1" />
+      <Typography tag="p" text="Full Reservoir Level (FRL)" className="text-sm pt-2" />
       <Wrapper className="w-full h-10 relative">
         <Input
           type="text"
@@ -130,7 +131,7 @@ const DamConstantForm = ({setAddDamData}) => {
       )}
 
       {/* Spillway Crest Level */}
-      <Typography tag="p" text="Spillway Crest Level" className="text-sm pt-1" />
+      <Typography tag="p" text="Spillway Crest Level" className="text-sm pt-2" />
       <Wrapper className="w-full h-10 relative">
         <Input
           type="text"
@@ -161,7 +162,7 @@ const DamConstantForm = ({setAddDamData}) => {
       )}
 
       {/* Live Storage at FRL */}
-      <Typography tag="p" text="Live Storage at FRL" className="text-sm pt-1" />
+      <Typography tag="p" text="Live Storage at FRL" className="text-sm pt-2" />
       <Wrapper className="w-full h-10 relative">
         <Input
           type="text"
@@ -192,7 +193,7 @@ const DamConstantForm = ({setAddDamData}) => {
       )}
 
       {/* Select District */}
-      <Typography tag="p" text="Select District" className="text-sm pt-1" />
+      <Typography tag="p" text="Select District" className="text-sm pt-2" />
       <Select
         options={[{ name: "idukki" }]}
         placeholder="Select District"
@@ -222,8 +223,3 @@ const DamConstantForm = ({setAddDamData}) => {
 };
 
 export default DamConstantForm;
-
-const decimalNumberPattern = {
-  value: /^[0-9]+(\.[0-9]+)?$/,
-  message: "Only accept numbers (decimals allowed)",
-};

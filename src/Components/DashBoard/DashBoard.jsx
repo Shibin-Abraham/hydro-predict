@@ -30,8 +30,6 @@ import DamDataContext from "../Contexts/DamDataContext/DamDataContext"
 import RainAlertSkeleton from "./loader/RainAlertSkeleton"
 import SettingsContext from "../Contexts/SettingsContext/SettingsContext"
 
-
-
 const DashBoard = ({mode,setMode,setTheme}) => {
     const {showError } = usePopUp()
     const [allDamData,setAllDamData] = useState([])
@@ -43,7 +41,6 @@ const DashBoard = ({mode,setMode,setTheme}) => {
 
     const {setDamData} = useContext(DamDataContext)
     const{expand} = useContext(SettingsContext)
-
 
     const fetchAllDamData = useCallback(async (params = {})=>{
         try {
@@ -66,7 +63,6 @@ const DashBoard = ({mode,setMode,setTheme}) => {
     useEffect(() => {
         fetchAllDamData({offset:0}) //pass parameters- fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
       }, [fetchAllDamData])
-
 
       useEffect(() => {
         if (!damAlertData.length) return
@@ -92,7 +88,6 @@ const DashBoard = ({mode,setMode,setTheme}) => {
     
       //console.log(allDamData,filterRedAlert(damAlertData))
     
-
     return (
         <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex ${expand?'pl-8':'pl-16'}`}>
 
@@ -158,7 +153,6 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                     <SwiperSlide><PichartCardSkeleton mode={mode}/></SwiperSlide>
                     </>}
                     </Swiper>
-
 
                 <Typography tag="h4" className="text-lg font-bold mt-4" text="Inflow Chart" />
                 <Wrapper className="w-full h-[60%] flex justify-between pr-6">
@@ -476,7 +470,6 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                         </>
                     }
                     
-                    
                 </Wrapper>
 
             </Wrapper>
@@ -486,7 +479,6 @@ const DashBoard = ({mode,setMode,setTheme}) => {
 }
 
 export default DashBoard
-
 
 const filterRedAlert = (data)=>data.filter((item)=>item.alert==='red')
 const filterOrangeAlert = (data)=>data.filter((item)=>item.alert==='orange')

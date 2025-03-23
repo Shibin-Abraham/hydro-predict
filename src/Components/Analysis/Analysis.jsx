@@ -7,7 +7,7 @@ import Select from '../AtomicDesign/Atom/Input/Select'
 import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Pichart from '../AtomicDesign/Molecule/Pichart/Pichart'
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { getColor, donutStyles, inflowStyles, getWaterLevelStyles, getCardData, getPreviousYearDate } from './utils'
 import Button from '../AtomicDesign/Atom/Button/Button'
 import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
@@ -19,18 +19,23 @@ import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
 import { LuHistory } from 'react-icons/lu'
 import moment from 'moment'
 import { BiCloudUpload } from 'react-icons/bi'
+import { getDamData } from '../../API/Handler/getDataHandler'
+import { checkDamHandlingUser } from '../../API/Handler/setDataHandler'
+import { AuthContext } from '../Contexts/AuthContext'
 
 const Analysis = ({mode,theme,setAddDamData}) => {
   const color = getColor({theme})
   const [selectedDamId,setSelectedDamId] = useState(1) //default damid eg: 1-idukki
+  const [damHandlingUser,setDamHandlingUser] = useState() 
 
   const [filteredDamData,setFilteredDamData] = useState()
   const previousDate = getPreviousYearDate(moment(filteredDamData?.[0].dam_data[0].date).format('DD-MM-YYYY'))
 
   const navigate = useNavigate();
 
-  const {damData} = useContext(DamDataContext)
-  console.log('filterd dam analysis',damData)
+  const { auth } = useContext(AuthContext)
+  const {damData,setDamData} = useContext(DamDataContext)
+  //console.log('filterd dam analysis',damData)
 
   const [donutState, setDonutState] = useState(donutStyles({data:filteredDamData?.[0]}));
   const [stateInflow, setStateInflow] = useState(inflowStyles);
@@ -39,6 +44,25 @@ const Analysis = ({mode,theme,setAddDamData}) => {
   const{expand} = useContext(SettingsContext)
 
   const {liveStorage,liveStorageAtFRL,percentage,formattedTime,alertColor,date,name} = getCardData({item:filteredDamData?.[0]})
+
+  const fetchAllDamData = useCallback(async (params = {})=>{
+          try {
+              const {data} = await getDamData(params)
+              setDamData(data)
+          } catch (error) {
+              console.error("Error fetching dam data:", error)
+          }
+      },[setDamData])
+
+  const checkUserIsAssigned = useCallback(async (object)=>{
+          try {
+              const {data} = await checkDamHandlingUser(object)
+              setDamHandlingUser(data)
+          } catch (error) {
+              console.error("Error checkDamHandlingUser:", error)
+              setDamHandlingUser()
+          }
+      },[])
 
   useEffect(()=>{
     setFilteredDamData(damData.filter((item)=>item.id===selectedDamId))
@@ -50,6 +74,12 @@ const Analysis = ({mode,theme,setAddDamData}) => {
       setDonutState(donutStyles({data:filteredDamData?.[0]}))
     }
   }, [filteredDamData, color,mode]);
+
+  useEffect(()=>{
+    if(auth?.user?.position.toUpperCase()!=='ADMIN'){
+      checkUserIsAssigned({user_id:auth?.user?.id,dam_id:selectedDamId})
+    }
+  },[checkUserIsAssigned,selectedDamId,auth?.user?.id,auth?.user?.position])
 
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex overflow-hidden ${expand?'pl-8':'pl-16'}`}>
@@ -68,8 +98,15 @@ const Analysis = ({mode,theme,setAddDamData}) => {
                 <LuHistory />
                   Previous year
                   </Button>
-                <AddSolidIcon className='size-7 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData({state:true,damId:selectedDamId})} />
-                <BiCloudUpload className='size-7' />
+                  {
+                    (damHandlingUser||auth?.user?.position.toUpperCase()==='ADMIN')
+                    &&
+                    <>
+                    <AddSolidIcon className='size-7 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData({state:true,damId:selectedDamId})} />
+                    <BiCloudUpload className='size-7' />
+                    </>
+                  }
+                
                 {/* <Button onClick={()=>navigate('/analysis/damdata', { state: { id:'1' } })}>navigate {id}</Button> ******/}
             </Wrapper>
 
