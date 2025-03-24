@@ -17,9 +17,11 @@ import Button from "../AtomicDesign/Atom/Button/Button"
 import SparklesIcon from "../../Assets/icons/SparklesIcon"
 import { useContext, } from "react"
 import SettingsContext from "../Contexts/SettingsContext/SettingsContext"
+import { AuthContext } from "../Contexts/AuthContext"
 
 const NavBar = () => {
     const {expand} = useContext(SettingsContext)
+    const { auth } = useContext(AuthContext)
     return (
         <Wrapper className={`h-full text-black dark:text-gray-300`}>
             <Wrapper className={`${expand ? 'w-40 ml-6 justify-between' : 'w-10'} h-full pt-8 flex flex-col`}>
@@ -109,27 +111,31 @@ const NavBar = () => {
                         </NavLink>
                     </Wrapper>*/}
 
-                    <Wrapper className="h-12 relative">
-                        <NavLink to="/Users" className={({ isActive }) => {
-                            return isActive ? "active" : null
-                        }}>{
-                                expand ?
-                                    <Wrapper className="group flex items-center gap-2 w-full h-full [.active_&]:before:content-[''] [.active_&]:bg-[#2e79d926] dark:[.active_&]:bg-black
-                        [.active_&]:before:w-1.5 [.active_&]:before:h-full [.active_&]:rounded-e-md dark:[.active_&]:rounded-none [.active_&]:before:bg-primary [.active_&]:before:absolute 
-                        [.active_&]:before:left-0">
-                                        <UsersIcon className="size-4 text-black dark:text-[#7d8da1] ml-6 [.active_&]:text-primary group-hover:ml-10 group-hover:text-primary transition-all ease-linear duration-200" />
-                                        <Typography tag="h4" className="text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary">
-                                            Users
-                                        </Typography>
-                                    </Wrapper>
-                                    :
-                                    <Wrapper className='group bg-tertiary-variant w-10 h-12 ml-6 flex items-center justify-center'>
-                                        <UsersIcon className="size-5 text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary transition-all ease-linear duration-200" />
-                                    </Wrapper>
-                            }
-                        </NavLink>
-                    </Wrapper>
-
+                        {
+                            auth?.user?.position?.toUpperCase()==='ADMIN'
+                            &&
+                            <Wrapper className="h-12 relative">
+                                <NavLink to="/Users" className={({ isActive }) => {
+                                    return isActive ? "active" : null
+                                }}>{
+                                        expand ?
+                                            <Wrapper className="group flex items-center gap-2 w-full h-full [.active_&]:before:content-[''] [.active_&]:bg-[#2e79d926] dark:[.active_&]:bg-black
+                                [.active_&]:before:w-1.5 [.active_&]:before:h-full [.active_&]:rounded-e-md dark:[.active_&]:rounded-none [.active_&]:before:bg-primary [.active_&]:before:absolute 
+                                [.active_&]:before:left-0">
+                                                <UsersIcon className="size-4 text-black dark:text-[#7d8da1] ml-6 [.active_&]:text-primary group-hover:ml-10 group-hover:text-primary transition-all ease-linear duration-200" />
+                                                <Typography tag="h4" className="text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary">
+                                                    Users
+                                                </Typography>
+                                            </Wrapper>
+                                            :
+                                            <Wrapper className='group bg-tertiary-variant w-10 h-12 ml-6 flex items-center justify-center'>
+                                                <UsersIcon className="size-5 text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary transition-all ease-linear duration-200" />
+                                            </Wrapper>
+                                    }
+                                </NavLink>
+                            </Wrapper>
+                        }
+                    
                     <Wrapper className="h-12 relative">
                         <NavLink to="/Logs" className={({ isActive }) => {
                             return isActive ? "active" : null
@@ -193,7 +199,6 @@ const NavBar = () => {
                         </NavLink>
                     </Wrapper>
                 </Wrapper>
-
 
                 <Wrapper className={`${expand ? 'w-full h-32 mb-8' : 'w-10 ml-6 h-10 mt-6'}`}>
                     <Wrapper className="group relative w-full h-full bg-tertiary overflow-hidden dark:bg-tertiary-variant border-primary rounded-md dark:hover:bg-tertiary">

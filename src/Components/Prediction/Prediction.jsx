@@ -10,6 +10,9 @@ import Button from "../AtomicDesign/Atom/Button/Button"
 import ReactApexChart from "react-apexcharts"
 import Pichart from "../AtomicDesign/Molecule/Pichart/Pichart"
 import SettingsContext from "../Contexts/SettingsContext/SettingsContext"
+import { useForm } from "react-hook-form"
+import { decimalNumberPattern } from "../Analysis/Popup/utils"
+import axios from "axios"
 
 // eslint-disable-next-line react/prop-types
 const Prediction = ({mode}) => {
@@ -138,6 +141,44 @@ const Prediction = ({mode}) => {
   
 });
 
+const [isLoading,setIsLoading] = useState(false) 
+const [predictedData,setPredictedData] = useState() 
+ const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+      } = useForm();
+
+      const onSubmit = async (data) => {
+        const features = {
+          "inflow_t": data.latest_inflow,
+          "inflow_t-1": data.yesterday_inflow,
+          "inflow_t-2": data.before_yesterday_inflow,
+          "totalRainfall_t": data.latest_total_rainfall,
+          "totalRainfall_t-1": data.yesterday_total_rainfall,
+          "totalRainfall_t-2": data.before_yesterday_total_rainfall,
+          "inflow_3day_avg": data._3_day_avg_inflow,
+          "inflow_7day_avg": data._7_day_avg_inflow,
+          "rainfall_3day_avg": data._3_day_avg_rainfall,
+          "rainfall_7day_avg": data._7_day_avg_rainfall,
+          "month": data.current_month
+      }
+      console.log(features)
+      try {
+        // Using direct axios
+        setIsLoading(true)
+        const {data} = await axios.post('http://127.0.0.1:8001/api/dam/predict/1/', features);
+        // OR using the api instance: const response = await api.post('/predict/1/', data);
+        console.log(data);
+        setPredictedData(data)
+      } catch (error) {
+        console.log(error)
+      }finally{
+        setIsLoading(false)
+      }
+      }
+
   const {showInfo} = usePopUp()
   useEffect(() => {
     showInfo('Predictions are estimates only. They are based on historical data.')
@@ -187,7 +228,7 @@ const Prediction = ({mode}) => {
                   </Wrapper>
                   
                   <Typography tag="p" className="text-[10px] font-normal text-center pt-1" text="Inflow Value" />
-                  <Typography tag="p" className="text-xs font-semibold text-center" text="110.22 MCM" />
+                  <Typography tag="p" className="text-xs font-semibold text-center" text={`${predictedData?predictedData?.predicted_inflow_tomorrow.toFixed(4):''} MCM`} />
                   
                   </Wrapper>
                 </Wrapper>
@@ -211,7 +252,7 @@ const Prediction = ({mode}) => {
                   <Wrapper className='flex flex-col items-center'>
                      <Pichart
                      variant='gray'
-                      percentage={75}
+                      percentage={67}
                       className="w-20 h-20 grid place-items-center"
                       subClassName="relative w-16 h-16 rounded-full grid place-items-center before:content-[''] before:absolute before:h-[84%]
                           before:w-[84%] before:bg-[#ffffff] before:dark:bg-[#121720] before:rounded-full"
@@ -223,11 +264,11 @@ const Prediction = ({mode}) => {
                   <Wrapper className='w-[60%] h-full flex flex-col items-end justify-center'>
                   <Typography tag="p" className="text-xs font-normal text-center" text="Predicted Water Level" />
                   <Wrapper>
-                  <Typography tag="p" className="text-lg font-bold text-center text-color-light-gray dark:text-color-dark-gray" text="720.22 m" />
+                  <Typography tag="p" className="text-lg font-bold text-center text-color-light-gray dark:text-color-dark-gray" text="703.22 m" />
                   </Wrapper>
                   
                   <Typography tag="p" className="text-[10px] font-normal text-center pt-1" text="Inflow Value" />
-                  <Typography tag="p" className="text-xs font-semibold text-center" text="110.22 MCM" />
+                  <Typography tag="p" className="text-xs font-semibold text-center" text={`${predictedData?predictedData?.predicted_inflow_day_after.toFixed(4):''} MCM`} />
                   
                   </Wrapper>
                 </Wrapper>
@@ -244,8 +285,9 @@ const Prediction = ({mode}) => {
             <ReactApexChart options={state.options} series={state.series} type="area" height={320} />
           </Wrapper>
         </Wrapper>
-        <Wrapper className='w-[40vw] h-full pt-3 pl-8 '>
+        <Wrapper className='w-[40vw] h-full pt-3 pl-8 overflow-y-scroll no-scrollbar'>
             <Form
+            onSubmit={handleSubmit(onSubmit)}
               className='w-full text-black dark:text-[#7d8da1] flex flex-col gap-2 justify-between'>
                 <Wrapper className='flex gap-3 justify-between'>
                     <Wrapper className='w-[47%]'>
@@ -253,20 +295,38 @@ const Prediction = ({mode}) => {
                       <Input type='text'
                           placeholder='Enter the latest inflow value'
                           autoComplete='off'
+                          {...register("latest_inflow", {
+                                    required: "required",
+                                    pattern: decimalNumberPattern,
+                                  })}
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
                               `}
                       />
+                      {errors.latest_inflow && (
+                        <Typography tag="p" className="text-color-red text-[11px]">
+                          {errors.latest_inflow.message}
+                        </Typography>
+                      )}
                     </Wrapper>
                     <Wrapper className='w-[47%]'>
                       <Typography tag="p" text="Yesterday's inflow" className=" text-sm" />
                       <Input type='text'
                           placeholder="Enter yesterday's inflow"
                           autoComplete='off'
+                          {...register("yesterday_inflow", {
+                            required: "required",
+                            pattern: decimalNumberPattern,
+                          })}
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
                               `}
                       />
+                      {errors.yesterday_inflow && (
+                        <Typography tag="p" className="text-color-red text-[11px]">
+                          {errors.yesterday_inflow.message}
+                        </Typography>
+                      )}
                     </Wrapper>
                 </Wrapper>
               
@@ -276,20 +336,38 @@ const Prediction = ({mode}) => {
                       <Input type='text'
                           placeholder="Enter day before yesterday's inflow"
                           autoComplete='off'
+                          {...register("before_yesterday_inflow", {
+                            required: "required",
+                            pattern: decimalNumberPattern,
+                          })}
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
                               `}
                       />
+                      {errors.before_yesterday_inflow && (
+                        <Typography tag="p" className="text-color-red text-[11px]">
+                          {errors.before_yesterday_inflow.message}
+                        </Typography>
+                      )}
                     </Wrapper>
                     <Wrapper className='w-[47%]'>
                       <Typography tag="p" text="Latest total rainfall" className=" text-sm" />
                       <Input type='text'
                           placeholder="Enter latest total rainfall"
                           autoComplete='off'
+                          {...register("latest_total_rainfall", {
+                            required: "required",
+                            pattern: decimalNumberPattern,
+                          })}
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
                               `}
                       />
+                      {errors.latest_total_rainfall && (
+                        <Typography tag="p" className="text-color-red text-[11px]">
+                          {errors.latest_total_rainfall.message}
+                        </Typography>
+                      )}
                     </Wrapper>
                 </Wrapper>
                 <Wrapper className='flex gap-3 justify-between'>
@@ -298,20 +376,38 @@ const Prediction = ({mode}) => {
                       <Input type='text'
                           placeholder="Enter yesterday's rainfall"
                           autoComplete='off'
+                          {...register("yesterday_total_rainfall", {
+                            required: "required",
+                            pattern: decimalNumberPattern,
+                          })}
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
                               `}
                       />
+                      {errors.yesterday_total_rainfall && (
+                        <Typography tag="p" className="text-color-red text-[11px]">
+                          {errors.yesterday_total_rainfall.message}
+                        </Typography>
+                      )}
                     </Wrapper>
                     <Wrapper className='w-[47%]'>
                       <Typography tag="p" text="Day before yesterday's rainfall" className=" text-sm" />
                       <Input type='text'
                           placeholder="Enter day before yesterday's rainfall"
                           autoComplete='off'
+                          {...register("before_yesterday_total_rainfall", {
+                            required: "required",
+                            pattern: decimalNumberPattern,
+                          })}
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
                               `}
                       />
+                      {errors.before_yesterday_total_rainfall && (
+                        <Typography tag="p" className="text-color-red text-[11px]">
+                          {errors.before_yesterday_total_rainfall.message}
+                        </Typography>
+                      )}
                     </Wrapper>
                 </Wrapper>
 
@@ -321,20 +417,38 @@ const Prediction = ({mode}) => {
                       <Input type='text'
                           placeholder="Enter 3-day average inflow"
                           autoComplete='off'
+                          {...register("_3_day_avg_inflow", {
+                            required: "required",
+                            pattern: decimalNumberPattern,
+                          })}
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
                               `}
                       />
+                      {errors._3_day_avg_inflow && (
+                        <Typography tag="p" className="text-color-red text-[11px]">
+                          {errors._3_day_avg_inflow.message}
+                        </Typography>
+                      )}
                     </Wrapper>
                     <Wrapper className='w-[47%]'>
                       <Typography tag="p" text="Enter 7-day average inflow" className=" text-sm" />
                       <Input type='text'
                           placeholder="Enter 7-day average inflow"
                           autoComplete='off'
+                          {...register("_7_day_avg_inflow", {
+                            required: "required",
+                            pattern: decimalNumberPattern,
+                          })}
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
                               `}
                       />
+                      {errors._7_day_avg_inflow && (
+                        <Typography tag="p" className="text-color-red text-[11px]">
+                          {errors._7_day_avg_inflow.message}
+                        </Typography>
+                      )}
                     </Wrapper>
                 </Wrapper>
                 <Wrapper className='w-full'>
@@ -342,10 +456,19 @@ const Prediction = ({mode}) => {
                       <Input type='text'
                           placeholder="Enter 3-day average rainfall"
                           autoComplete='off'
+                          {...register("_3_day_avg_rainfall", {
+                            required: "required",
+                            pattern: decimalNumberPattern,
+                          })}
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
                               `}
                       />
+                      {errors._3_day_avg_rainfall && (
+                        <Typography tag="p" className="text-color-red text-[11px]">
+                          {errors._3_day_avg_rainfall.message}
+                        </Typography>
+                      )}
                     </Wrapper>
 
                     <Wrapper className='w-full'>
@@ -353,10 +476,19 @@ const Prediction = ({mode}) => {
                       <Input type='text'
                           placeholder="Enter 7-day average rainfall"
                           autoComplete='off'
+                          {...register("_7_day_avg_rainfall", {
+                            required: "required",
+                            pattern: decimalNumberPattern,
+                          })}
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
                               `}
                       />
+                      {errors._7_day_avg_rainfall && (
+                        <Typography tag="p" className="text-color-red text-[11px]">
+                          {errors._7_day_avg_rainfall.message}
+                        </Typography>
+                      )}
                     </Wrapper>
 
                     <Wrapper className='w-full'>
@@ -364,17 +496,26 @@ const Prediction = ({mode}) => {
                       <Input type='text'
                           placeholder="Enter current month (1-12)"
                           autoComplete='off'
+                          {...register("current_month", {
+                            required: "required",
+                            pattern: decimalNumberPattern,
+                          })}
                           className={`w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1]
                               placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm
                               `}
                       />
+                      {errors.current_month && (
+                        <Typography tag="p" className="text-color-red text-[11px]">
+                          {errors.current_month.message}
+                        </Typography>
+                      )}
                     </Wrapper>
 
                     <Button
                             type="submit"
                             className="w-full mt-5 h-11 bg-primary dark:bg-primary-variant text-white hover:bg-primary-hover"
                             containerClass="text-sm flex items-center justify-center gap-3"
-                           
+                           isLoading={isLoading}
                         >
                             submit
                         </Button>

@@ -321,10 +321,6 @@ export const getCardData = ({item})=>{
   }               
 }
 
-export const feetToMeter = (value) => {
-  return value * 0.3048;
-};
-
 export const getPreviousYearDate=(inputDate)=>{
   // Split input into day, month, year (format: DD-MM-YYYY)
   const [day, month, year] = inputDate.split('-').map(Number);

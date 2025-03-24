@@ -27,6 +27,7 @@ const PreviousAnalysis = ({mode,theme}) => {
 
   const location = useLocation()
     const { id,previousDate } = location.state || {}
+    console.log('previous date',previousDate)
 
   const [filteredDamData,setFilteredDamData] = useState()
   const [selectedDate, setSelectedDate] = useState(new Date(previousDate));

@@ -51,7 +51,7 @@ const { auth } = useContext(AuthContext)
                         </Wrapper>
                         {
                             auth?.user?.position.toUpperCase()==='ADMIN'?
-                          !toggleBtn?<DamConstantForm setAddDamData={setAddDamData} />:<DailyUpdatesForm damId={addDamData.damId} />:<DailyUpdatesForm damId={addDamData.damId} />
+                          !toggleBtn?<DamConstantForm setAddDamData={setAddDamData} />:<DailyUpdatesForm damId={addDamData.damId} setAddDamData={setAddDamData} />:<DailyUpdatesForm damId={addDamData.damId} setAddDamData={setAddDamData} />
                         }
             
         </Wrapper>

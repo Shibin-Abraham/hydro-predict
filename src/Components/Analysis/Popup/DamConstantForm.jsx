@@ -6,10 +6,9 @@ import Typography from "../../AtomicDesign/Atom/Typography/Typography";
 import Select from "../../AtomicDesign/Atom/Input/Select";
 import Wrapper from "../../AtomicDesign/Atom/Wrapper/Wrapper";
 import { addNewDam } from "../../../API/Handler/setDataHandler";
-import { feetToMeter } from "../utils";
 import { useState } from "react";
 import { usePopUp } from "../../Contexts/PopUpContext";
-import { decimalNumberPattern } from "./utils";
+import { decimalNumberPattern, feetToMeter } from "./utils";
 
 // eslint-disable-next-line react/prop-types
 const DamConstantForm = ({setAddDamData}) => {

@@ -29,7 +29,7 @@ const Analysis = ({mode,theme,setAddDamData}) => {
   const [damHandlingUser,setDamHandlingUser] = useState() 
 
   const [filteredDamData,setFilteredDamData] = useState()
-  const previousDate = getPreviousYearDate(moment(filteredDamData?.[0].dam_data[0].date).format('DD-MM-YYYY'))
+  const previousDate = getPreviousYearDate(moment(filteredDamData?.[0]?.dam_data?.[0]?.date).format('DD-MM-YYYY'))
 
   const navigate = useNavigate();
 
@@ -86,7 +86,7 @@ const Analysis = ({mode,theme,setAddDamData}) => {
          <Wrapper className='w-[50%] h-full'>
             <Wrapper className='w-full  mt-4 flex items-center gap-4' >
                 <Select 
-                options={damData.filter((data)=>data.dam_data.length!==0)} 
+                options={damData} 
                 onChange={(e)=>setSelectedDamId(parseInt(e.target.value))}
                 className='w-28 h-6 bg-inherit rounded-md text-sm border border-color-border dark:border-[#161d29f5] outline-none cursor-pointer' 
                 firstOptionClassName="dark:bg-[#121721f5]"
@@ -102,7 +102,7 @@ const Analysis = ({mode,theme,setAddDamData}) => {
                     (damHandlingUser||auth?.user?.position.toUpperCase()==='ADMIN')
                     &&
                     <>
-                    <AddSolidIcon className='size-7 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData({state:true,damId:selectedDamId})} />
+                    <AddSolidIcon className='size-7 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData({state:true,damId:selectedDamId,fetchAllDamData:fetchAllDamData})} />
                     <BiCloudUpload className='size-7' />
                     </>
                   }
@@ -170,36 +170,36 @@ const Analysis = ({mode,theme,setAddDamData}) => {
               <Wrapper className='h-full pl-8 mt-1 flex flex-col gap-3'>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium" >
-                            Maximum Water Level(MWL): <Typography tag='span' className="text-primary" text={filteredDamData?.[0].MWL} /> (meter)
+                            Maximum Water Level(MWL): <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.MWL} /> (meter)
                       </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Full Reservoir Level(FRL): <Typography tag='span' className="text-primary" text={filteredDamData?.[0].FRL} /> (meter)
+                            Full Reservoir Level(FRL): <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.FRL} /> (meter)
                       </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Spillway Crest Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0].spillway_crest_level} /> (meter)
+                            Spillway Crest Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.spillway_crest_level} /> (meter)
                       </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                       <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Live Storage at FRL: <Typography tag='span' className="text-primary" text={filteredDamData?.[0].live_storage_at_FRL} /> (Million Cubic Meters)
+                            Live Storage at FRL: <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.live_storage_at_FRL} /> (Million Cubic Meters)
                         </Typography>
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                         <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Rule Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0].dam_data?.[0].rule_level} /> (meter)
+                            Rule Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.dam_data?.[0]?.rule_level} /> (meter)
                         </Typography>
                  </Wrapper>  
                  <Wrapper className='w-[90%] h-12 flex items-center'>
                         <Wrapper className='size-3 bg-color-blue rounded-full'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0].dam_data?.[0].blue_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.blue_level} />
                         <Wrapper className='size-3 bg-color-orange rounded-full ml-4'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0].dam_data?.[0].orange_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.orange_level} />
                         <Wrapper className='size-3 bg-color-red rounded-full ml-4'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0].dam_data?.[0].red_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.red_level} />
                         
                  </Wrapper>             
               </Wrapper>

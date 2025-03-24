@@ -39,3 +39,13 @@ export const checkDamHandlingUser = async (data) => {
         throw error;
     }
 }
+
+export const addNewDamData = async (data) => {
+    try {
+        const response = await axiosInstance.post('/dam-data/add', data);
+        return response;
+    } catch (error) {
+        console.error('Error on addNewDamData(post) :', error);
+        throw error;
+    }
+}

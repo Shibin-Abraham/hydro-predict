@@ -1,4 +1,4 @@
-import {  useState } from "react"
+import {  useContext, useState } from "react"
 import Wrapper from "./Components/AtomicDesign/Atom/Wrapper/Wrapper";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DashBoard from "./Components/DashBoard/DashBoard";
@@ -25,10 +25,11 @@ import WaterLevel from "./Components/Analysis/DetailedView/WaterLevel";
 import PreviousAnalysis from "./Components/Analysis/DetailedView/PreviousAnalysis";
 import Users from "./Components/Users/Users";
 import UserAssignment from "./Components/Users/Popup/UserAssignment";
+import { AuthContext } from "./Components/Contexts/AuthContext";
 
 function App() {
 
-  const [addDamData,setAddDamData] = useState({state:false,damId:undefined})
+  const [addDamData,setAddDamData] = useState({state:false,damId:undefined,fetchAllDamData:()=>{}})
   const [openMap,setOpenMap] = useState(false)
   const [openUserAssignment,setOpenUserAssignment] = useState({state:false,users:[],damId:undefined,dmaName:'',fetchDamHandlingUsers:()=>{}})
 
@@ -37,6 +38,8 @@ function App() {
   //const [auth, setAuth] = useState(false)
 
   const { error, success,info } = usePopUp()
+
+  const { auth } = useContext(AuthContext)
 
   return (
     <DamDataProvider>
@@ -128,7 +131,7 @@ function App() {
               </ProtectedLayout>
             }
           />
-          <Route
+          {auth?.user?.position.toUpperCase()==='ADMIN'&&<Route
             path="/users"
             element={
               <ProtectedLayout theme={theme}>
@@ -137,7 +140,7 @@ function App() {
              
               </ProtectedLayout>
             }
-          />
+          />}
           <Route
             path="/predict"
             element={
