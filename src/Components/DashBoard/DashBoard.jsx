@@ -46,10 +46,12 @@ const DashBoard = ({mode,setMode,setTheme}) => {
         try {
             const {data} = await getDamData(params)
             setAllDamData(data)
+            console.log(data)
             setDamData(data)
             setDamAlertData(getDamAlerts(data))// filter dam data for alerts
             setChartData(transformDamData(data))//filter dam data for chart
             setLoadingDamData(false)
+            console.log('damAlertData',damAlertData)
         } catch (error) {
             console.error("Error fetching dam data:", error)
             const errorMsg = error.response?.data?.error || error.response?.data?.message || 'An error occurred while fetching dam data.';
@@ -111,9 +113,9 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                             const alertColor = damAlertColor({
                                 prefix:'text',
                                 value:item?.dam_data[0]?.water_level,
-                                blueLevel:item?.dam_data[0]?.blue_level,
-                                orangeLevel:item?.dam_data[0]?.orange_level,
-                                redLevel:item?.dam_data[0]?.red_level,
+                                blueLevel:item?.dam_data[0]?.alert?.blue_level,
+                                orangeLevel:item?.dam_data[0]?.alert?.orange_level,
+                                redLevel:item?.dam_data[0]?.alert?.red_level,
                                 defaultLightColor:'#595959',
                                 defaultDarkColor:'#7d8da196',
                             })
@@ -159,8 +161,9 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                     <Wrapper className="w-[800px] h-full border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mr-4">
                         {
                             !loadingDamData 
-                            && 
-                            <ResponsiveLine
+                            && (
+                                chartData.length > 0 &&
+                                <ResponsiveLine
                                 data={chartData}
                                 margin={{ top: 20, right: 30, bottom: 50, left: 40 }}
                                 lineWidth={3}
@@ -223,6 +226,8 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                                 useMesh={true}
 
                             />
+                            )
+                            
                         }
                         {
                             loadingDamData &&<ResposiveLineSkeleton mode={mode} />
@@ -285,15 +290,15 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                                         <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
                                         <Wrapper className="w-[75%] flex items-center">
                                             <Wrapper className='w-24 '>
-                                                <Typography tag="p" className="text-sm ml-2 capitalize" text={item.name} />
-                                                <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text={`Live: ${item.water_level}`} />
+                                                <Typography tag="p" className="text-sm ml-2 capitalize" text={item?.name} />
+                                                <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text={`Live: ${item?.water_level}`} />
                                             </Wrapper>
                                             <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
-                                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.blue_level} />
+                                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.blue_level} />
                                             <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
-                                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.orange_level} />
+                                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.orange_level} />
                                             <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
-                                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.red_level} />
+                                            <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.red_level} />
                                         </Wrapper>
                                         <Wrapper className="w-[10%] mr-2" >
                                             <FlagIcon className="size-4 ml-2 text-color-red" />
@@ -308,22 +313,23 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                         btnState?.orangeLevel && (<>
                             {
                                 filterOrangeAlert(damAlertData).map((item,index)=>{
+                                    console.log("item",item)
                                     return(
                                         <Wrapper key={index} className='w-[100%] h-16 flex items-center bg-color-orange-variant'>
                                             <Media mediaType="image" mediaSrc={iconDam} className="w-9 h-9 bg-tertiary-variant ml-4 rounded-md" imgClass="rounded-none" />
                                             <Wrapper className="w-[75%] flex items-center">
 
                                                 <Wrapper className='w-24 '>
-                                                    <Typography tag="p" className="text-sm ml-2" text={item.name} />
-                                                    <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text={`Live: ${item.water_level}`} />
+                                                    <Typography tag="p" className="text-sm ml-2" text={item?.name} />
+                                                    <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text={`Live: ${item?.water_level}`} />
                                                 </Wrapper>
 
                                                 <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
-                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.blue_level} />
+                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.blue_level} />
                                                 <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
-                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.orange_level} />
+                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.orange_level} />
                                                 <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
-                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.red_level} />
+                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.red_level} />
                                             </Wrapper>
                                             <Wrapper className="w-[10%] mr-2" >
                                                 <FlagIcon className="size-4 ml-2 text-color-orange" />
@@ -344,16 +350,16 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                                             <Wrapper className="w-[75%] flex items-center">
             
                                                 <Wrapper className='w-24 '>
-                                                    <Typography tag="p" className="text-sm ml-2" text={item.name} />
-                                                    <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text={`Live: ${item.water_level}`} />
+                                                    <Typography tag="p" className="text-sm ml-2" text={item?.name} />
+                                                    <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text={`Live: ${item?.water_level}`} />
                                                 </Wrapper>
             
                                                 <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
-                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.blue_level} />
+                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.blue_level} />
                                                 <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
-                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.orange_level} />
+                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.orange_level} />
                                                 <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
-                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.red_level} />
+                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.red_level} />
                                             </Wrapper>
                                             <Wrapper className="w-[10%] mr-2" >
                                                 <FlagIcon className="size-4 ml-2 text-color-blue" />
@@ -375,16 +381,16 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                                             <Wrapper className="w-[75%] flex items-center">
 
                                                 <Wrapper className='w-24 '>
-                                                    <Typography tag="p" className="text-sm ml-2" text={item.name} />
-                                                    <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text={`Live: ${item.water_level}`} />
+                                                    <Typography tag="p" className="text-sm ml-2" text={item?.name} />
+                                                    <Typography tag="p" className="text-[10px] ml-2 dark:text-[#7d8da196] leading-3" text={`Live: ${item?.water_level}`} />
                                                 </Wrapper>
 
                                                 <Wrapper className='w-2 h-2 bg-color-blue relative rounded-full ml-2' />
-                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.blue_level} />
+                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.blue_level} />
                                                 <Wrapper className='w-2 h-2 bg-color-orange relative rounded-full ml-2' />
-                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.orange_level} />
+                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.orange_level} />
                                                 <Wrapper className='w-2 h-2 bg-color-red relative rounded-full ml-2' />
-                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item.red_level} />
+                                                <Typography tag="p" className="text-[10px] dark:text-[#7d8da196] leading-3 ml-1" text={item?.alert?.red_level} />
                                             </Wrapper>
                                             <Wrapper className="w-[10%] mr-2" >
                                                 <FlagIcon className="size-4 ml-2" />
@@ -480,7 +486,7 @@ const DashBoard = ({mode,setMode,setTheme}) => {
 
 export default DashBoard
 
-const filterRedAlert = (data)=>data.filter((item)=>item.alert==='red')
-const filterOrangeAlert = (data)=>data.filter((item)=>item.alert==='orange')
-const filterBlueAlert = (data)=>data.filter((item)=>item.alert==='blue')
-const filterNoAlert = (data)=>data.filter((item)=>item.alert==='no')
+const filterRedAlert = (data)=>data.filter((item)=>item.alertColor==='red')
+const filterOrangeAlert = (data)=>data.filter((item)=>item.alertColor==='orange')
+const filterBlueAlert = (data)=>data.filter((item)=>item.alertColor==='blue')
+const filterNoAlert = (data)=>data.filter((item)=>item.alertColor==='no')

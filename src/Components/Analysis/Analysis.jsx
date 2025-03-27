@@ -22,6 +22,8 @@ import { BiCloudUpload } from 'react-icons/bi'
 import { getDamData } from '../../API/Handler/getDataHandler'
 import { checkDamHandlingUser } from '../../API/Handler/setDataHandler'
 import { AuthContext } from '../Contexts/AuthContext'
+import { TfiMoreAlt } from 'react-icons/tfi'
+import { MdMoreHoriz } from 'react-icons/md'
 
 const Analysis = ({mode,theme,setAddDamData}) => {
   const color = getColor({theme})
@@ -102,8 +104,9 @@ const Analysis = ({mode,theme,setAddDamData}) => {
                     (damHandlingUser||auth?.user?.position.toUpperCase()==='ADMIN')
                     &&
                     <>
-                    <AddSolidIcon className='size-7 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData({state:true,damId:selectedDamId,fetchAllDamData:fetchAllDamData})} />
-                    <BiCloudUpload className='size-7' />
+                    <AddSolidIcon className='size-6 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData({state:true,damId:selectedDamId,fetchAllDamData:fetchAllDamData})} />
+                    <BiCloudUpload className='size-6 cursor-pointer' />
+                    <MdMoreHoriz className='size-6 cursor-pointer' />
                     </>
                   }
                 
@@ -195,11 +198,11 @@ const Analysis = ({mode,theme,setAddDamData}) => {
                  </Wrapper>  
                  <Wrapper className='w-[90%] h-12 flex items-center'>
                         <Wrapper className='size-3 bg-color-blue rounded-full'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.blue_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.alert?.blue_level} />
                         <Wrapper className='size-3 bg-color-orange rounded-full ml-4'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.orange_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.alert?.orange_level} />
                         <Wrapper className='size-3 bg-color-red rounded-full ml-4'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.red_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.alert?.red_level} />
                         
                  </Wrapper>             
               </Wrapper>

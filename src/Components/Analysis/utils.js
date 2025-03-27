@@ -26,14 +26,14 @@ export const data = [
   // Add more data here
 ];
 export const donutStyles=({data})=>{
-  const waterLevel = parseFloat(data?.dam_data?.[0]?.water_level)
+  //const waterLevel = parseFloat(data?.dam_data?.[0]?.water_level)
   const inflow = parseFloat(data?.dam_data?.[0]?.inflow)
   const powerHouseDischarge = parseFloat(data?.dam_data?.[0]?.power_house_discharge)
   const spillwayRelease = parseFloat(data?.dam_data?.[0]?.spillway_release)
-  const totalOutflow = powerHouseDischarge+spillwayRelease
+  //const totalOutflow = powerHouseDischarge+spillwayRelease
   
   return{      
-    series: [waterLevel, inflow, powerHouseDischarge, spillwayRelease, totalOutflow],
+    series: [ inflow, powerHouseDischarge, spillwayRelease],
     options: {
       chart: {
         width: 600,
@@ -41,7 +41,7 @@ export const donutStyles=({data})=>{
         type: 'donut',
       },
       colors: ['#ff0d3e', '#23d823', '#715ff8', '#F4C724', '#B833FF'],
-      labels: ['Water Level', 'Inflow', 'Power Discharge', 'Spillway release', 'Total Outflow'],
+      labels: [ 'Inflow', 'Power Discharge', 'Spillway release'],
       plotOptions: {
         pie: {
           startAngle: -90,
@@ -57,7 +57,7 @@ export const donutStyles=({data})=>{
       legend: {
         position: 'right',  // Place legend to the right
         floating: false,    
-        offsetY: -15,         // Center vertically
+        offsetY: 10,         // Center vertically
         offsetX: -5, 
         fontSize:'10px', 
         formatter: function(val, opts) {
@@ -155,7 +155,7 @@ export const inflowStyles ={
 }
 
 export const getWaterLevelStyles = ({mode,color,data})=>{
-  const redLevel = data?.dam_data?.[0]?.red_level || "0"
+  const redLevel = data?.dam_data?.[0]?.alert?.red_level || "0"
   // const orangeLevel = data?.dam_data?.[0].orange_level
   // const blueLevel = data?.dam_data?.[0].blue_level
   const seriesData = (data?.dam_data?.map(item => item.water_level) || [0,0,0,0,0,0]).reverse();
@@ -300,9 +300,9 @@ export const getCardData = ({item})=>{
   const alertColor = damAlertColor({
       prefix:'text',
       value:item?.dam_data?.[0]?.water_level,
-      blueLevel:item?.dam_data?.[0]?.blue_level,
-      orangeLevel:item?.dam_data?.[0]?.orange_level,
-      redLevel:item?.dam_data?.[0]?.red_level,
+      blueLevel:item?.dam_data?.[0]?.alert?.blue_level,
+      orangeLevel:item?.dam_data?.[0]?.alert?.orange_level,
+      redLevel:item?.dam_data?.[0]?.alert?.red_level,
       defaultLightColor:'#595959',
       defaultDarkColor:'#7d8da196',
   })

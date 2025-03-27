@@ -261,9 +261,9 @@ export const getDamAlerts=(dams)=> {
             live_storage_at_FRL:dam.live_storage_at_FRL
         };
         const water_level = parseFloat(first_data.water_level);
-        const blue_level = parseFloat(first_data.blue_level);
-        const orange_level = parseFloat(first_data.orange_level);
-        const red_level = parseFloat(first_data.red_level);
+        const blue_level = parseFloat(first_data.alert.blue_level);
+        const orange_level = parseFloat(first_data.alert.orange_level);
+        const red_level = parseFloat(first_data.alert.red_level);
         let alert;
   
         if (water_level >= red_level && water_level!==0 && red_level!==0) {
@@ -276,7 +276,7 @@ export const getDamAlerts=(dams)=> {
           alert = "no";
         }
   
-        const output_data = { ...first_data, alert: alert };
+        const output_data = { ...first_data, alertColor: alert };
         result.push(output_data);
       }
     }
