@@ -16,3 +16,16 @@ export const getDamData = async ({ id,date, limit, offset,test } = {}) => {
         throw error;
     }
 }
+
+export const getDamAlert = async ({ id } = {}) => {
+    try {
+        const params = {};
+        if (id !== undefined) params.id = id;
+
+        const response = await axiosInstance.get('/dam-alert', { params });
+        return response;
+    } catch (error) {
+        console.error('Error getDamData :', error);
+        throw error;
+    }
+}

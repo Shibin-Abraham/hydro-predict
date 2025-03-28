@@ -36,6 +36,7 @@ const DamConstantForm = ({setAddDamData}) => {
       const response = await addNewDam(damData);
       console.log(response);
       showSuccess("New dam added successfully!")
+      setAddDamData(prev=>prev.fetchAllDamData())
       setAddDamData(prev=>prev.state=false)
     } catch (error) {
       console.log(error)

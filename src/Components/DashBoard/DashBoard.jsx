@@ -121,7 +121,7 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                             })
 
                             return (<SwiperSlide key={index}  >
-                                        <Wrapper onClick={()=>setMode((prev)=>prev==='dark'?'light':'dark')} className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg">
+                                        <Wrapper className="w-72 h-40 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg">
                                             <Wrapper className='w-full h-[30%] flex items-center justify-between'>
                                                 <Wrapper className='h-full flex items-center'>
                                                     <MapPointerIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />

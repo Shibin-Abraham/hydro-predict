@@ -12,7 +12,7 @@ import DamDataContext from "../../Contexts/DamDataContext/DamDataContext"
 import { addNewDamData } from "../../../API/Handler/setDataHandler"
 import { usePopUp } from "../../Contexts/PopUpContext"
 
-const DailyUpdatesForm = ({damId,setAddDamData}) => {
+const DailyUpdatesForm = ({damId,setAddDamData,damAlert}) => {
     const [isLoading,setIsLoading] = useState(false)
     const { showSuccess, showError } = usePopUp()
     const {
@@ -31,11 +31,8 @@ const DailyUpdatesForm = ({damId,setAddDamData}) => {
 
         const dailyUpdates = {
           dam_id:parseInt(damId),
+          dam_alert_id:damAlert?.[0]?.id,
           date:data.date,
-          rule_level: data.ruleLevelUnit === 'feet' ? feetToMeter(parseFloat(data.rule_level)) : parseFloat(data.rule_level),
-          blue_level: data.blueLevelUnit === 'feet' ? feetToMeter(parseFloat(data.blue_level)) : parseFloat(data.blue_level),
-          orange_level: data.orangeLevelUnit === 'feet' ? feetToMeter(parseFloat(data.orange_level)) : parseFloat(data.orange_level),
-          red_level: data.redLevelUnit === 'feet' ? feetToMeter(parseFloat(data.red_level)) : parseFloat(data.red_level),
           water_level: data.waterLevelUnit === 'feet' ? feetToMeter(parseFloat(data.water_level)) : parseFloat(data.water_level),
           live_storage: parseFloat(data.live_storage),
           inflow: parseFloat(data.inflow), 
@@ -57,27 +54,6 @@ const DailyUpdatesForm = ({damId,setAddDamData}) => {
                 message: `Cannot exceed the Maximum Live storage at FRL of ${filterdDamData?.[0]?.live_storage_at_FRL} MCM.`,
             });
             return; 
-          }
-          if(dailyUpdates?.red_level>dailyUpdates?.rule_level){
-            setError('red_level', {
-              type: 'manual',
-              message: `Red level must be less than rule level`,
-          });
-          return; 
-          }
-          if(dailyUpdates?.orange_level>dailyUpdates?.red_level){
-            setError('orange_level', {
-              type: 'manual',
-              message: `Orange level must be less than red level`,
-          });
-          return; 
-          }
-          if(dailyUpdates?.blue_level>dailyUpdates?.orange_level){
-            setError('blue_level', {
-              type: 'manual',
-              message: `Blue level must be less than orange level`,
-          });
-          return; 
           }
           console.log(dailyUpdates,filterdDamData)
 
@@ -287,134 +263,6 @@ const DailyUpdatesForm = ({damId,setAddDamData}) => {
     <Typography tag="p" className="text-color-red text-[11px]">
         {errors.time.message}
     </Typography>
-    )}
-
-    {/* Rule Level */}
-    <Typography tag="p" text="Rule Level" className="text-sm pt-2" />
-    <Wrapper className="w-full h-10 relative">
-      <Input
-        type="text"
-        defaultValue={parseFloat(filterdDamData?.[0]?.dam_data?.[0]?.rule_level)}
-        placeholder="Enter the Rule level"
-        autoComplete="off"
-        {...register("rule_level", {
-          required: "Rule level is required",
-          pattern: decimalNumberPattern,
-        })}
-        className="w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm"
-      />
-      <Select
-        defaultValue ='meter'
-        options={[{id:'meter', name: "meter" }, {id:'feet', name: "feet" }]}
-        placeholder="Units"
-        className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-xs cursor-pointer"
-        firstOptionClassName="text-[#7d8da1] dark:bg-black"
-        childClassName="dark:bg-black"
-        {...register("ruleLevelUnit", { 
-          defaultValue: "meter" // Add this to all unit registers
-        })}
-      />
-    </Wrapper>
-    {errors.rule_level && (
-      <Typography tag="p" className="text-color-red text-[11px]">
-        {errors.rule_level.message}
-      </Typography>
-    )}
-
-    {/* Red Level */}
-    <Typography tag="p" text="Red Level" className="text-sm pt-2 text-color-red" />
-    <Wrapper className="w-full h-10 relative">
-      <Input
-        type="text"
-        placeholder="Enter the Red level"
-        defaultValue={parseFloat(filterdDamData?.[0]?.dam_data?.[0]?.red_level)}
-        autoComplete="off"
-        {...register("red_level", {
-          required: "Red level is required",
-          pattern: decimalNumberPattern,
-        })}
-        className="text-color-red w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm"
-      />
-      <Select
-        defaultValue ='meter'
-        options={[{id:'meter', name: "meter" }, {id:'feet', name: "feet" }]}
-        placeholder="Units"
-        className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-xs cursor-pointer"
-        firstOptionClassName="text-[#7d8da1] dark:bg-black"
-        childClassName="dark:bg-black"
-        {...register("redLevelUnit", { 
-          defaultValue: "meter" // Add this to all unit registers
-        })}
-      />
-    </Wrapper>
-    {errors.red_level && (
-      <Typography tag="p" className="text-color-red text-[11px]">
-        {errors.red_level.message}
-      </Typography>
-    )}
-
-    {/* Orange Level */}
-    <Typography tag="p" text="Orange Level" className="text-sm pt-2 text-color-orange" />
-    <Wrapper className="w-full h-10 relative">
-      <Input
-        type="text"
-        placeholder="Enter the Orange level"
-        defaultValue={parseFloat(filterdDamData?.[0]?.dam_data?.[0]?.orange_level)}
-        autoComplete="off"
-        {...register("orange_level", {
-          required: "Orange level is required",
-          pattern: decimalNumberPattern,
-        })}
-        className="text-color-orange w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm"
-      />
-      <Select
-        defaultValue ='meter'
-        options={[{id:'meter', name: "meter" }, {id:'feet', name: "feet" }]}
-        placeholder="Units"
-        className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-xs cursor-pointer"
-        firstOptionClassName="text-[#7d8da1] dark:bg-black"
-        childClassName="dark:bg-black"
-        {...register("orangeLevelUnit", { 
-          defaultValue: "meter" // Add this to all unit registers
-        })}
-      />
-    </Wrapper>
-    {errors.orange_level && (
-      <Typography tag="p" className="text-color-red text-[11px]">
-        {errors.orange_level.message}
-      </Typography>
-    )}
-
-    {/* Blue Level */}
-    <Typography tag="p" text="Blue Level" className="text-sm pt-2 text-color-blue" />
-    <Wrapper className="w-full h-10 relative">
-      <Input
-        type="text"
-        placeholder="Enter the Blue level"
-        defaultValue={parseFloat(filterdDamData?.[0]?.dam_data?.[0]?.blue_level)}
-        autoComplete="off"
-        {...register("blue_level", {
-          required: "Blue level is required",
-          pattern: decimalNumberPattern,
-        })}
-        className="text-color-blue w-full h-10 rounded-md border-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1af] outline-none bg-transparent pl-2 text-sm"
-      />
-      <Select
-        defaultValue ='meter'
-        options={[{id:'meter', name: "meter" }, {id:'feet', name: "feet" }]}
-        placeholder="Units"
-        className="w-14 rounded-md pl-1 h-full absolute right-0 border-l-[1px] border-black dark:border-[#7d8da1] placeholder:text-[#7d8da1] outline-none bg-transparent text-xs cursor-pointer"
-        firstOptionClassName="text-[#7d8da1] dark:bg-black"
-        childClassName="dark:bg-black"
-        {...register("blueLevelUnit", { 
-          defaultValue: "meter" // Add this to all unit registers
-        })}
-      />
-    </Wrapper>
-    {errors.blue_level && (
-      <Typography tag="p" className="text-color-red text-[11px]">
-        {errors.blue_level.message}
-      </Typography>
     )}
 
     {/* Remarks */}

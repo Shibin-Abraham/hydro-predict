@@ -26,10 +26,12 @@ import PreviousAnalysis from "./Components/Analysis/DetailedView/PreviousAnalysi
 import Users from "./Components/Users/Users";
 import UserAssignment from "./Components/Users/Popup/UserAssignment";
 import { AuthContext } from "./Components/Contexts/AuthContext";
+import AddDamAlert from "./Components/Analysis/Popup/AddDamAlert";
 
 function App() {
 
   const [addDamData,setAddDamData] = useState({state:false,damId:undefined,fetchAllDamData:()=>{}})
+  const [addDamAlert,setAddDamAlert] = useState({state:false,damId:undefined,damName:'',fetchAllDamData:()=>{}})
   const [openMap,setOpenMap] = useState(false)
   const [openUserAssignment,setOpenUserAssignment] = useState({state:false,users:[],damId:undefined,dmaName:'',fetchDamHandlingUsers:()=>{}})
 
@@ -60,6 +62,9 @@ function App() {
         addDamData.state&&<AddDamData addDamData={addDamData} setAddDamData={setAddDamData}  />
       }
       {
+        addDamAlert.state&&<AddDamAlert addDamAlert={addDamAlert} setAddDamAlert={setAddDamAlert}  />
+      }
+      {
         openMap&&<Map setOpenMap={setOpenMap} />
       }
       {
@@ -88,7 +93,7 @@ function App() {
             element={
               <ProtectedLayout theme={theme}>
 
-                <Analysis mode={mode} theme={theme} setAddDamData={setAddDamData} />
+                <Analysis mode={mode} theme={theme} setAddDamData={setAddDamData} setAddDamAlert={setAddDamAlert} />
             
               </ProtectedLayout>
             }

@@ -22,10 +22,10 @@ import { BiCloudUpload } from 'react-icons/bi'
 import { getDamData } from '../../API/Handler/getDataHandler'
 import { checkDamHandlingUser } from '../../API/Handler/setDataHandler'
 import { AuthContext } from '../Contexts/AuthContext'
-import { TfiMoreAlt } from 'react-icons/tfi'
 import { MdMoreHoriz } from 'react-icons/md'
+import { FiAlertOctagon } from 'react-icons/fi'
 
-const Analysis = ({mode,theme,setAddDamData}) => {
+const Analysis = ({mode,theme,setAddDamData,setAddDamAlert}) => {
   const color = getColor({theme})
   const [selectedDamId,setSelectedDamId] = useState(1) //default damid eg: 1-idukki
   const [damHandlingUser,setDamHandlingUser] = useState() 
@@ -104,9 +104,14 @@ const Analysis = ({mode,theme,setAddDamData}) => {
                     (damHandlingUser||auth?.user?.position.toUpperCase()==='ADMIN')
                     &&
                     <>
-                    <AddSolidIcon className='size-6 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData({state:true,damId:selectedDamId,fetchAllDamData:fetchAllDamData})} />
-                    <BiCloudUpload className='size-6 cursor-pointer' />
-                    <MdMoreHoriz className='size-6 cursor-pointer' />
+                    <AddSolidIcon title='add dam data' className='size-6 cursor-pointer hover:text-[#7d8da1f6]' onClick={()=>setAddDamData({state:true,damId:selectedDamId,fetchAllDamData:fetchAllDamData})} />
+                    {
+                      (auth?.user?.position.toUpperCase()==='ADMIN'&&damData.length!==0)
+                      &&
+                      <FiAlertOctagon title='add dam alert' onClick={()=>setAddDamAlert({state:true,damName:filteredDamData?.[0]?.name,damId:selectedDamId,fetchAllDamData:fetchAllDamData})} className='size-5 cursor-pointer' />
+                    }
+                    <BiCloudUpload title='bulk upload' className='size-6 cursor-pointer' />
+                    <MdMoreHoriz title='more..' className='size-6 cursor-pointer' />
                     </>
                   }
                 

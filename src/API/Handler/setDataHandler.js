@@ -49,3 +49,13 @@ export const addNewDamData = async (data) => {
         throw error;
     }
 }
+
+export const addNewDamAlert = async (data) => {
+    try {
+        const response = await axiosInstance.post('/dam-alert/add', data);
+        return response;
+    } catch (error) {
+        console.error('Error on addNewDamAlert(post) :', error);
+        throw error;
+    }
+}
