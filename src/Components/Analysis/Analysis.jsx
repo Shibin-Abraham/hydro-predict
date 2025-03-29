@@ -25,7 +25,7 @@ import { AuthContext } from '../Contexts/AuthContext'
 import { MdMoreHoriz } from 'react-icons/md'
 import { FiAlertOctagon } from 'react-icons/fi'
 
-const Analysis = ({mode,theme,setAddDamData,setAddDamAlert}) => {
+const Analysis = ({mode,theme,setAddDamData,setAddDamAlert,setAddBulkUpload}) => {
   const color = getColor({theme})
   const [selectedDamId,setSelectedDamId] = useState(1) //default damid eg: 1-idukki
   const [damHandlingUser,setDamHandlingUser] = useState() 
@@ -110,7 +110,11 @@ const Analysis = ({mode,theme,setAddDamData,setAddDamAlert}) => {
                       &&
                       <FiAlertOctagon title='add dam alert' onClick={()=>setAddDamAlert({state:true,damName:filteredDamData?.[0]?.name,damId:selectedDamId,fetchAllDamData:fetchAllDamData})} className='size-5 cursor-pointer' />
                     }
-                    <BiCloudUpload title='bulk upload' className='size-6 cursor-pointer' />
+                    {
+                      auth?.user?.position.toUpperCase()==='ADMIN'
+                      &&
+                      <BiCloudUpload onClick={()=>setAddBulkUpload({state:true,fetchAllDamData:fetchAllDamData})} title='bulk upload' className='size-6 cursor-pointer' />
+                    }
                     <MdMoreHoriz title='more..' className='size-6 cursor-pointer' />
                     </>
                   }
@@ -198,7 +202,7 @@ const Analysis = ({mode,theme,setAddDamData,setAddDamAlert}) => {
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                         <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Rule Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.dam_data?.[0]?.rule_level} /> (meter)
+                            Rule Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.dam_data?.[0]?.alert?.rule_level} /> (meter)
                         </Typography>
                  </Wrapper>  
                  <Wrapper className='w-[90%] h-12 flex items-center'>

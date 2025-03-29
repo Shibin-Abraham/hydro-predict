@@ -75,7 +75,7 @@ const AddDamData = ({addDamData,setAddDamData}) => {
                                 <Typography
                                     tag="p"
                                     className={`font-normal text-xs select-none ${toggleBtn ? 'text-primary' : 'text-[#ffffff]'}`}
-                                    text={`Daily Updates ${addDamData.damId}`}
+                                    text={`Daily Updates`}
                                 />
                             </Wrapper>
                         </Wrapper>

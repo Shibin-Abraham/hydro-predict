@@ -325,6 +325,8 @@ export const getPreviousYearDate=(inputDate)=>{
   // Split input into day, month, year (format: DD-MM-YYYY)
   const [day, month, year] = inputDate.split('-').map(Number);
 
+  console.log(day, month, year)
+
   // Calculate the previous year
   const previousYear = year - 1;
   
@@ -341,6 +343,6 @@ export const getPreviousYearDate=(inputDate)=>{
   const formattedDay = String(tentativeDate.getDate()).padStart(2, '0');
   const formattedMonth = String(tentativeDate.getMonth() + 1).padStart(2, '0');
   const formattedYear = tentativeDate.getFullYear();
-  
+  console.log(`${formattedDay}-${formattedMonth}-${formattedYear}`)
   return `${formattedDay}-${formattedMonth}-${formattedYear}`;
 }

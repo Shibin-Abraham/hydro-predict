@@ -33,21 +33,21 @@ const AddDamAlert = ({addDamAlert,setAddDamAlert}) => {
             red_level: data.redLevelUnit === 'feet' ? feetToMeter(parseFloat(data.red_level)) : parseFloat(data.red_level),
             };
 
-        if(damAlert?.red_level>damAlert?.rule_level){
+        if((damAlert?.red_level>damAlert?.rule_level)&&(parseInt(damAlert?.rule_level)!==0)){
             setError('red_level', {
                 type: 'manual',
                 message: `Red level must be less than rule level`,
             });
             return; 
         }
-        if(damAlert?.orange_level>damAlert?.red_level){
+        if((damAlert?.orange_level>damAlert?.red_level)&&(parseInt(damAlert?.red_level)!==0)){
             setError('orange_level', {
                 type: 'manual',
                 message: `Orange level must be less than red level`,
             });
             return; 
         }
-        if(damAlert?.blue_level>damAlert?.orange_level){
+        if((damAlert?.blue_level>damAlert?.orange_level)&&(parseInt(damAlert?.orange_level)!==0)){
             setError('blue_level', {
                 type: 'manual',
                 message: `Blue level must be less than orange level`,

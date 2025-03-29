@@ -27,11 +27,13 @@ import Users from "./Components/Users/Users";
 import UserAssignment from "./Components/Users/Popup/UserAssignment";
 import { AuthContext } from "./Components/Contexts/AuthContext";
 import AddDamAlert from "./Components/Analysis/Popup/AddDamAlert";
+import BulkUpload from "./Components/Analysis/Popup/BulkUpload";
 
 function App() {
 
   const [addDamData,setAddDamData] = useState({state:false,damId:undefined,fetchAllDamData:()=>{}})
   const [addDamAlert,setAddDamAlert] = useState({state:false,damId:undefined,damName:'',fetchAllDamData:()=>{}})
+  const [addBulkUpload,setAddBulkUpload] = useState({state:false,fetchAllDamData:()=>{}})
   const [openMap,setOpenMap] = useState(false)
   const [openUserAssignment,setOpenUserAssignment] = useState({state:false,users:[],damId:undefined,dmaName:'',fetchDamHandlingUsers:()=>{}})
 
@@ -65,6 +67,9 @@ function App() {
         addDamAlert.state&&<AddDamAlert addDamAlert={addDamAlert} setAddDamAlert={setAddDamAlert}  />
       }
       {
+        addBulkUpload.state&&<BulkUpload setAddBulkUpload={setAddBulkUpload}  />
+      }
+      {
         openMap&&<Map setOpenMap={setOpenMap} />
       }
       {
@@ -93,7 +98,7 @@ function App() {
             element={
               <ProtectedLayout theme={theme}>
 
-                <Analysis mode={mode} theme={theme} setAddDamData={setAddDamData} setAddDamAlert={setAddDamAlert} />
+                <Analysis mode={mode} theme={theme} setAddDamData={setAddDamData} setAddDamAlert={setAddDamAlert} setAddBulkUpload={setAddBulkUpload} />
             
               </ProtectedLayout>
             }

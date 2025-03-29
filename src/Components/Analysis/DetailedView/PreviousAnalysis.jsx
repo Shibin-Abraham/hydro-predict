@@ -11,14 +11,11 @@ import { getColor, donutStyles, inflowStyles, getWaterLevelStyles, getCardData }
 import Media from '../../AtomicDesign/Atom/Media/Media'
 import drop from "../../../Assets/drop.png"
 import { useLocation, useNavigate } from 'react-router-dom'
-import DamDataContext from '../../Contexts/DamDataContext/DamDataContext'
 import SettingsContext from '../../Contexts/SettingsContext/SettingsContext'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
 import { getDamData } from '../../../API/Handler/getDataHandler'
 import moment from 'moment'
-import { SwiperSlide } from 'swiper/react'
-import PichartCardSkeleton from '../../DashBoard/loader/PichartCardSkeleton'
 import { BsDatabaseFillSlash } from 'react-icons/bs'
 
 const PreviousAnalysis = ({mode,theme}) => {
@@ -30,7 +27,9 @@ const PreviousAnalysis = ({mode,theme}) => {
     console.log('previous date',previousDate)
 
   const [filteredDamData,setFilteredDamData] = useState()
-  const [selectedDate, setSelectedDate] = useState(new Date(previousDate));
+  const parsedDate = moment(previousDate, 'DD-MM-YYYY');
+  const initialDate = parsedDate.isValid() ? parsedDate.toDate() : new Date();
+  const [selectedDate, setSelectedDate] = useState(initialDate);
 
   const navigate = useNavigate();
 
@@ -55,8 +54,16 @@ const PreviousAnalysis = ({mode,theme}) => {
       },[id])
   
   useEffect(() => {
-      fetchAllDamData({date:moment(previousDate).format('YYYY-MM-DD'),id:id}) //pass parameters- fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
-    }, [fetchAllDamData,id,previousDate])
+    const isValidDate = previousDate && moment(previousDate, 'DD-MM-YYYY').isValid();
+    let formattedDate;
+    if (isValidDate) {
+      formattedDate = moment(previousDate, 'DD-MM-YYYY').format('YYYY-MM-DD');
+    } else {
+      console.error("Invalid previousDate:", previousDate);
+      formattedDate = moment().subtract(1, 'year').format('YYYY-MM-DD');
+    }
+    fetchAllDamData({ date: formattedDate, id: id }); //pass parameters- fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
+  }, [fetchAllDamData,id,previousDate])
 
   useEffect(() => {
     if (filteredDamData?.[0]&&filteredDamData?.[0].dam_data.length!==0) {
@@ -193,16 +200,16 @@ const PreviousAnalysis = ({mode,theme}) => {
                  </Wrapper>
                  <Wrapper className='w-[90%] p-6 h-12 rounded-xl gap-4 flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
                         <Typography tag="p" className="text-xs font-medium mt-1" >
-                            Rule Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.dam_data?.[0]?.rule_level} /> (meter)
+                            Rule Level: <Typography tag='span' className="text-primary" text={filteredDamData?.[0]?.dam_data?.[0]?.alert?.rule_level} /> (meter)
                         </Typography>
                  </Wrapper>  
                  <Wrapper className='w-[90%] h-12 flex items-center'>
                         <Wrapper className='size-3 bg-color-blue rounded-full'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.blue_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.alert?.blue_level} />
                         <Wrapper className='size-3 bg-color-orange rounded-full ml-4'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.orange_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.alert?.orange_level} />
                         <Wrapper className='size-3 bg-color-red rounded-full ml-4'/>
-                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.red_level} />
+                        <Typography tag='span' className="text-xs font-medium pl-2"  text={filteredDamData?.[0]?.dam_data?.[0]?.alert?.red_level} />
                         
                  </Wrapper>             
               </Wrapper>
