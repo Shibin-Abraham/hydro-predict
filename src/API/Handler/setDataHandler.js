@@ -50,6 +50,16 @@ export const addNewDamData = async (data) => {
     }
 }
 
+export const addBulkDamData = async (data) => {
+    try {
+        const response = await axiosInstance.post('/dam-bulk-data/add', data);
+        return response;
+    } catch (error) {
+        console.error('Error on addBulkDamData(post) :', error);
+        throw error;
+    }
+}
+
 export const addNewDamAlert = async (data) => {
     try {
         const response = await axiosInstance.post('/dam-alert/add', data);

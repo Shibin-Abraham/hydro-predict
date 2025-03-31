@@ -6,14 +6,20 @@ import Typography from "../../AtomicDesign/Atom/Typography/Typography";
 import Wrapper from "../../AtomicDesign/Atom/Wrapper/Wrapper";
 import InputPopUp from "../../AtomicDesign/Molecule/PopUp/InputPopUp";
 import Button from "../../AtomicDesign/Atom/Button/Button";
-import { OutTable, ExcelRenderer } from "react-excel-renderer";
+import { ExcelRenderer } from "react-excel-renderer";
 import { useState } from "react";
+import { usePopUp } from "../../Contexts/PopUpContext";
+import { addBulkDamData } from "../../../API/Handler/setDataHandler";
+import { excelSerialToDate, excelTimeToString } from "./utils";
 
 const BulkUpload = ({ setAddBulkUpload }) => {
     const [header, setHeader] = useState([]);
     const [data, setData] = useState([]);
     const [fileName, setFileName] = useState("");
     const [validationError, setValidationError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const { showSuccess, showError } = usePopUp()
 
     const handleFile = (e) => {
         const file = e.target.files[0];
@@ -22,9 +28,10 @@ const BulkUpload = ({ setAddBulkUpload }) => {
         ExcelRenderer(file, (err, resp) => {
             if (err) {
                 console.log(err);
+                showError(err?.message)
             } else {
-                const newHeader = resp.rows[0];
-                const headerLower = newHeader.map((h) => h.toLowerCase().trim());
+                const newHeader = resp.rows[0]
+                const headerLower = newHeader.map((h) => h.toLowerCase().trim())
                 const requiredFields = [
                     "dam_id",
                     "dam_alert_id",
@@ -40,14 +47,92 @@ const BulkUpload = ({ setAddBulkUpload }) => {
                     (field) => !headerLower.includes(field)
                 );
                 if (missingFields.length > 0) {
-                    setValidationError(`Missing required fields: ${missingFields.join(", ")}`);
+                    setValidationError(`Missing required fields: ${missingFields.join(", ")}`)
                 } else {
-                    setValidationError(null);
+                    setValidationError(null)
                 }
-                setHeader(newHeader);
-                setData(resp.rows.slice(1));
+                setHeader(newHeader)
+                setData(resp.rows.slice(1))
+                console.log(data)
             }
+        })
+    }
+
+    const handleSubmit = async () => {
+        setIsLoading(true);
+        if (validationError || data.length === 0) {
+            return showError(validationError || "No data to submit");
+        }
+    
+        // Define required fields based on API validation rules
+        const requiredFields = [
+            "dam_id",
+            "dam_alert_id",
+            "date",
+            "water_level",
+            "live_storage",
+            "inflow",
+            "power_house_discharge",
+            "spillway_release",
+            "time"
+        ];
+    
+        const formattedData = data.map((row) => {
+            const rowData = {};
+            header.forEach((h, index) => {
+                let value = row[index];
+                const key = h.toLowerCase().trim();
+    
+                // Format 'date' field
+                if (key === "date") {
+                    if (typeof value === "number") {
+                        value = excelSerialToDate(value);
+                    } else if (typeof value === "string") {
+                        // Assume it's already in 'YYYY-MM-DD' format; adjust if needed
+                        value = value.trim();
+                    }
+                }
+                // Format 'time' field
+                else if (key === "time") {
+                    if (typeof value === "number") {
+                        value = excelTimeToString(value);
+                    } else if (typeof value === "string") {
+                        // Assume it's already in 'HH:MM' format; adjust if needed
+                        value = value.trim();
+                    }
+                }
+    
+                rowData[key] = value;
+            });
+            return rowData;
         });
+    
+        // Filter out rows missing any required fields
+        const validData = formattedData.filter(row =>
+            requiredFields.every(field => 
+                row[field] !== undefined && 
+                row[field] !== null && 
+                row[field] !== ""
+            )
+        );
+    
+        if (validData.length === 0) {
+            return showError("No valid data rows to submit after filtering");
+        }
+    
+        try {
+            const { data } = await addBulkDamData({ data: validData });
+            showSuccess(data?.message);
+            console.log(data);
+            setAddBulkUpload(prev=>prev.fetchAllDamData())
+            setAddBulkUpload(prev=>prev.state=false)
+        } catch (error) {
+            console.log(error);
+            showError(error?.message || 'An error occurred while uploading data');
+        }
+        finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -101,7 +186,6 @@ const BulkUpload = ({ setAddBulkUpload }) => {
                                     {item.map((cell, colIndex) => {
                                         let displayValue;
                                         const columnName = header[colIndex].toLowerCase();
-
                                         if (columnName === "date") {
                                             if (cell instanceof Date) {
                                                 const year = cell.getFullYear();
@@ -164,7 +248,9 @@ const BulkUpload = ({ setAddBulkUpload }) => {
                 <Button
                     className={`${(data.length===0 || validationError)?'bg-gray-400 dark:bg-gray-700 cursor-not-allowed text-gray-300':'hover:bg-primary-hover dark:bg-primary-variant bg-primary text-white '} w-full mt-5 h-11`}
                     containerClass="text-sm flex items-center justify-center gap-3"
-                    disabled={true}
+                    onClick={handleSubmit}
+                    disabled={data.length===0 || validationError}
+                    isLoading={isLoading}
                 >
                     submit
                 </Button>}
