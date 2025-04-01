@@ -29,3 +29,20 @@ export const getDamAlert = async ({ id } = {}) => {
         throw error;
     }
 }
+
+export const getRaingaugeData = async ({ id,date, limit, offset } = {}) => {
+    try {
+        const params = {};
+        if (id !== undefined) params.id = id;
+        if (date !== undefined) params.date = date;
+        if (limit !== undefined) params.limit = limit;
+        if (offset !== undefined) params.offset = offset;
+        //if (test !== undefined) params.test = test;
+
+        const response = await axiosInstance.get('/raingauge-data', { params });
+        return response;
+    } catch (error) {
+        console.error('Error getRaingauge :', error);
+        throw error;
+    }
+}

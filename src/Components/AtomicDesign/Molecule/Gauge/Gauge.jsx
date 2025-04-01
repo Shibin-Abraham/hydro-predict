@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react'
 import { alertColor } from './utils';
 
 // eslint-disable-next-line react/prop-types
-const Gauge = ({ rainFall, speed = 50, maxRainFall = 250, maxHeight = 96 }) => {
+const Gauge = ({ rainFall, speed = 50, maxRainFall = 250, maxHeight = 96,redLevel,orangeLevel,yellowLevel }) => {
     const [count, setCount] = useState(0);
-    const alert = alertColor(rainFall,'bg')
+    const alert = alertColor(rainFall,'bg',redLevel,orangeLevel,yellowLevel);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -52,7 +52,3 @@ const Gauge = ({ rainFall, speed = 50, maxRainFall = 250, maxHeight = 96 }) => {
 };
 
 export default Gauge;
-
-
-
-

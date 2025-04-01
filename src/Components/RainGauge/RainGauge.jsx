@@ -1,5 +1,5 @@
 
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
 import CloudIcon from '../../Assets/icons/CloudIcon'
 import Button from '../AtomicDesign/Atom/Button/Button'
@@ -11,11 +11,15 @@ import LeafletMap from './LeafletMap'
 import ReactApexChart from 'react-apexcharts'
 import MapIcon from '../../Assets/icons/MapIcon'
 import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
-
+import { getRaingaugeData } from '../../API/Handler/getDataHandler'
+import { usePopUp } from '../Contexts/PopUpContext'
 
 // eslint-disable-next-line react/prop-types
 const RainGauge = ({setOpenMap}) => {
   const {expand} = useContext(SettingsContext)
+  const {showError } = usePopUp()
+
+  const [raingaugeData, setRaingaugeData] = useState([])
 
   const [state, setState] = useState({
     series: [{
@@ -90,6 +94,22 @@ const RainGauge = ({setOpenMap}) => {
 });
   
   const data =[215.00,192.11,175.23,68,60.00,0]
+
+  const fetchAllRaingaugeData = useCallback(async (params = {})=>{
+          try {
+              const {data} = await getRaingaugeData(params)
+              console.log('Raingauge Data',data)
+              setRaingaugeData(data)
+          } catch (error) {
+              console.error("Error fetching Raingauge data:", error)
+              const errorMsg = error.response?.data?.error || error.response?.data?.message || 'An error occurred while fetching Raingauge data.';
+              showError(errorMsg)
+          }
+      },[showError])
+  
+      useEffect(() => {
+        fetchAllRaingaugeData({offset:0}) //pass parameters- fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
+        }, [fetchAllRaingaugeData])
   
   return (
     <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex gap-8 overflow-hidden">
@@ -102,27 +122,47 @@ const RainGauge = ({setOpenMap}) => {
             </Wrapper>
             <Wrapper className='w-full pt-4 pb-4 h-[75vh] overflow-y-scroll flex justify-between gap-6 flex-wrap no-scrollbar'>
               {
-                data.map((data,index)=>{
-                  const color = alertColor(data,'text')
-                
+                raingaugeData?.map((data,index)=>{
+                  const value = parseFloat(data?.raingauge_data?.[0]?.value)||0
+                  const redLevel = parseFloat(data?.red_level)
+                  const orangeLevel = parseFloat(data?.orange_level)
+                  const yellowLevel = parseFloat(data?.yellow_level)
+                  const color = alertColor(value,'text',redLevel,orangeLevel,yellowLevel)
+
+                  const latestReading = data?.raingauge_data?.[0];
+                  const readingDateTime = new Date(`${latestReading?.date}T${latestReading?.time}`);
+                  const now = new Date();
+                  const hoursAgo = Math.floor((now - readingDateTime) / (1000 * 60 * 60));
+                  let updateText='';
+                  if (hoursAgo < 24) {
+                    updateText = `Data updated ${hoursAgo} hours ago`;
+                  } else {
+                    updateText = `Data updated on ${latestReading?.date} at ${latestReading?.time}`;
+                  }
+                  
                   return(
                     <Wrapper key={index} className="w-[265px] h-60 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 ">
                       <Wrapper className='w-full h-14 flex items-center justify-between'>
                             <Wrapper className='h-full flex items-center'>
                                 <CloudIcon className='size-4 text-[#595959] dark:text-[#7d8da196] ml-6' />
-                                <Typography tag="p" text='Idukki' className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
+                                <Typography tag="p" text={data?.station_name} className='text-[#595959] dark:text-[#7d8da196] text-sm ml-1' />
                             </Wrapper>
-                            <Typography tag="p" text='Today' className='text-[#595959] dark:text-[#7d8da196] text-xs pr-6' />
+                            <Typography tag="p" text={'Today'} className='text-[#595959] dark:text-[#7d8da196] text-xs pr-6' />
                         </Wrapper>
                         <Wrapper className="w-full flex items-start justify-between pt-3">
                             <Wrapper className='h-full ml-6'>
                                 <Typography tag="p" className="text-lg font-bold mt-2 text-[#1f2328] dark:text-[#7d8da1]" text="RainFall" />
-                              <Typography tag="p" text={`${data} mm`} className="text-sm font-medium  mt-1" />
-                                <Typography tag="p" text={`${rainAlert(data).level} rainfall`} className="text-xs mt-1" />
-                                <Typography tag="p" text={`${rainAlert(data).alert}`} className={`text-xs mt-1 ${color}`} />
-                                <Typography tag="p" text="Data updated for the last 24 hours" className="text-[10px] leading-3 mt-3" />
+                              <Typography tag="p" text={`${value} mm`} className="text-sm font-medium  mt-1" />
+                                <Typography tag="p" text={`${rainAlert(value,redLevel,orangeLevel,yellowLevel).level} rainfall`} className="text-xs mt-1" />
+                                <Typography tag="p" text={`${rainAlert(value,redLevel,orangeLevel,yellowLevel).alert}`} className={`text-xs mt-1 ${color}`} />
+                                <Typography tag="p" text={updateText} className="text-[10px] leading-3 mt-3" />
                             </Wrapper>
-                            <Gauge rainFall={data} />
+                            <Gauge 
+                              rainFall={value}
+                              redLevel={redLevel}
+                              orangeLevel={orangeLevel}
+                              yellowLevel={yellowLevel}
+                             />
                         </Wrapper>
                     </Wrapper>
                   )
