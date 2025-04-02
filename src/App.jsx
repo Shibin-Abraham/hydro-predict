@@ -28,10 +28,12 @@ import UserAssignment from "./Components/Users/Popup/UserAssignment";
 import { AuthContext } from "./Components/Contexts/AuthContext";
 import AddDamAlert from "./Components/Analysis/Popup/AddDamAlert";
 import BulkUpload from "./Components/Analysis/Popup/BulkUpload";
+import AddRaingauge from "./Components/RainGauge/Popup/AddRaingauge";
 
 function App() {
 
   const [addDamData,setAddDamData] = useState({state:false,damId:undefined,fetchAllDamData:()=>{}})
+  const [addRaingauge,setAddRaingauge] = useState({state:false,fetchAllRaingaugeData:()=>{}})
   const [addDamAlert,setAddDamAlert] = useState({state:false,damId:undefined,damName:'',fetchAllDamData:()=>{}})
   const [addBulkUpload,setAddBulkUpload] = useState({state:false,fetchAllDamData:()=>{}})
   const [openMap,setOpenMap] = useState(false)
@@ -74,6 +76,9 @@ function App() {
       }
       {
         openUserAssignment.state&&<UserAssignment openUserAssignment={openUserAssignment} setOpenUserAssignment={setOpenUserAssignment} />
+      }
+      {
+        addRaingauge.state&&<AddRaingauge addRaingauge={addRaingauge} setAddRaingauge={setAddRaingauge}  />
       }
       <BrowserRouter>
         <Routes>
@@ -137,7 +142,7 @@ function App() {
             path="/rain gauge"
             element={
               <ProtectedLayout theme={theme}>
-                <RainGauge theme={theme} setOpenMap={setOpenMap} />
+                <RainGauge theme={theme} mode={mode} setOpenMap={setOpenMap} setAddRaingauge={setAddRaingauge} />
               </ProtectedLayout>
             }
           />

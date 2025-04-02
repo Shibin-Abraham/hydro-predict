@@ -7,95 +7,28 @@ import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Gauge from '../AtomicDesign/Molecule/Gauge/Gauge'
 import { alertColor, rainAlert } from '../AtomicDesign/Molecule/Gauge/utils'
-import LeafletMap from './LeafletMap'
 import ReactApexChart from 'react-apexcharts'
 import MapIcon from '../../Assets/icons/MapIcon'
 import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
 import { getRaingaugeData } from '../../API/Handler/getDataHandler'
 import { usePopUp } from '../Contexts/PopUpContext'
+import GaugeCardSkeleton from './Loader/GaugeCardSkeleton'
+import { processRainfallData } from './utils'
+import { AuthContext } from '../Contexts/AuthContext'
 
 // eslint-disable-next-line react/prop-types
-const RainGauge = ({setOpenMap}) => {
-  const {expand} = useContext(SettingsContext)
-  const {showError } = usePopUp()
+const RainGauge = ({setOpenMap,mode,setAddRaingauge}) => {
 
   const [raingaugeData, setRaingaugeData] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [state, setState] = useState(barChartStyles);
 
-  const [state, setState] = useState({
-    series: [{
-      name: 'Rainfall',
-      data: [62, 55, 41, 67, 22, 43, 111, 123, 145, 131, 87, 165, 135]
-    }],
-    options: {
-      annotations: {
-        points: [{
-          x: 'today',
-          seriesIndex: 0,
-          label: {
-            borderColor: '#775DD0',
-            offsetY: 0,
-            style: {
-              color: '#fff',
-              background: '#775DD0',
-            },
-            text: 'High',
-          }
-        }]
-      },
-      chart: {
-        height: 350,
-        type: 'bar',
-      },
-      plotOptions: {
-        bar: {
-          borderRadius: 10,
-          columnWidth: '50%',
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        width: 0
-      },
-      
-      xaxis: {
-        labels: {
-          rotate: -45
-        },
-        categories: ['tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
-          'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'today'
-        ],
-        tickPlacement: 'on'
-      },
-      yaxis: {
-        title: {
-          text: 'Rainfall',
-        },
-      },
-      grid: {
-        borderColor: '#7d8da196', 
-        strokeDashArray: 3,    
-    },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'light',
-          type: "horizontal",
-          shadeIntensity: 0.25,
-          gradientToColors: undefined,
-          inverseColors: true,
-          opacityFrom: 0.85,
-          opacityTo: 0.85,
-          stops: [50, 0, 250]
-        },
-      }
-    },
-});
-  
-  const data =[215.00,192.11,175.23,68,60.00,0]
+  const {expand} = useContext(SettingsContext)
+  const { auth } = useContext(AuthContext)
+  const {showError } = usePopUp()
 
   const fetchAllRaingaugeData = useCallback(async (params = {})=>{
+          setLoading(true)
           try {
               const {data} = await getRaingaugeData(params)
               console.log('Raingauge Data',data)
@@ -104,19 +37,44 @@ const RainGauge = ({setOpenMap}) => {
               console.error("Error fetching Raingauge data:", error)
               const errorMsg = error.response?.data?.error || error.response?.data?.message || 'An error occurred while fetching Raingauge data.';
               showError(errorMsg)
+          }finally {
+              setLoading(false)
           }
       },[showError])
   
       useEffect(() => {
         fetchAllRaingaugeData({offset:0}) //pass parameters- fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
         }, [fetchAllRaingaugeData])
+
+      useEffect(() => {
+        const { dates, averages } = processRainfallData(raingaugeData);
+        
+        setState(prevState => ({
+          ...prevState,
+          series: [{
+            name: 'Average Rainfall',
+            data: averages
+          }],
+          options: {
+            ...prevState.options,
+            xaxis: {
+              ...prevState.options.xaxis,
+              categories: dates
+            }
+          }
+        }));
+      }, [raingaugeData]);
   
   return (
     <Wrapper className="w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg flex gap-8 overflow-hidden">
         
          <Wrapper className={`w-[600px] h-full pb-4 pt-4 ${expand?'pl-8':'pl-10'}`}>
             <Wrapper className='w-full pt-4 flex items-center gap-4' >
-                <Button variant='primary' variantType='outline' className='text-xs'> Add New Gauge</Button>
+              {
+                auth?.user?.position.toUpperCase()==='ADMIN'
+                &&
+                <Button onClick={()=>setAddRaingauge({state:true,fetchAllRaingaugeData:fetchAllRaingaugeData})} variant='primary' variantType='outline' className='text-xs'> Add New Gauge</Button>
+              }
                 <AddSolidIcon className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]'  />
                 <MapIcon onClick={()=>setOpenMap(true)} className='size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]'  />
             </Wrapper>
@@ -167,6 +125,16 @@ const RainGauge = ({setOpenMap}) => {
                     </Wrapper>
                   )
                 })
+              }
+              {
+                loading 
+                && 
+                <>
+                  <GaugeCardSkeleton mode={mode}/>
+                  <GaugeCardSkeleton mode={mode}/>
+                  <GaugeCardSkeleton mode={mode}/>
+                  <GaugeCardSkeleton mode={mode}/>
+                </>
               }
                 
             </Wrapper>
@@ -224,3 +192,72 @@ const RainGauge = ({setOpenMap}) => {
 }
 
 export default RainGauge
+
+const barChartStyles = {
+  series: [{
+    name: 'Rainfall',
+    data: []  // Initially empty
+  }],
+  options: {
+    annotations: {
+      points: [{
+        x: 'today',
+        seriesIndex: 0,
+        label: {
+          borderColor: '#775DD0',
+          offsetY: 0,
+          style: {
+            color: '#fff',
+            background: '#775DD0',
+          },
+          text: 'High',
+        }
+      }]
+    },
+    chart: {
+      height: 350,
+      type: 'bar',
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 10,
+        columnWidth: '50%',
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      width: 0
+    },
+    xaxis: {
+      labels: {
+        rotate: -45
+      },
+      categories: [], // Initially empty; will update from processed data
+      tickPlacement: 'on'
+    },
+    yaxis: {
+      title: {
+        text: 'Rainfall',
+      },
+    },
+    grid: {
+      borderColor: '#7d8da196',
+      strokeDashArray: 3,
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'light',
+        type: "horizontal",
+        shadeIntensity: 0.25,
+        gradientToColors: undefined,
+        inverseColors: true,
+        opacityFrom: 0.85,
+        opacityTo: 0.85,
+        stops: [50, 0, 250]
+      },
+    }
+  },
+}

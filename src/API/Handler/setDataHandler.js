@@ -69,3 +69,13 @@ export const addNewDamAlert = async (data) => {
         throw error;
     }
 }
+
+export const addNewRaingauge = async (data) => {
+    try {
+        const response = await axiosInstance.post('/add-raingauge', data);
+        return response;
+    } catch (error) {
+        console.error('Error on addNewRaingauge(post) :', error);
+        throw error;
+    }
+}
