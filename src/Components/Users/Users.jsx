@@ -5,27 +5,28 @@ import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import Button from '../AtomicDesign/Atom/Button/Button'
 import Settings from '../../Assets/icons/Settings'
-import { getAllUsers, getDamHandlingUsers, updateUserActivation } from '../../API/Handler/userDataHandler'
+import { getAllUsers, getDamHandlingUsers, getRaingaugeHandlingUsers, updateUserActivation } from '../../API/Handler/userDataHandler'
 import { AuthContext } from '../Contexts/AuthContext'
 import Media from '../AtomicDesign/Atom/Media/Media'
 import iconDam from "../../Assets/dam.png"
-import { MdAssignmentAdd } from "react-icons/md";
-import { FaUsersViewfinder } from 'react-icons/fa6'
 import DamDataContext from '../Contexts/DamDataContext/DamDataContext'
 import UserCardLoader from './loader/UserCardLoader'
 import { FaUsersCog } from 'react-icons/fa'
 import { IoRainy } from 'react-icons/io5'
+import RaingaugeContext from '../Contexts/RaingaugeContext/RaingaugeContext'
 
-const Users = ({mode,setOpenUserAssignment}) => {
+const Users = ({mode,setOpenUserAssignment,setOpenRainGaugeUserAssignment}) => {
     const [isLoading,setIsLoading] = useState(null)
     const [loadingUsersData,setLoadingUsersData] = useState(true)
     const [openTooltip,setOpenTooltip] = useState(null)
     const {expand} = useContext(SettingsContext)
     const [users,setUsers] = useState([])
     const [damHandlingUsers,setDamHandlingUsers] = useState([])
+    const [raingaugeHandlingUsers,setRaingaugeHandlingUsers] = useState([])
 
     const { auth } = useContext(AuthContext)
     const {damData} = useContext(DamDataContext)
+    const {raingaugeData} = useContext(RaingaugeContext)
 
 const fetchUsers = useCallback(async ()=>{
     try {
@@ -43,7 +44,18 @@ const fetchDamHandlingUsers = useCallback(async (params = {})=>{
         const {data} =await getDamHandlingUsers(params)
         console.log(data)
         setDamHandlingUsers(data)
-        console.log('dd',await damHandlingUsers)
+        //console.log('dd',await damHandlingUsers)
+    } catch (error) {
+        console.log(error)
+    }
+},[])
+
+const fetchRaingaugeHandlingUsers = useCallback(async (params = {})=>{
+    try {
+        const {data} =await getRaingaugeHandlingUsers(params)
+        console.log(data)
+        setRaingaugeHandlingUsers(data)
+        //console.log('dd',await damHandlingUsers)
     } catch (error) {
         console.log(error)
     }
@@ -63,6 +75,7 @@ const handleActivation = async (userId, activate) => {
 useEffect(()=>{
     fetchUsers()
     fetchDamHandlingUsers()
+    fetchRaingaugeHandlingUsers()
 },[])
 
   return (
@@ -173,23 +186,25 @@ useEffect(()=>{
         <Wrapper className='w-[20%] h-full flex flex-wrap justify-between items-start gap-4 overflow-y-auto no-scrollbar content-start'>
             <Typography tag="h4" text={`Rain Gauge User Assignments`} className='text-base ml-1' />
             {
-                    damData?.map((dam,index)=>{
-                        const damHandling = damHandlingUsers.filter((data)=>data?.dam?.id===dam?.id)
+                    raingaugeData?.map((gauge,index)=>{
+                        //console.log('data',data)
+                        //const damHandling = damHandlingUsers.filter((data)=>data?.dam?.id===dam?.id)
+                        const raingaugeHandling = raingaugeHandlingUsers.filter((data)=>data?.raingauge?.id===gauge?.id)
                         
                         return(
                             <Wrapper key={index} className='w-full rounded-md h-16 border-2 border-color-border dark:border-none dark:bg-[#121721f5] flex justify-between gap-4 items-center px-4'>
                                 <Wrapper className='flex items-center'>
                                     <IoRainy className='size-5' />
                                     <Wrapper>
-                                        <Typography tag="p" className="text-sm ml-2 capitalize" text={dam?.name} />
+                                        <Typography tag="p" className="text-sm ml-2 capitalize" text={gauge?.station_name} />
                                         <Typography tag="p" className="text-xs ml-2 dark:text-[#7d8da196] leading-3" text={`users: `} >
-                                            <Typography tag='span' className={`text-xs ${damHandling?.[0]?.dam?.users?.length!==(undefined)?'text-primary':'text-color-red'}`} text={damHandling?.[0]?.dam?.users?.length??'0'} />
+                                            <Typography tag='span' className={`text-xs ${raingaugeHandling?.[0]?.raingauge?.users?.length!==(undefined)?'text-primary':'text-color-red'}`} text={raingaugeHandling?.[0]?.raingauge?.users?.length??'0'} />
                                         </Typography>
                                     </Wrapper>
                                 </Wrapper>
                                 <Wrapper className='flex gap-3'>
                                     <FaUsersCog onClick={
-                                        ()=>setOpenUserAssignment({state:true,users:users,damId:dam?.id,damName:dam?.name,fetchDamHandlingUsers:fetchDamHandlingUsers})} 
+                                        ()=>setOpenRainGaugeUserAssignment({state:true,raingaugeId:gauge?.id,users:users,raingaugeName:gauge?.station_name,fetchRaingaugeHandlingUsers:fetchRaingaugeHandlingUsers})} 
                                         className='size-5 cursor-pointer hover:text-primary-hover' 
                                     />
                                     

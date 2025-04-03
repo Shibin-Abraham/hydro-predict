@@ -43,3 +43,15 @@ export const getDamHandlingUsers = async ({dam_id}) => {
         throw error;
     }
 }
+
+export const getRaingaugeHandlingUsers = async ({raingauge_id}) => {
+    try {
+        const params = {};
+        if (raingauge_id !== undefined) params.raingauge_id = raingauge_id;
+        const response = await axiosInstance.get('/raingauge/handling-users',{ params });
+        return response;
+    } catch (error) {
+        console.error('Error getRaingaugeHandlingUsers:', error);
+        throw error;
+    }
+}

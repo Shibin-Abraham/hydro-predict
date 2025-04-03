@@ -79,3 +79,33 @@ export const addNewRaingauge = async (data) => {
         throw error;
     }
 }
+
+export const addRainGaugeHandlingUser = async (data) => {
+    try {
+        const response = await axiosInstance.post('/raingauge/handling-user/add-new', data);
+        return response;
+    } catch (error) {
+        console.error('Error on addRainGaugeHandlingUser(post) :', error);
+        throw error;
+    }
+}
+
+export const deleteRainGaugeHandlingUser = async (data) => {
+    try {
+        const response = await axiosInstance.delete('/raingauge/handling-user/delete', {data});
+        return response;
+    } catch (error) {
+        console.error('Error on deleteRainGaugeHandlingUser(post) :', error);
+        throw error;
+    }
+}
+
+export const addRaingaugeData = async (data) => {
+    try {
+        const response = await axiosInstance.post('/raingauge-data/add', data);
+        return response;
+    } catch (error) {
+        console.error('Error on addRaingaugeData(post) :', error);
+        throw error;
+    }
+}
