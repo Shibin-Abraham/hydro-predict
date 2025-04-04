@@ -109,3 +109,13 @@ export const addRaingaugeData = async (data) => {
         throw error;
     }
 }
+
+export const addBulkRainFallData = async (data) => {
+    try {
+        const response = await axiosInstance.post('/raingauge-bulk-data/add', data);
+        return response;
+    } catch (error) {
+        console.error('Error on addBulkRainFallData(post) :', error);
+        throw error;
+    }
+}

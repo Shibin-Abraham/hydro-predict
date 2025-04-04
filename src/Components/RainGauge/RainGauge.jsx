@@ -1,5 +1,4 @@
 import {  useContext, useEffect, useState } from 'react';
-import AddSolidIcon from '../../Assets/icons/AddSolidIcon';
 import CloudIcon from '../../Assets/icons/CloudIcon';
 import Button from '../AtomicDesign/Atom/Button/Button';
 import Typography from '../AtomicDesign/Atom/Typography/Typography';
@@ -7,15 +6,17 @@ import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper';
 import Gauge from '../AtomicDesign/Molecule/Gauge/Gauge';
 import { alertColor, rainAlert } from '../AtomicDesign/Molecule/Gauge/utils';
 import ReactApexChart from 'react-apexcharts';
-import MapIcon from '../../Assets/icons/MapIcon';
 import SettingsContext from '../Contexts/SettingsContext/SettingsContext';
 import GaugeCardSkeleton from './Loader/GaugeCardSkeleton';
 import { processRainfallData } from './utils';
 import { AuthContext } from '../Contexts/AuthContext';
 import RaingaugeContext from '../Contexts/RaingaugeContext/RaingaugeContext';
+import { BiCloudUpload } from 'react-icons/bi';
+import { IoIosAddCircleOutline } from 'react-icons/io';
+import { FaMapLocationDot } from 'react-icons/fa6';
 
 // eslint-disable-next-line react/prop-types
-const RainGauge = ({ setOpenMap, mode, setAddRaingauge,setAddRaingaugeData }) => {
+const RainGauge = ({ setOpenMap, mode, setAddRaingauge,setAddRaingaugeData,setAddRainBulkUpload }) => {
   const [state, setState] = useState(barChartStyles);
 
   const { expand } = useContext(SettingsContext);
@@ -50,15 +51,21 @@ const RainGauge = ({ setOpenMap, mode, setAddRaingauge,setAddRaingaugeData }) =>
               onClick={() => setAddRaingauge({ state: true, fetchAllRaingaugeData })}
               variant="primary"
               variantType="outline"
-              className="text-xs"
+              className="text-[11px] h-6"
             >
               Add New Gauge
             </Button>
           )}
-          <AddSolidIcon onClick={()=>setAddRaingaugeData({state:true})} className="size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]" />
-          <MapIcon
+          <IoIosAddCircleOutline title='add rainfalldata' onClick={()=>setAddRaingaugeData({state:true})} className="size-6 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]" />
+          {
+            auth?.user?.position.toUpperCase()==='ADMIN'
+            &&
+            <BiCloudUpload onClick={()=>setAddRainBulkUpload({state:true,fetchAllRaingaugeData:fetchAllRaingaugeData})} title='bulk upload' className='size-6 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]' />
+          }
+          <FaMapLocationDot
+           title='view map'
             onClick={() => setOpenMap(true)}
-            className="size-7 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]"
+            className="size-6 cursor-pointer text-[#595959] dark:text-[#7d8da196] hover:text-[#7d8da1f6]"
           />
         </Wrapper>
         <Wrapper className="w-full pt-4 pb-4 h-[75vh] overflow-y-scroll flex justify-between gap-6 flex-wrap no-scrollbar">

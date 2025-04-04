@@ -14,16 +14,21 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import SettingsContext from '../../Contexts/SettingsContext/SettingsContext'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
-import { getDamData } from '../../../API/Handler/getDataHandler'
+import { getDamData, getRaingaugeData } from '../../../API/Handler/getDataHandler'
 import moment from 'moment'
 import { BsDatabaseFillSlash } from 'react-icons/bs'
+import { alertColor as rainAlertColor } from "../../AtomicDesign/Molecule/Gauge/utils"
+import { processRainfallData } from '../../RainGauge/utils'
 
 const PreviousAnalysis = ({mode,theme}) => {
   const color = getColor({theme}) 
   const [loadingDamData,setLoadingDamData] = useState(false)
+  const [prevRainfallData,setPrevRainfallData] = useState([])
 
   const location = useLocation()
-    const { id,previousDate } = location.state || {}
+  const { id,previousDate } = location.state || {}
+  //const { raingaugeData } = useContext(RaingaugeContext)
+  const { dates, averages } = processRainfallData(prevRainfallData);
     console.log('previous date',previousDate)
 
   const [filteredDamData,setFilteredDamData] = useState()
@@ -34,7 +39,7 @@ const PreviousAnalysis = ({mode,theme}) => {
   const navigate = useNavigate();
 
   const [donutState, setDonutState] = useState(donutStyles({data:filteredDamData?.[0]}));
-  const [stateInflow, setStateInflow] = useState(inflowStyles);
+  const [stateInflow, setStateInflow] = useState(inflowStyles({data:filteredDamData?.[0],rainfall:averages,date:dates}));
   const [state, setState] = useState(getWaterLevelStyles({mode,color,data:filteredDamData?.[0]}));
 
   const{expand} = useContext(SettingsContext)
@@ -52,6 +57,35 @@ const PreviousAnalysis = ({mode,theme}) => {
             setLoadingDamData(false)
           }
       },[id])
+  const fetchAllRaingaugeData = useCallback(async (params = {}) => {
+          try {
+              const { data } = await getRaingaugeData(params);
+              console.log('Raingauge Data', data);
+  
+              // Filter raingauges with and without data
+              const raingaugesWithData = data.filter(rg => rg.raingauge_data.length > 0);
+              const raingaugesWithoutData = data.filter(rg => rg.raingauge_data.length === 0);
+  
+              // Sort raingauges with data by latest value in descending order
+              const sortedRaingaugesWithData = raingaugesWithData.sort((a, b) => {
+                  const valA = parseFloat(a.raingauge_data[0].value) || 0;
+                  const valB = parseFloat(b.raingauge_data[0].value) || 0;
+                  return valB - valA; // Sorts in descending order
+              });
+  
+              // Combine sorted raingauges with data and those without
+              const sortedData = [...sortedRaingaugesWithData, ...raingaugesWithoutData];
+  
+              // Update state with sorted data
+              setPrevRainfallData(sortedData);
+          } catch (error) {
+              console.error("Error fetching Raingauge data:", error);
+              const errorMsg = error.response?.data?.error || 
+                               error.response?.data?.message || 
+                               'An error occurred while fetching Raingauge data.';
+              console.error(errorMsg);
+          } 
+      }, []);
   
   useEffect(() => {
     const isValidDate = previousDate && moment(previousDate, 'DD-MM-YYYY').isValid();
@@ -63,12 +97,14 @@ const PreviousAnalysis = ({mode,theme}) => {
       formattedDate = moment().subtract(1, 'year').format('YYYY-MM-DD');
     }
     fetchAllDamData({ date: formattedDate, id: id }); //pass parameters- fetchAllDamData({test:'Test: An error occurred while fetching dam data.'});
-  }, [fetchAllDamData,id,previousDate])
+    fetchAllRaingaugeData({ date: formattedDate });
+  }, [fetchAllDamData,id,previousDate,fetchAllRaingaugeData])
 
   useEffect(() => {
     if (filteredDamData?.[0]&&filteredDamData?.[0].dam_data.length!==0) {
       setState(getWaterLevelStyles({mode, color, data: filteredDamData[0] }));
       setDonutState(donutStyles({data:filteredDamData?.[0]}))
+      setStateInflow(inflowStyles({data:filteredDamData?.[0],rainfall:averages,date:dates}))
     }
   }, [filteredDamData, color,mode]);
 
@@ -78,6 +114,7 @@ const PreviousAnalysis = ({mode,theme}) => {
         date: moment(selectedDate).format('YYYY-MM-DD'),
         id: id
       });
+      fetchAllRaingaugeData({ date: moment(selectedDate).format('YYYY-MM-DD') });
     }
   }, [fetchAllDamData, id, selectedDate]);
 
@@ -217,145 +254,28 @@ const PreviousAnalysis = ({mode,theme}) => {
           <Wrapper className='w-[40%] h-full '>
           <Typography tag="h4" className="text-lg font-bold mt-2 " text="Rainfall" />
           <Wrapper className='w-full h-[80vh] flex flex-col gap-3 overflow-y-scroll no-scrollbar mt-2 '>
-          <Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-red' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper>
-          <Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-red' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper>
-          <Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-red' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-red' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-orange' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-orange' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-orange' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper><Wrapper className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                  <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
-                  <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
-                  Rainfall- 
-                    <Typography tag='span' className='text-color-blue' text={'12.11'} />
-                    mm
-                    </Typography>
-                    <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={'12/10/2024'}></Typography>
-          </Wrapper>
+          {
+              prevRainfallData.map((data,index)=>{
+                  const value = parseFloat(data?.raingauge_data?.[0]?.value) || 0;
+                  const date = data?.raingauge_data?.[0]?.date|| 0;
+                  const redLevel = parseFloat(data?.red_level);
+                  const orangeLevel = parseFloat(data?.orange_level);
+                  const yellowLevel = parseFloat(data?.yellow_level);
+                  const color = rainAlertColor(value, 'text', redLevel, orangeLevel, yellowLevel);
+
+                  return(
+                    <Wrapper key={index} className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                      <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                      <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                      {data?.station_name}- 
+                        <Typography tag='span' className={`${color}`} text={value} />
+                        mm
+                        </Typography>
+                        <Typography tag='span' className='text-xs text-black dark:text-[#7d8da196] ml-auto' text={date}></Typography>
+                      </Wrapper>
+                  )
+              })
+            }
           
           </Wrapper>
           </Wrapper>

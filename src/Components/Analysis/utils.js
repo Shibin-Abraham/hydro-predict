@@ -79,38 +79,55 @@ export const donutStyles=({data})=>{
 } 
 }
 
-export const inflowStyles ={
-          
+export const inflowStyles = ({ data, rainfall, date }) => {
+  // Inflow data and dates
+  const inflowDate = data?.dam_data.map(item => item.date) || [];
+  const inflowMap = new Map(data?.dam_data.map(item => [item.date, parseFloat(item.inflow)]) || []);
+
+  // Rainfall data as a map, handling undefined date or rainfall
+  const safeDate = date || [];
+  const safeRainfall = rainfall || Array(safeDate.length).fill(0);
+  const rainfallMap = new Map(safeDate.map((d, i) => [d, safeRainfall[i]]));
+
+  // Find common dates
+  const inflowDateSet = new Set(inflowDate);
+  const commonDates = safeDate.filter(d => inflowDateSet.has(d));
+
+  // Get data for common dates, defaulting to 0 if no value exists
+  const inflowData = commonDates.map(d => inflowMap.get(d) ?? 0);
+  const rainfallData = commonDates.map(d => rainfallMap.get(d) ?? 0);
+
+  return {
     series: [{
-      name:'inflow',
-      data: [31.1, 40, 28, 151, 42, 109, 100]
+      name: 'inflow',
+      data: inflowData
     }, {
-      name:'rainfall',
-      data: [11, 32, 45, 0, 34, 52, 41]
-    },],
+      name: 'rainfall',
+      data: rainfallData
+    }],
     options: {
       chart: {
-        width:'100%',
+        width: '100%',
         height: '100%',
         type: 'area',
         toolbar: {
-          show: false 
-      },
-      offsetX:0,  
-      offsetY: -20
+          show: false
+        },
+        offsetX: 0,
+        offsetY: -20
       },
       grid: {
-        show: true,  
-        borderColor: '#7d8da121', 
-        strokeDashArray: 3,   
+        show: true,
+        borderColor: '#7d8da121',
+        strokeDashArray: 3,
         yaxis: {
           lines: {
-            show: true 
+            show: true
           }
         },
         xaxis: {
           lines: {
-            show: true 
+            show: true
           }
         },
       },
@@ -121,27 +138,17 @@ export const inflowStyles ={
         curve: 'smooth'
       },
       xaxis: {
-          type: 'datetime',
-          categories: [
-            '2018-09-19T00:00:00.000Z',
-            '2018-09-19T01:30:00.000Z',
-            '2018-09-19T02:30:00.000Z',
-            '2018-09-19T03:30:00.000Z',
-            '2018-09-19T04:30:00.000Z',
-            '2018-09-19T05:30:00.000Z',
-            '2018-09-19T06:30:00.000Z',
-          ],
-          labels: {
-            style: {
-              fontSize: '10px',
-            },
+        type: 'datetime',
+        categories: commonDates,
+        labels: {
+          style: {
+            fontSize: '10px',
           },
-        
+        },
       },
-      
       yaxis: {
         show: false  // Hides the left-side Y-axis numbers
-    },
+      },
       tooltip: {
         x: {
           format: 'dd/MM/yy HH:mm'
@@ -149,9 +156,10 @@ export const inflowStyles ={
       },
       legend: {
         show: false  // Hides the legend buttons
+      },
+      colors: ['#715ff8', '#23d823']
     },
-    colors:['#715ff8','#23d823']
-    },
+  };
 }
 
 export const getWaterLevelStyles = ({mode,color,data})=>{

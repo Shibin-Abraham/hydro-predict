@@ -426,8 +426,8 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                                     <Wrapper key={index} className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
                                         <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
                                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text={data?.station_name} />
-                                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text={`Rainfall-${data?.raingauge_data?.[0]?.value}mm`} />
-                                        <Wrapper className={`w-2 h-2 rounded-full ${color} ml-auto mr-4`} />
+                                        <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text={`Rainfall-${value}mm`} />
+                                        <Wrapper className={`w-2 h-2 rounded-full ${value>yellowLevel?color:null} ml-auto mr-4`} />
                                     </Wrapper>
                                 )
                             })

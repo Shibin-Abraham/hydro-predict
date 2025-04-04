@@ -32,6 +32,7 @@ import AddRaingauge from "./Components/RainGauge/Popup/AddRaingauge";
 import RaingaugeProvider from "./Components/Contexts/RaingaugeContext/RaingaugeProvider";
 import RainGaugeUserAssignment from "./Components/Users/Popup/RainGaugeUserAssignment";
 import AddRaingaugeData from "./Components/RainGauge/Popup/AddRaingaugeData";
+import RainBulkUpload from "./Components/RainGauge/Popup/RainBulkUpload";
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
   const [addRaingaugeData,setAddRaingaugeData] = useState({state:false})
   const [addDamAlert,setAddDamAlert] = useState({state:false,damId:undefined,damName:'',fetchAllDamData:()=>{}})
   const [addBulkUpload,setAddBulkUpload] = useState({state:false,fetchAllDamData:()=>{}})
+  const [addRainBulkUpload,setAddRainBulkUpload] = useState({state:false,fetchAllRaingaugeData:()=>{}})
   const [openMap,setOpenMap] = useState(false)
   const [openUserAssignment,setOpenUserAssignment] = useState({state:false,users:[],damId:undefined,dmaName:'',fetchDamHandlingUsers:()=>{}})
   const [openRainGaugeUserAssignment,setOpenRainGaugeUserAssignment] = useState({
@@ -85,6 +87,9 @@ function App() {
         }
         {
           addBulkUpload.state&&<BulkUpload setAddBulkUpload={setAddBulkUpload}  />
+        }
+        {
+          addRainBulkUpload.state&&<RainBulkUpload setAddRainBulkUpload={setAddRainBulkUpload}  />
         }
         {
           openMap&&<Map setOpenMap={setOpenMap} />
@@ -165,7 +170,7 @@ function App() {
               path="/rain gauge"
               element={
                 <ProtectedLayout theme={theme}>
-                  <RainGauge theme={theme} mode={mode} setOpenMap={setOpenMap} setAddRaingauge={setAddRaingauge} setAddRaingaugeData={setAddRaingaugeData} />
+                  <RainGauge theme={theme} mode={mode} setOpenMap={setOpenMap} setAddRaingauge={setAddRaingauge} setAddRainBulkUpload={setAddRainBulkUpload} setAddRaingaugeData={setAddRaingaugeData} />
                 </ProtectedLayout>
               }
             />
