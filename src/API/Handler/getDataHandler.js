@@ -46,3 +46,18 @@ export const getRaingaugeData = async ({ id,date, limit, offset } = {}) => {
         throw error;
     }
 }
+
+export const getPredictionData = async ({ limit, offset } = {}) => {
+    try {
+        const params = {};
+        if (limit !== undefined) params.limit = limit;
+        if (offset !== undefined) params.offset = offset;
+        //if (test !== undefined) params.test = test;
+
+        const response = await axiosInstance.get('/prediction-data', { params });
+        return response;
+    } catch (error) {
+        console.error('Error getPredictionData :', error);
+        throw error;
+    }
+}

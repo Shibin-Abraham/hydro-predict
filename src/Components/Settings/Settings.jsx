@@ -5,9 +5,22 @@ import MoonIcon from '../../Assets/icons/MoonIcon'
 import SunIcon from '../../Assets/icons/SunIcon'
 import { useContext } from 'react'
 import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
+import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie';
 
 const Settings = ({ mode, setMode, theme, setTheme }) => {
   const {expand,setExpand} = useContext(SettingsContext)
+  const navigate = useNavigate();
+  console.log('cookie',document.cookie)
+
+    const handleLogout = () => {
+        // Clear the JWT cookie by setting its expiration date to a past date.
+        // Replace 'jwt' with the actual name of your JWT cookie if it's different.
+        Cookies.remove('jwt', { path: '/' });
+        
+        // Redirect to the "/login" route.
+        navigate("/login");
+    };
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg overflow-hidden ${expand?'p-8':'py-8 pl-16 pr-8'}`}>
         <Wrapper className='w-2/4 h-full pt-3 flex flex-col gap-8'>
@@ -89,6 +102,14 @@ const Settings = ({ mode, setMode, theme, setTheme }) => {
                     </Wrapper>
                   </Wrapper>
                 </Wrapper>
+            </Wrapper>
+
+            {/* Logout */}
+            <Wrapper className='flex items-start justify-between'>
+                <Wrapper>
+                <Typography onClick={handleLogout} tag="h4" text={`Logout`} className='text-sm text-primary ml-1 cursor-pointer' />
+                </Wrapper>
+                
             </Wrapper>
             {/* copyright */}
             <Wrapper className='flex items-start justify-between mt-auto'>

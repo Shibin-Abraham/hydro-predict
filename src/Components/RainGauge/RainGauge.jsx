@@ -155,15 +155,20 @@ const RainGauge = ({ setOpenMap, mode, setAddRaingauge,setAddRaingaugeData,setAd
         </Wrapper>
         <Wrapper className="w-full h-[30vh] flex gap-6">
           <Wrapper className="w-[48%] h-full overflow-y-scroll no-scrollbar">
-            <Typography tag="h4" text="Total Raingauges 44" className="text-sm font-medium" />
+            <Typography tag="h4" text="Total Raingauges 9" className="text-sm font-medium" />
             <Wrapper className="w-full h-10 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden flex items-center px-3">
               <Typography tag="p" className="text-xs">
-                IDUKKI Dam Catchment – <Typography tag="span" text="23" className="text-xs text-primary" /> Rain Gauges
+                IDUKKI Dam Catchment – <Typography tag="span" text="9" className="text-xs text-primary" /> Rain Gauges
               </Typography>
             </Wrapper>
             <Wrapper className="w-full h-10 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden flex items-center px-3">
               <Typography tag="p" className="text-xs">
-                LOWER PERIYAR Dam Catchment – <Typography tag="span" text="23" className="text-xs text-primary" /> Rain Gauges
+                LOWER PERIYAR Dam Catchment – <Typography tag="span" text="0" className="text-xs text-primary" /> Rain Gauges
+              </Typography>
+            </Wrapper>
+            <Wrapper className="w-full h-10 border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg mt-2 overflow-hidden flex items-center px-3">
+              <Typography tag="p" className="text-xs">
+                PONMUDI Dam Catchment – <Typography tag="span" text="0" className="text-xs text-primary" /> Rain Gauges
               </Typography>
             </Wrapper>
             {/* Repeat similar blocks as needed */}

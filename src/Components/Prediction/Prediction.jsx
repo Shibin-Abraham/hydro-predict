@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import Wrapper from "../AtomicDesign/Atom/Wrapper/Wrapper"
 
 import { usePopUp } from "../Contexts/PopUpContext"
@@ -10,37 +10,97 @@ import Button from "../AtomicDesign/Atom/Button/Button"
 import ReactApexChart from "react-apexcharts"
 import Pichart from "../AtomicDesign/Molecule/Pichart/Pichart"
 import SettingsContext from "../Contexts/SettingsContext/SettingsContext"
-import { useForm } from "react-hook-form"
+import { set, useForm } from "react-hook-form"
 import { decimalNumberPattern } from "../Analysis/Popup/utils"
 import axios from "axios"
+import { getPredictionData } from "../../API/Handler/getDataHandler"
+import DamDataContext from "../Contexts/DamDataContext/DamDataContext"
 
 // eslint-disable-next-line react/prop-types
 const Prediction = ({mode}) => {
   const {expand} = useContext(SettingsContext)
+  console.log('expand',generateDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 20, {
+    min: 10,
+    max: 60
+  }))
+
+const [isLoading,setIsLoading] = useState(false) 
+const [loading,setLoading] = useState(false)
+const [predictedData,setPredictedData] = useState({inflow_t1:0,inflow_t2:0,}) 
+const [allPredictedData,setAllPredictedData] = useState([])
+ const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+      } = useForm();
+
+      const onSubmit = async (data) => {
+        const features = {
+          "inflow_t": data.latest_inflow,
+          "inflow_t-1": data.yesterday_inflow,
+          "inflow_t-2": data.before_yesterday_inflow,
+          "totalRainfall_t": data.latest_total_rainfall,
+          "totalRainfall_t-1": data.yesterday_total_rainfall,
+          "totalRainfall_t-2": data.before_yesterday_total_rainfall,
+          "inflow_3day_avg": data._3_day_avg_inflow,
+          "inflow_7day_avg": data._7_day_avg_inflow,
+          "rainfall_3day_avg": data._3_day_avg_rainfall,
+          "rainfall_7day_avg": data._7_day_avg_rainfall,
+          "month": data.current_month
+      }
+      console.log(features)
+      try {
+        // Using direct axios
+        setIsLoading(true)
+        const {data} = await axios.post('http://127.0.0.1:8001/api/dam/predict/1/', features);
+        // OR using the api instance: const response = await api.post('/predict/1/', data);
+        console.log(data);
+        setPredictedData({
+          inflow_t1: data.predicted_inflow_tomorrow ?? 0,
+          inflow_t2: data.predicted_inflow_day_after ?? 0,
+        })
+      } catch (error) {
+        console.log(error)
+      }finally{
+        setIsLoading(false)
+      }
+      }
+
+  const {showInfo,showError} = usePopUp()
+  const {damData} = useContext(DamDataContext)
+
+  const filterIdkData = damData?.filter((item) => item.name === 'idukki')
+  console.log('filterIdkData',filterIdkData)
+  console.log('allPredictedData',allPredictedData)
+
   const [state, setState] = useState({
           
     series: [
       {
         name: 'Actual',
-        data: generateDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 20, {
-          min: 10,
-          max: 60
-        })
+        data: filterIdkData?.[0]?.dam_data?.map((item) => {
+          return {
+            x: item.date,
+            y: parseFloat(item.inflow),
+          }
+        }
+        )
       },
-      {
-        name: 'Today',
-        data: generateDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 20, {
-          min: 10,
-          max: 20
-        })
-      },
-      {
-        name: 'Tomarrow',
-        data: generateDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 20, {
-          min: 10,
-          max: 15
-        })
-      }
+      // {
+      //   name: 'Today',
+      //   data: generateDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 20, {
+      //     min: 10,
+      //     max: 20
+      //   })
+      // },
+      // {
+      //   name: 'Tomarrow',
+      //   data: generateDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 20, {
+      //     min: 10,
+      //     max: 15
+      //   })
+      // }
     ],
     options: {
       chart: {
@@ -141,48 +201,42 @@ const Prediction = ({mode}) => {
   
 });
 
-const [isLoading,setIsLoading] = useState(false) 
-const [predictedData,setPredictedData] = useState() 
- const {
-        register,
-        handleSubmit,
-        setError,
-        formState: { errors },
-      } = useForm();
+const MWL = parseFloat(filterIdkData?.[0]?.MWL);
+const waterLevel = parseFloat(filterIdkData?.[0]?.dam_data?.[0]?.water_level);
+const percentage = ((waterLevel / MWL) * 100).toFixed(2);
+const inflowValue = Number(predictedData.inflow_t1);
+const finalValue = waterLevel + 0.00158 * inflowValue;
+const roundedFinalValue = finalValue.toFixed(2);
 
-      const onSubmit = async (data) => {
-        const features = {
-          "inflow_t": data.latest_inflow,
-          "inflow_t-1": data.yesterday_inflow,
-          "inflow_t-2": data.before_yesterday_inflow,
-          "totalRainfall_t": data.latest_total_rainfall,
-          "totalRainfall_t-1": data.yesterday_total_rainfall,
-          "totalRainfall_t-2": data.before_yesterday_total_rainfall,
-          "inflow_3day_avg": data._3_day_avg_inflow,
-          "inflow_7day_avg": data._7_day_avg_inflow,
-          "rainfall_3day_avg": data._3_day_avg_rainfall,
-          "rainfall_7day_avg": data._7_day_avg_rainfall,
-          "month": data.current_month
-      }
-      console.log(features)
-      try {
-        // Using direct axios
-        setIsLoading(true)
-        const {data} = await axios.post('http://127.0.0.1:8001/api/dam/predict/1/', features);
-        // OR using the api instance: const response = await api.post('/predict/1/', data);
-        console.log(data);
-        setPredictedData(data)
-      } catch (error) {
-        console.log(error)
-      }finally{
-        setIsLoading(false)
-      }
-      }
+const inflowValue_t2 = Number(predictedData.inflow_t2);
+const finalValue_t2 = waterLevel + 0.00158 * inflowValue_t2;
+const roundedFinalValue_t2 = finalValue_t2.toFixed(2);
+const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
 
-  const {showInfo} = usePopUp()
+  const fetchAllPredictionData = useCallback(async (params = {})=>{
+    setLoading(true)
+          try {
+              const {data} = await getPredictionData(params)
+              setAllPredictedData(data)
+              setPredictedData(prev => ({
+                ...prev,
+                inflow_t1: data?.[0]?.predicted_inflow_t1 ?? 0,
+                inflow_t2: data?.[0]?.predicted_inflow_t2 ?? 0,
+              }))
+              
+          } catch (error) {
+              console.error("Error fetching fetchPredictionData:", error)
+              const errorMsg = error.response?.data?.error || error.response?.data?.message || 'An error occurred while fetching Prediction Data.';
+              showError(errorMsg)
+          }finally{
+            setLoading(false)
+          }
+      },[showError])
+
   useEffect(() => {
     showInfo('Predictions are estimates only. They are based on historical data.')
-  }, [showInfo])
+    fetchAllPredictionData()
+  }, [])
              
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg overflow-hidden ${expand?'pl-8':'pl-16'}`}>
@@ -212,7 +266,7 @@ const [predictedData,setPredictedData] = useState()
                 <Wrapper className='h-[16vh] w-full flex justify-between'>
                   <Wrapper className='flex flex-col items-center'>
                      <Pichart
-                      percentage={75}
+                      percentage={percentage}
                       className="w-20 h-20 grid place-items-center"
                       subClassName="relative w-16 h-16 rounded-full grid place-items-center before:content-[''] before:absolute before:h-[84%]
                           before:w-[84%] before:bg-[#ffffff] before:dark:bg-[#121720] before:rounded-full"
@@ -224,18 +278,18 @@ const [predictedData,setPredictedData] = useState()
                   <Wrapper className='w-[60%] h-full flex flex-col items-end justify-center'>
                   <Typography tag="p" className="text-xs font-normal text-center" text="Predicted Water Level" />
                   <Wrapper>
-                  <Typography tag="p" className="text-lg font-bold text-center text-primary" text="720.22 m" />
+                  <Typography tag="p" className="text-lg font-bold text-center text-primary" text={`${roundedFinalValue} m`} />
                   </Wrapper>
                   
                   <Typography tag="p" className="text-[10px] font-normal text-center pt-1" text="Inflow Value" />
-                  <Typography tag="p" className="text-xs font-semibold text-center" text={`${predictedData?predictedData?.predicted_inflow_tomorrow.toFixed(4):''} MCM`} />
+                  <Typography tag="p" className="text-xs font-semibold text-center" text={`${predictedData?.inflow_t1 ? Number(predictedData.inflow_t1).toFixed(4) : ''} cumecs`} />
                   
                   </Wrapper>
                 </Wrapper>
                 <Wrapper className='w-full h-[1px] bg-[#595959] dark:bg-[#7d8da196]' />
                 <Typography tag="p" className="text-[10px] font-normal">
-                    Current Waterl Level <Typography tag="span" className="text-[10px] font-normal text-primary" text='710.90 m'/>
-                    , percentage <Typography tag="span" className="text-[10px] font-normal text-primary" text='82%'/>
+                    Current Waterl Level <Typography tag="span" className="text-[10px] font-normal text-primary" text={`${filterIdkData?.[0]?.dam_data?.[0]?.water_level} m`}/>
+                    {/* , percentage <Typography tag="span" className="text-[10px] font-normal text-primary" text='82%'/> */}
                   </Typography>
               
               </Wrapper>
@@ -252,7 +306,7 @@ const [predictedData,setPredictedData] = useState()
                   <Wrapper className='flex flex-col items-center'>
                      <Pichart
                      variant='gray'
-                      percentage={67}
+                      percentage={percentage_t2}
                       className="w-20 h-20 grid place-items-center"
                       subClassName="relative w-16 h-16 rounded-full grid place-items-center before:content-[''] before:absolute before:h-[84%]
                           before:w-[84%] before:bg-[#ffffff] before:dark:bg-[#121720] before:rounded-full"
@@ -264,17 +318,17 @@ const [predictedData,setPredictedData] = useState()
                   <Wrapper className='w-[60%] h-full flex flex-col items-end justify-center'>
                   <Typography tag="p" className="text-xs font-normal text-center" text="Predicted Water Level" />
                   <Wrapper>
-                  <Typography tag="p" className="text-lg font-bold text-center text-color-light-gray dark:text-color-dark-gray" text="703.22 m" />
+                  <Typography tag="p" className="text-lg font-bold text-center text-color-light-gray dark:text-color-dark-gray" text={`${roundedFinalValue_t2} m`} />
                   </Wrapper>
                   
                   <Typography tag="p" className="text-[10px] font-normal text-center pt-1" text="Inflow Value" />
-                  <Typography tag="p" className="text-xs font-semibold text-center" text={`${predictedData?predictedData?.predicted_inflow_day_after.toFixed(4):''} MCM`} />
+                  <Typography tag="p" className="text-xs font-semibold text-center" text={`${predictedData?.inflow_t2 ? Number(predictedData.inflow_t2).toFixed(4) : ''} cumecs`} />
                   
                   </Wrapper>
                 </Wrapper>
                 <Wrapper className='block w-full h-[1px] bg-[#595959] dark:bg-[#7d8da196]' />
                 <Typography tag="p" className="text-[10px] font-normal">
-                    This Model has 84% of accuray, It can make mistakes
+                    This Model has 64% of accuray, It can make mistakes
                   </Typography>
               
               </Wrapper>
