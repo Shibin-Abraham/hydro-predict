@@ -236,7 +236,7 @@ const Analysis = ({mode,theme,setAddDamData,setAddDamAlert,setAddBulkUpload}) =>
                   const color = rainAlertColor(value, 'text', redLevel, orangeLevel, yellowLevel);
 
                   return(
-                    <Wrapper key={index} className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
+                    <Wrapper key={index} className='w-60 p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200 overflow-x-scroll no-scrollbar'>
                       <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
                       <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
                       {data?.station_name}- 

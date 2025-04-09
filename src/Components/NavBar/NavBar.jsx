@@ -90,26 +90,47 @@ const NavBar = () => {
                         </NavLink>
                     </Wrapper>
 
-                    {/*<Wrapper className="h-12 relative">
-                        <NavLink to="/Map" className={({ isActive }) => {
-                            return isActive ? "active" : null
-                        }}>{
-                                expand ?
-                                    <Wrapper className="group flex items-center gap-2 w-full h-full [.active_&]:before:content-[''] [.active_&]:bg-[#2e79d926] dark:[.active_&]:bg-black
-                        [.active_&]:before:w-1.5 [.active_&]:before:h-full [.active_&]:rounded-e-md dark:[.active_&]:rounded-none [.active_&]:before:bg-primary [.active_&]:before:absolute 
-                        [.active_&]:before:left-0">
-                                        <MapIcon className="size-4 text-black dark:text-[#7d8da1] ml-6 [.active_&]:text-primary group-hover:ml-10 group-hover:text-primary transition-all ease-linear duration-200" />
-                                        <Typography tag="h4" className="text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary">
-                                            Map
-                                        </Typography>
-                                    </Wrapper>
-                                    :
-                                    <Wrapper className='group bg-tertiary-variant  w-10 h-12 ml-6 flex items-center justify-center'>
-                                        <MapIcon className="size-5 text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary transition-all ease-linear duration-200" />
-                                    </Wrapper>
-                            }
-                        </NavLink>
-                    </Wrapper>*/}
+                    <Wrapper className="h-12 relative">
+                         <NavLink to="/Logs" className={({ isActive }) => {
+                             return isActive ? "active" : null
+                         }}>{
+                                 expand ?
+                                     <Wrapper className="group flex items-center gap-2 w-full h-full [.active_&]:before:content-[''] [.active_&]:bg-[#2e79d926] dark:[.active_&]:bg-black
+                         [.active_&]:before:w-1.5 [.active_&]:before:h-full [.active_&]:rounded-e-md dark:[.active_&]:rounded-none [.active_&]:before:bg-primary [.active_&]:before:absolute 
+                         [.active_&]:before:left-0">
+                                         <TableIcon className="size-4 text-black dark:text-[#7d8da1] ml-6 [.active_&]:text-primary group-hover:ml-10 group-hover:text-primary transition-all ease-linear duration-200" />
+                                         <Typography tag="h4" className="text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary">
+                                             Logs
+                                         </Typography>
+                                     </Wrapper>
+                                     :
+                                     <Wrapper className='group bg-tertiary-variant w-10 h-12 ml-6 flex items-center justify-center'>
+                                         <TableIcon className="size-5 text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary transition-all ease-linear duration-200" />
+                                     </Wrapper>
+                             }
+                         </NavLink>
+                     </Wrapper>
+ 
+                     <Wrapper className="h-12 relative">
+                         <NavLink to="/Activities" className={({ isActive }) => {
+                             return isActive ? "active" : null
+                         }}>{
+                                 expand ?
+                                     <Wrapper className="group flex items-center gap-2 w-full h-full [.active_&]:before:content-[''] [.active_&]:bg-[#2e79d926] dark:[.active_&]:bg-black
+                         [.active_&]:before:w-1.5 [.active_&]:before:h-full [.active_&]:rounded-e-md dark:[.active_&]:rounded-none [.active_&]:before:bg-primary [.active_&]:before:absolute 
+                         [.active_&]:before:left-0">
+                                         <BookIcon className="size-4 text-black dark:text-[#7d8da1] ml-6 [.active_&]:text-primary group-hover:ml-10 group-hover:text-primary transition-all ease-linear duration-200" />
+                                         <Typography tag="h4" className="text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary">
+                                             Activities
+                                         </Typography>
+                                     </Wrapper>
+                                     :
+                                     <Wrapper className='group bg-tertiary-variant w-10 h-12 ml-6 flex items-center justify-center'>
+                                         <BookIcon className="size-5 text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary transition-all ease-linear duration-200" />
+                                     </Wrapper>
+                             }
+                         </NavLink>
+                     </Wrapper>
 
                         {
                             auth?.user?.position?.toUpperCase()==='ADMIN'

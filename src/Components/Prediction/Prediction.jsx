@@ -87,13 +87,16 @@ const [allPredictedData,setAllPredictedData] = useState([])
         }
         )
       },
-      // {
-      //   name: 'Today',
-      //   data: generateDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 20, {
-      //     min: 10,
-      //     max: 20
-      //   })
-      // },
+      {
+        name: 'Today',
+        data: allPredictedData?.map((item) => {
+          return {
+            x: item.date,
+            y: parseFloat(item.inflow_t1),
+          }
+        }
+        )
+      },
       // {
       //   name: 'Tomarrow',
       //   data: generateDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 20, {
