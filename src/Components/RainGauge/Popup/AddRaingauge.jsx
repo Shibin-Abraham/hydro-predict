@@ -7,14 +7,18 @@ import InputPopUp from "../../AtomicDesign/Molecule/PopUp/InputPopUp"
 import Form from "../../AtomicDesign/Atom/Form/Form"
 import Input from "../../AtomicDesign/Atom/Input/Input"
 import Button from "../../AtomicDesign/Atom/Button/Button"
-import {  useState } from "react"
+import {  useContext, useState } from "react"
 import { addNewRaingauge } from "../../../API/Handler/setDataHandler"
 import { usePopUp } from "../../Contexts/PopUpContext"
+import DamDataContext from "../../Contexts/DamDataContext/DamDataContext"
+import Select from "../../AtomicDesign/Atom/Input/Select"
 
 const AddRaingauge = ({setAddRaingauge}) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const {showError, showSuccess} = usePopUp()
+    const {damData} = useContext(DamDataContext)
+
     const {
             register,
             handleSubmit,
@@ -30,8 +34,9 @@ const AddRaingauge = ({setAddRaingauge}) => {
             "red_level": parseFloat(data?.red_level),
             "orange_level": parseFloat(data?.orange_level),
             "yellow_level": parseFloat(data?.yellow_level),
+            "catchment_dam_id": data?.damId,
         }
-        console.log("Form data:", data);
+        console.log("Form data:", data,formatedData);
         if((formatedData?.orange_level>formatedData?.red_level)&&(formatedData?.red_level!==0)){
             setError('orange_level', {
                 type: 'manual',
@@ -49,7 +54,7 @@ const AddRaingauge = ({setAddRaingauge}) => {
 
         try {
             setIsLoading(true)
-            const response = await addNewRaingauge(data)
+            const response = await addNewRaingauge(formatedData)
             console.log(response);
             showSuccess("New raingauge added successfully!")
             setAddRaingauge(prev=>prev.fetchAllRaingaugeData())
@@ -227,6 +232,19 @@ const AddRaingauge = ({setAddRaingauge}) => {
                         {errors.yellow_level.message}
                     </Typography>
                     )}
+
+                    <Typography tag="p" text="Select Catchment Dam" className="text-sm pt-2" />
+                    <Wrapper className="w-full h-10 relative">
+                        <Select
+                            options={damData}
+                            placeholder={"Select Dam"}
+                            className={`w-full h-11 mt-1 rounded-md border-[1px] border-black dark:border-[#7d8da1]
+                            placeholder:text-[#7d8da1] outline-none bg-transparent pl-2 text-sm cursor-pointer`}
+                            firstOptionClassName="text-[#7d8da1] dark:bg-black"
+                            childClassName="dark:bg-black"
+                            {...register("damId", )}
+                        />
+                    </Wrapper>
                     <Button
                         type="submit"
                         className="w-full mt-5 h-11 bg-primary dark:bg-primary-variant text-white hover:bg-primary-hover"

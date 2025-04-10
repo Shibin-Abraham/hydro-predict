@@ -19,6 +19,7 @@ import moment from 'moment'
 import { BsDatabaseFillSlash } from 'react-icons/bs'
 import { alertColor as rainAlertColor } from "../../AtomicDesign/Molecule/Gauge/utils"
 import { processRainfallData } from '../../RainGauge/utils'
+import { IoMdRainy } from 'react-icons/io'
 
 const PreviousAnalysis = ({mode,theme}) => {
   const color = getColor({theme}) 
@@ -28,7 +29,7 @@ const PreviousAnalysis = ({mode,theme}) => {
   const location = useLocation()
   const { id,previousDate } = location.state || {}
   //const { raingaugeData } = useContext(RaingaugeContext)
-  const { dates, averages } = processRainfallData(prevRainfallData);
+  const { dates, averages } = processRainfallData(prevRainfallData.filter(item=>parseInt(item.catchment_dam_id)===parseInt(id)));
     console.log('previous date',previousDate)
 
   const [filteredDamData,setFilteredDamData] = useState()
@@ -255,7 +256,7 @@ const PreviousAnalysis = ({mode,theme}) => {
           <Typography tag="h4" className="text-lg font-bold mt-2 " text="Rainfall" />
           <Wrapper className='w-full h-[80vh] flex flex-col gap-3 overflow-y-scroll no-scrollbar mt-2 '>
           {
-              prevRainfallData.map((data,index)=>{
+              prevRainfallData.filter(item=>parseInt(item.catchment_dam_id)===parseInt(id)).map((data,index)=>{
                   const value = parseFloat(data?.raingauge_data?.[0]?.value) || 0;
                   const date = data?.raingauge_data?.[0]?.date|| 0;
                   const redLevel = parseFloat(data?.red_level);
@@ -265,7 +266,7 @@ const PreviousAnalysis = ({mode,theme}) => {
 
                   return(
                     <Wrapper key={index} className='w-[90%] p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200'>
-                      <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                      <IoMdRainy />    
                       <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
                       {data?.station_name}- 
                         <Typography tag='span' className={`${color}`} text={value} />
@@ -275,6 +276,14 @@ const PreviousAnalysis = ({mode,theme}) => {
                       </Wrapper>
                   )
               })
+            }
+            {
+              prevRainfallData.filter(item=>parseInt(item.catchment_dam_id)===parseInt(id)).length===0&&
+                    <Wrapper className='w-60 p-6 h-12 rounded-xl flex justify-center items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200 overflow-x-scroll no-scrollbar'>
+                        <Typography tag='span' className='text-[11px] text-color-red'>
+                          No rainfall data available for this dam
+                        </Typography>
+                    </Wrapper>
             }
           
           </Wrapper>

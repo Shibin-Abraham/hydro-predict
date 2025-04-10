@@ -31,6 +31,7 @@ import RainAlertSkeleton from "./loader/RainAlertSkeleton"
 import SettingsContext from "../Contexts/SettingsContext/SettingsContext"
 import RaingaugeContext from "../Contexts/RaingaugeContext/RaingaugeContext"
 import { alertColor } from "../AtomicDesign/Molecule/Gauge/utils"
+import { IoMdRainy } from "react-icons/io"
 
 const DashBoard = ({mode,setMode,setTheme}) => {
     const {showError } = usePopUp()
@@ -423,8 +424,8 @@ const DashBoard = ({mode,setMode,setTheme}) => {
                                 const color = alertColor(value, 'bg', redLevel, orangeLevel, yellowLevel);
 
                                 return(
-                                    <Wrapper key={index} className='w-full p-2 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
-                                        <Media mediaType="image" mediaSrc={drop} className="w-9 h-9 mt-1 ml-2 rounded-md" imgClass="rounded-none" />
+                                    <Wrapper key={index} className='w-full py-4 px-3 flex items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] rounded-lg'>
+                                        <IoMdRainy className="size-6" />
                                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-2" text={data?.station_name} />
                                         <Typography tag="h6" className="text-xs text-black dark:text-[#7d8da196] leading-3 ml-4" text={`Rainfall-${value}mm`} />
                                         <Wrapper className={`w-2 h-2 rounded-full ${value>yellowLevel?color:null} ml-auto mr-4`} />

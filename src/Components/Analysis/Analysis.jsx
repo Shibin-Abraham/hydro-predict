@@ -19,6 +19,7 @@ import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
 import { LuHistory } from 'react-icons/lu'
 import moment from 'moment'
 import { BiCloudUpload } from 'react-icons/bi'
+import { IoMdRainy } from "react-icons/io";
 import { getDamData } from '../../API/Handler/getDataHandler'
 import { checkDamHandlingUser } from '../../API/Handler/setDataHandler'
 import { AuthContext } from '../Contexts/AuthContext'
@@ -41,7 +42,7 @@ const Analysis = ({mode,theme,setAddDamData,setAddDamAlert,setAddBulkUpload}) =>
   const { auth } = useContext(AuthContext)
   const {damData,setDamData} = useContext(DamDataContext)
   const { raingaugeData } = useContext(RaingaugeContext)
-  const { dates, averages } = processRainfallData(raingaugeData);
+  const { dates, averages } = processRainfallData(raingaugeData.filter(item=>parseInt(item.catchment_dam_id)===parseInt(selectedDamId)));
   //console.log('filterd dam analysis',damData)
 
   const [donutState, setDonutState] = useState(donutStyles({data:filteredDamData?.[0]}));
@@ -227,7 +228,7 @@ const Analysis = ({mode,theme,setAddDamData,setAddDamAlert,setAddBulkUpload}) =>
           <Typography tag="h4" className="text-lg font-bold mt-2 " text="Rainfall" />
           <Wrapper className='w-full h-[80vh] flex flex-col gap-3 overflow-y-scroll no-scrollbar mt-2 '>
             {
-              raingaugeData.map((data,index)=>{
+              raingaugeData.filter(item=>parseInt(item.catchment_dam_id)===parseInt(selectedDamId)).map((data,index)=>{
                   const value = parseFloat(data?.raingauge_data?.[0]?.value) || 0;
                   const date = data?.raingauge_data?.[0]?.date|| 0;
                   const redLevel = parseFloat(data?.red_level);
@@ -237,7 +238,7 @@ const Analysis = ({mode,theme,setAddDamData,setAddDamAlert,setAddBulkUpload}) =>
 
                   return(
                     <Wrapper key={index} className='w-60 p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200 overflow-x-scroll no-scrollbar'>
-                      <Media mediaType="image" mediaSrc={drop} className="w-6 h-6 rounded-md" imgClass="rounded-none" />   
+                      <IoMdRainy /> 
                       <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
                       {data?.station_name}- 
                         <Typography tag='span' className={`${color}`} text={value} />
@@ -247,6 +248,14 @@ const Analysis = ({mode,theme,setAddDamData,setAddDamAlert,setAddBulkUpload}) =>
                       </Wrapper>
                   )
               })
+            }
+            {
+              raingaugeData.filter(item=>parseInt(item.catchment_dam_id)===parseInt(selectedDamId)).length===0&&
+                    <Wrapper className='w-60 p-6 h-12 rounded-xl flex justify-center items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200 overflow-x-scroll no-scrollbar'>
+                        <Typography tag='span' className='text-[11px] text-color-red'>
+                          No rainfall data available for this dam
+                        </Typography>
+                    </Wrapper>
             }
           </Wrapper>
           </Wrapper>
