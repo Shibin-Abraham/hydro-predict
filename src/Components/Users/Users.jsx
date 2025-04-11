@@ -14,10 +14,13 @@ import UserCardLoader from './loader/UserCardLoader'
 import { FaUsersCog } from 'react-icons/fa'
 import { IoRainy } from 'react-icons/io5'
 import RaingaugeContext from '../Contexts/RaingaugeContext/RaingaugeContext'
+import BtnLoader from '../AtomicDesign/Atom/Loader/BtnLoader'
 
 const Users = ({mode,setOpenUserAssignment,setOpenRainGaugeUserAssignment}) => {
     const [isLoading,setIsLoading] = useState(null)
     const [loadingUsersData,setLoadingUsersData] = useState(true)
+    const [loadingDamHandlingUsers,setLoadingDamHandlingUsers] = useState(true)
+    const [loadingRaingaugeHandlingUsers,setLoadingRaingaugeHandlingUsers] = useState(true)
     const [openTooltip,setOpenTooltip] = useState(null)
     const {expand} = useContext(SettingsContext)
     const [users,setUsers] = useState([])
@@ -40,6 +43,7 @@ const fetchUsers = useCallback(async ()=>{
 },[])
 
 const fetchDamHandlingUsers = useCallback(async (params = {})=>{
+    setLoadingDamHandlingUsers(true)
     try {
         const {data} =await getDamHandlingUsers(params)
         console.log(data)
@@ -47,10 +51,13 @@ const fetchDamHandlingUsers = useCallback(async (params = {})=>{
         //console.log('dd',await damHandlingUsers)
     } catch (error) {
         console.log(error)
+    }finally{
+        setLoadingDamHandlingUsers(false)
     }
 },[])
 
 const fetchRaingaugeHandlingUsers = useCallback(async (params = {})=>{
+    setLoadingRaingaugeHandlingUsers(true)
     try {
         const {data} =await getRaingaugeHandlingUsers(params)
         console.log(data)
@@ -58,6 +65,8 @@ const fetchRaingaugeHandlingUsers = useCallback(async (params = {})=>{
         //console.log('dd',await damHandlingUsers)
     } catch (error) {
         console.log(error)
+    }finally{
+        setLoadingRaingaugeHandlingUsers(false)
     }
 },[])
 
@@ -97,7 +106,16 @@ useEffect(()=>{
                                     <Wrapper>
                                         <Typography tag="p" className="text-sm ml-2 capitalize" text={dam?.name} />
                                         <Typography tag="p" className="text-xs ml-2 dark:text-[#7d8da196] leading-3" text={`users: `} >
-                                            <Typography tag='span' className={`text-xs ${damHandling?.[0]?.dam?.users?.length!==(undefined)?'text-primary':'text-color-red'}`} text={damHandling?.[0]?.dam?.users?.length??'0'} />
+                                            {
+                                                loadingDamHandlingUsers?
+                                                    <BtnLoader
+                                                        className='w-full h-full border-b border-color-border dark:border-[#161d29f5] flex items-center justify-center'
+                                                        spinnerClassName='w-3 h-3 border-[2px] border-[#575353] border-t-white rounded-[50%] animate-spin'
+                                                    />
+                                                :
+                                                    <Typography tag='span' className={`text-xs ${damHandling?.[0]?.dam?.users?.length!==(undefined)?'text-primary':'text-color-red'}`} text={damHandling?.[0]?.dam?.users?.length??'0'} />
+                                            }
+                                            
                                         </Typography>
                                     </Wrapper>
                                 </Wrapper>
@@ -198,7 +216,15 @@ useEffect(()=>{
                                     <Wrapper>
                                         <Typography tag="p" className="text-sm ml-2 capitalize" text={gauge?.station_name} />
                                         <Typography tag="p" className="text-xs ml-2 dark:text-[#7d8da196] leading-3" text={`users: `} >
-                                            <Typography tag='span' className={`text-xs ${raingaugeHandling?.[0]?.raingauge?.users?.length!==(undefined)?'text-primary':'text-color-red'}`} text={raingaugeHandling?.[0]?.raingauge?.users?.length??'0'} />
+                                            {
+                                                loadingRaingaugeHandlingUsers?
+                                                    <BtnLoader
+                                                        className='w-full h-full border-b border-color-border dark:border-[#161d29f5] flex items-center justify-center'
+                                                        spinnerClassName='w-3 h-3 border-[2px] border-[#575353] border-t-white rounded-[50%] animate-spin'
+                                                    />
+                                                :
+                                                    <Typography tag='span' className={`text-xs ${raingaugeHandling?.[0]?.raingauge?.users?.length!==(undefined)?'text-primary':'text-color-red'}`} text={raingaugeHandling?.[0]?.raingauge?.users?.length??'0'} />
+                                            }
                                         </Typography>
                                     </Wrapper>
                                 </Wrapper>
