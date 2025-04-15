@@ -252,7 +252,8 @@ const PreviousAnalysis = ({mode,theme}) => {
                  </Wrapper>             
               </Wrapper>
           </Wrapper>
-          <Wrapper className='w-[40%] h-full '>
+          <Wrapper className='w-[40%] h-full'>
+          <Wrapper className={`w-full ${filteredDamData?.[0]?.dam_data?.[0]?.remarks===null?'h-full':'h-[63vh]'} overflow-y-scroll no-scrollbar`}>
           <Typography tag="h4" className="text-lg font-bold mt-2 " text="Rainfall" />
           <Wrapper className='w-full h-[80vh] flex flex-col gap-3 overflow-y-scroll no-scrollbar mt-2 '>
           {
@@ -287,6 +288,15 @@ const PreviousAnalysis = ({mode,theme}) => {
             }
           
           </Wrapper>
+          </Wrapper>
+          { filteredDamData?.[0]?.dam_data?.[0]?.remarks &&  <Wrapper className='w-full h-auto pt-2'>
+                <Typography tag="h4" className="text-lg font-bold mt-2 " text="Remarks" />
+                <Wrapper className='w-60 mt-1 h-24 rounded-xl border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer overflow-y-scroll no-scrollbar p-2'>
+                  <Typography tag="p" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                    {filteredDamData?.[0]?.dam_data?.[0]?.remarks}
+                  </Typography>
+                </Wrapper>
+            </Wrapper>}
           </Wrapper>
           
          </Wrapper>

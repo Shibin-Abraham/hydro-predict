@@ -7,10 +7,12 @@ import Wrapper from "../../AtomicDesign/Atom/Wrapper/Wrapper";
 import InputPopUp from "../../AtomicDesign/Molecule/PopUp/InputPopUp";
 import Button from "../../AtomicDesign/Atom/Button/Button";
 import { ExcelRenderer } from "react-excel-renderer";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { usePopUp } from "../../Contexts/PopUpContext";
 import { addBulkDamData } from "../../../API/Handler/setDataHandler";
 import { excelSerialToDate, excelTimeToString } from "./utils";
+import Select from "../../AtomicDesign/Atom/Input/Select";
+import DamDataContext from "../../Contexts/DamDataContext/DamDataContext";
 
 const BulkUpload = ({ setAddBulkUpload }) => {
     const [header, setHeader] = useState([]);
@@ -18,8 +20,10 @@ const BulkUpload = ({ setAddBulkUpload }) => {
     const [fileName, setFileName] = useState("");
     const [validationError, setValidationError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedDamId,setSelectedDamId] = useState(1) //default damid eg: 1-idukki
 
     const { showSuccess, showError } = usePopUp()
+    const {damData} = useContext(DamDataContext)
 
     const handleFile = (e) => {
         const file = e.target.files[0];
@@ -141,6 +145,7 @@ const BulkUpload = ({ setAddBulkUpload }) => {
                 onClick={() => setAddBulkUpload((prev) => ({ ...prev, state: false }))}
                 className="absolute z-20 size-5 text-[#595959] dark:text-[#7d8da196] top-4 right-4 hover:cursor-pointer"
             />
+            
             <Wrapper className="w-full flex flex-col items-center justify-start content-start px-4 py-4 overflow-y-scroll no-scrollbar text-[#595959] dark:text-[#7d8da1]">
                 <Wrapper className="p-1 rounded-3xl bg-primary">
                     <Wrapper className="w-full h-full bg-white rounded-3xl px-8 py-[1px]">
@@ -151,7 +156,17 @@ const BulkUpload = ({ setAddBulkUpload }) => {
                         />
                     </Wrapper>
                 </Wrapper>
-                <Wrapper className="flex items-center justify-center w-full pt-4">
+                
+                <Wrapper className="w-full pt-4">
+                <Select
+                    options={damData} 
+                    onChange={(e)=>setSelectedDamId(parseInt(e.target.value))}
+                    className='w-32 mb-4 h-6 bg-inherit rounded-md text-sm border-2 border-color-border dark:border-[#161d29f5] outline-none cursor-pointer' 
+                    firstOptionClassName="dark:bg-[#121721f5]"
+                    childClassName="dark:bg-[#121721f5]"
+                    placeholder="Select Dam" 
+                    defaultValue={selectedDamId}
+                    />
                     <label
                         htmlFor="dropzone-file"
                         className="flex flex-col items-center justify-center w-full h-28 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"

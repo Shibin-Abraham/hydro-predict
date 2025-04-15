@@ -224,7 +224,8 @@ const Analysis = ({mode,theme,setAddDamData,setAddDamAlert,setAddBulkUpload}) =>
                  </Wrapper>             
               </Wrapper>
           </Wrapper>
-          <Wrapper className='w-[40%] h-full '>
+          <Wrapper className='w-[40%] h-full'>
+          <Wrapper className={`w-full ${filteredDamData?.[0]?.dam_data?.[0]?.remarks===null?'h-full':'h-[63vh]'} overflow-y-scroll no-scrollbar`}>
           <Typography tag="h4" className="text-lg font-bold mt-2 " text="Rainfall" />
           <Wrapper className='w-full h-[80vh] flex flex-col gap-3 overflow-y-scroll no-scrollbar mt-2 '>
             {
@@ -239,7 +240,7 @@ const Analysis = ({mode,theme,setAddDamData,setAddDamAlert,setAddBulkUpload}) =>
                   return(
                     <Wrapper key={index} className='w-60 p-6 h-12 rounded-xl flex justify-start items-center border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer hover:ml-1 transition-all ease-linear duration-200 overflow-x-scroll no-scrollbar'>
                       <IoMdRainy /> 
-                      <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                      <Typography tag="span" className="text-xs text-black dark:text-[#7d8da196] ml-1 ">
                       {data?.station_name}- 
                         <Typography tag='span' className={`${color}`} text={value} />
                         mm
@@ -258,8 +259,18 @@ const Analysis = ({mode,theme,setAddDamData,setAddDamAlert,setAddBulkUpload}) =>
                     </Wrapper>
             }
           </Wrapper>
-          </Wrapper>
           
+          </Wrapper>
+          { filteredDamData?.[0]?.dam_data?.[0]?.remarks &&  <Wrapper className='w-full h-auto pt-2'>
+                <Typography tag="h4" className="text-lg font-bold mt-2 " text="Remarks" />
+                <Wrapper className='w-60 mt-1 h-24 rounded-xl border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer overflow-y-scroll no-scrollbar p-2'>
+                  <Typography tag="p" className="text-xs text-black dark:text-[#7d8da196] ml-1">
+                    {filteredDamData?.[0]?.dam_data?.[0]?.remarks}
+                  </Typography>
+                </Wrapper>
+            </Wrapper>}
+           </Wrapper>
+           
          </Wrapper>
     </Wrapper>
   )
