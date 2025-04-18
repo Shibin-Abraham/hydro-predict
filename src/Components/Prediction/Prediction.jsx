@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState,useRef } from "react"
 import Wrapper from "../AtomicDesign/Atom/Wrapper/Wrapper"
 
 import { usePopUp } from "../Contexts/PopUpContext"
@@ -10,30 +10,31 @@ import Button from "../AtomicDesign/Atom/Button/Button"
 import ReactApexChart from "react-apexcharts"
 import Pichart from "../AtomicDesign/Molecule/Pichart/Pichart"
 import SettingsContext from "../Contexts/SettingsContext/SettingsContext"
-import { set, useForm } from "react-hook-form"
+import {  useForm } from "react-hook-form"
 import { decimalNumberPattern } from "../Analysis/Popup/utils"
 import axios from "axios"
 import { getPredictionData } from "../../API/Handler/getDataHandler"
 import DamDataContext from "../Contexts/DamDataContext/DamDataContext"
+import { GiWaterSplash } from "react-icons/gi"
+import { Transition } from 'semantic-ui-react';
+import { BsStars } from "react-icons/bs"
 
 // eslint-disable-next-line react/prop-types
 const Prediction = ({mode}) => {
-  const {expand} = useContext(SettingsContext)
-  console.log('expand',generateDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 20, {
-    min: 10,
-    max: 60
-  }))
-
+const {expand} = useContext(SettingsContext)
 const [isLoading,setIsLoading] = useState(false) 
 const [loading,setLoading] = useState(false)
 const [predictedData,setPredictedData] = useState({inflow_t1:0,inflow_t2:0,}) 
+const [manuelPredictedData,setManuelPredictedData] = useState({inflow_t1:0,inflow_t2:0,}) 
 const [allPredictedData,setAllPredictedData] = useState([])
+const [boxesVisible, setBoxesVisible] = useState(false);
  const {
         register,
         handleSubmit,
         setError,
         formState: { errors },
       } = useForm();
+const resultRef = useRef(null)
 
       const onSubmit = async (data) => {
         const features = {
@@ -56,10 +57,16 @@ const [allPredictedData,setAllPredictedData] = useState([])
         const {data} = await axios.post('http://127.0.0.1:8001/api/dam/predict/1/', features);
         // OR using the api instance: const response = await api.post('/predict/1/', data);
         console.log(data);
-        setPredictedData({
+        setManuelPredictedData({
           inflow_t1: data.predicted_inflow_tomorrow ?? 0,
           inflow_t2: data.predicted_inflow_day_after ?? 0,
         })
+        if(data){
+          setBoxesVisible(true)
+          setTimeout(() => {
+            setBoxesVisible(false);
+          }, 50_000);
+        }
       } catch (error) {
         console.log(error)
       }finally{
@@ -79,31 +86,16 @@ const [allPredictedData,setAllPredictedData] = useState([])
     series: [
       {
         name: 'Actual',
-        data: filterIdkData?.[0]?.dam_data?.map((item) => {
-          return {
-            x: item.date,
-            y: parseFloat(item.inflow),
-          }
-        }
-        )
+        data: []
       },
       {
         name: 'Today',
-        data: allPredictedData?.map((item) => {
-          return {
-            x: item.date,
-            y: parseFloat(item.inflow_t1),
-          }
-        }
-        )
+        data: []
       },
-      // {
-      //   name: 'Tomarrow',
-      //   data: generateDayWiseTimeSeries(new Date('11 Feb 2017 GMT').getTime(), 20, {
-      //     min: 10,
-      //     max: 15
-      //   })
-      // }
+      {
+        name: 'Tomarrow',
+        data: []
+      }
     ],
     options: {
       chart: {
@@ -221,6 +213,7 @@ const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
           try {
               const {data} = await getPredictionData(params)
               setAllPredictedData(data)
+              console.log('api prdicted data : ',allPredictedData)
               setPredictedData(prev => ({
                 ...prev,
                 inflow_t1: data?.[0]?.predicted_inflow_t1 ?? 0,
@@ -238,8 +231,59 @@ const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
 
   useEffect(() => {
     showInfo('Predictions are estimates only. They are based on historical data.')
-    fetchAllPredictionData()
+    fetchAllPredictionData({limit:9})
   }, [])
+
+  useEffect(() => {
+    if (boxesVisible) {
+      resultRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [boxesVisible]);
+
+  useEffect(() => {
+    
+        const actualValues = (filterIdkData?.[0]?.dam_data || [])
+          .map(item => ({
+            x: item.date,
+            y: parseFloat(item.inflow).toFixed(2),
+          }))
+          
+        const predictedT1Values = (allPredictedData || [])
+          .map((item) => ({
+            x: item.date_t1,
+            y: item.predicted_inflow_t1
+                ? parseFloat(item.predicted_inflow_t1).toFixed(2)
+                : 0,
+          }))
+
+          const predictedT2Values = (allPredictedData || [])
+          .map((item) => ({
+            x: item.date_t2,
+            y: item.predicted_inflow_t2
+                ? parseFloat(item.predicted_inflow_t2).toFixed(2)
+                : 0,
+          }))
+          
+        console.log(actualValues,predictedT1Values)
+
+    setState((prevState) => ({
+      ...prevState,
+      series: [
+        {
+          name: 'Actual',
+          data: actualValues
+        },
+        {
+          name: 'Predicted (Next 24 H)',
+          data: predictedT1Values
+        },
+        {
+          name: 'Predicted (Next 48 H)',
+          data: predictedT2Values
+        },
+      ],
+    }));
+  }, [allPredictedData]);
              
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg overflow-hidden ${expand?'pl-8':'pl-16'}`}>
@@ -260,7 +304,7 @@ const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
           <Wrapper className="w-full h-[25vh] flex items-center justify-between">
             <Wrapper className="w-[20vw] h-full flex flex-col border-2 dark:border border-primary  dark:bg-[#121721f5] rounded-lg overflow-hidden">
               <Wrapper className='w-full h-6 flex justify-between'>
-              <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1 text-primary" text="Today" />
+              <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1 text-primary" text="Next 24:00 hours" />
                   <Wrapper className='w-20 h-full bg-primary rounded-bl-lg grid place-items-center'>
                   <Typography tag="h4" className="text-[10px] font-normal text-center text-white" text="AI Generated" />
                   </Wrapper>
@@ -299,7 +343,7 @@ const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
             </Wrapper>
             <Wrapper className="w-[20vw] h-full flex flex-col border-2 border-color-light-gray dark:border dark:border-color-dark-gray  dark:bg-[#121721f5] rounded-lg overflow-hidden">
               <Wrapper className='w-full h-6 flex justify-between'>
-                  <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1" text="Tomorrow" />
+                  <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1" text="Next 48:00 hours" />
                   <Wrapper className='w-20 h-full bg-color-light-gray dark:bg-color-dark-gray rounded-bl-lg grid place-items-center'>
                   <Typography tag="h4" className="text-[10px] font-normal text-center text-white" text="AI Generated" />
                   </Wrapper>
@@ -342,10 +386,14 @@ const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
             <ReactApexChart options={state.options} series={state.series} type="area" height={320} />
           </Wrapper>
         </Wrapper>
-        <Wrapper className='w-[40vw] h-full pt-3 pl-8 overflow-y-scroll no-scrollbar'>
+        <Wrapper className='w-[40vw] h-full pl-8 overflow-y-scroll no-scrollbar'>
+          <Wrapper className='flex items-center'>
+            <Typography tag="p" text={"AI Assist- Manual Prediction"} className="text-lg font-medium text-primary"/>
+            <BsStars className="animate-spin-ai" />
+          </Wrapper>
             <Form
             onSubmit={handleSubmit(onSubmit)}
-              className='w-full text-black dark:text-[#7d8da1] flex flex-col gap-2 justify-between'>
+              className='w-full text-black dark:text-[#7d8da1] flex flex-col gap-2 justify-between pt-2'>
                 <Wrapper className='flex gap-3 justify-between'>
                     <Wrapper className='w-[47%]'>
                       <Typography tag="p" text="Latest Inflow" className=" text-sm" />
@@ -578,6 +626,37 @@ const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
                         </Button>
 
           </Form>
+          <Wrapper ref={resultRef} className="w-full pt-4 flex justify-between gap-3 pb-2">
+            <Transition animation="fly right" duration={2000} visible={boxesVisible}>
+            <Wrapper className="h-16 w-[45%] gap-2 border-2 dark:border border-primary  dark:bg-[#121721f5] rounded-lg cursor-pointer">
+              <Wrapper className='w-full h-6 flex justify-between'>
+                <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1 text-primary" text="Next 24:00 hours" />
+                    <Wrapper className='w-20 h-full bg-primary rounded-bl-lg grid place-items-center'>
+                    <Typography tag="h4" className="text-[10px] font-normal text-center text-white" text="AI Generated" />
+                    </Wrapper>
+                </Wrapper>
+              <Typography tag="p" className="text-sm font-medium pl-3 pt-2">
+                Predicted Inflow: 
+                <Typography tag="span" text={`${parseFloat(manuelPredictedData?.inflow_t1).toFixed(4)}`} className="text-sm font-semibold text-primary ml-1"/>
+              </Typography>
+            </Wrapper>
+          </Transition>
+
+          <Transition animation="fly right" duration={2000} visible={boxesVisible}>
+            <Wrapper className="h-16 w-[45%] border-2 border-color-light-gray dark:border dark:border-color-dark-gray  dark:bg-[#121721f5] rounded-lg mr-1 cursor-pointer">
+                <Wrapper className='w-full h-6 flex justify-between'>
+                    <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1" text="Next 48:00 hours" />
+                    <Wrapper className='w-20 h-full bg-color-light-gray dark:bg-color-dark-gray rounded-bl-lg grid place-items-center'>
+                    <Typography tag="h4" className="text-[10px] font-normal text-center text-white" text="AI Generated" />
+                    </Wrapper>
+                </Wrapper>
+                <Typography tag="p" className="text-sm font-medium pl-3 pt-2">
+                Predicted Inflow: 
+                <Typography tag="span" text={`${parseFloat(manuelPredictedData?.inflow_t2).toFixed(4)}`} className="text-sm font-semibold text-color-light-gray dark:text-color-dark-gray ml-1"/>
+              </Typography>
+            </Wrapper>
+          </Transition>
+          </Wrapper>  
         </Wrapper>
         
       </Wrapper>
@@ -587,16 +666,3 @@ const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
 }
 
 export default Prediction
-
-const generateDayWiseTimeSeries = (baseTimestamp, count, yrange) => {
-  let i = 0;
-  const series = [];
-  while (i < count) {
-    const x = baseTimestamp;
-    const y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-    series.push([x, y]);
-    baseTimestamp += 86400000; // Increment by one day (in milliseconds)
-    i++;
-  }
-  return series;
-};

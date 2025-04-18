@@ -1,11 +1,15 @@
 /* eslint-disable react/prop-types */
 
-const Wrapper = ({ className, children, ...props }) => {
+import { forwardRef } from "react"
+
+const Wrapper = forwardRef( ({ className, children, ...props },ref) => {
     return (
-        <div className={className} {...props}>
+        <div className={className} ref={ref} {...props}>
             {children}
         </div>
     )
-}
+})
+
+Wrapper.displayName = "Wrapper"
 
 export default Wrapper

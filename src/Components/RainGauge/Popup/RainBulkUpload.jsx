@@ -4,13 +4,15 @@ import CloseIcon from '../../../Assets/icons/CloseIcon'
 import InputPopUp from '../../AtomicDesign/Molecule/PopUp/InputPopUp'
 import Typography from '../../AtomicDesign/Atom/Typography/Typography'
 import { FaFileExcel } from 'react-icons/fa6'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { ExcelRenderer } from "react-excel-renderer";
 import { usePopUp } from '../../Contexts/PopUpContext'
 import Input from '../../AtomicDesign/Atom/Input/Input'
 import Button from '../../AtomicDesign/Atom/Button/Button'
 import { excelSerialToDate, excelTimeToString } from '../../Analysis/Popup/utils'
 import { addBulkRainFallData } from '../../../API/Handler/setDataHandler'
+import RaingaugeContext from '../../Contexts/RaingaugeContext/RaingaugeContext'
+import Select from '../../AtomicDesign/Atom/Input/Select'
 
 const RainBulkUpload = ({setAddRainBulkUpload}) => {
     const [header, setHeader] = useState([]);
@@ -18,8 +20,11 @@ const RainBulkUpload = ({setAddRainBulkUpload}) => {
     const [fileName, setFileName] = useState("");
     const [validationError, setValidationError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedRainGaugeId, setSelectedRainGaugeId] = useState(2);
+    const [serverError,setServerError] = useState([])
 
     const { showSuccess, showError } = usePopUp()
+    const { raingaugeData } = useContext(RaingaugeContext);
 
     const handleFile = (e) => {
             const file = e.target.files[0];
@@ -33,7 +38,6 @@ const RainBulkUpload = ({setAddRainBulkUpload}) => {
                     const newHeader = resp.rows[0]
                     const headerLower = newHeader.map((h) => h.toLowerCase().trim())
                     const requiredFields = [
-                        "raingauge_id",
                         "value",
                         "date",
                         "time"
@@ -54,13 +58,17 @@ const RainBulkUpload = ({setAddRainBulkUpload}) => {
         }
         const handleSubmit = async () => {
                 setIsLoading(true);
+                if (!selectedRainGaugeId) {
+                    setValidationError("Please select a Rain Gauge");
+                    setIsLoading(false);
+                    return
+                }
                 if (validationError || data.length === 0) {
                     return showError(validationError || "No data to submit");
                 }
             
                 // Define required fields based on API validation rules
                 const requiredFields = [
-                    "raingauge_id",
                     "value",
                     "date",
                     "time"
@@ -110,7 +118,11 @@ const RainBulkUpload = ({setAddRainBulkUpload}) => {
                 }
             
                 try {
-                    const { data } = await addBulkRainFallData({ data: validData });
+                    const validDataWithIds = validData.map(row => ({
+                        ...row,
+                        raingauge_id: selectedRainGaugeId,
+                    }));
+                    const { data } = await addBulkRainFallData({ data: validDataWithIds });
                     showSuccess(data?.message);
                     console.log(data);
                     setAddRainBulkUpload(prev=>prev.fetchAllRaingaugeData())
@@ -118,6 +130,14 @@ const RainBulkUpload = ({setAddRainBulkUpload}) => {
                 } catch (error) {
                     console.log(error);
                     showError(error?.message || 'An error occurred while uploading data');
+                    if(error?.response?.status === 422) {
+                        const errorsObj = error?.response?.data?.errors;
+                        // grab all the arrays of messages…
+                        const allErrorArrays = Object.values(errorsObj)
+                        // flatten them into one array of strings
+                        const flattened = allErrorArrays.flat();
+                        setServerError(flattened);
+                    }
                 }
                 finally {
                     setIsLoading(false);
@@ -140,7 +160,16 @@ const RainBulkUpload = ({setAddRainBulkUpload}) => {
                         />
                     </Wrapper>
                 </Wrapper>
-                <Wrapper className="flex items-center justify-center w-full pt-4">
+                <Wrapper className="flex flex-col items-start justify-center w-full pt-4">
+                    <Select
+                        options={raingaugeData.map((item) => ({id:item.id, name:item.station_name}))} 
+                        onChange={(e)=>setSelectedRainGaugeId(parseInt(e.target.value))}
+                        className='w-32 mb-4 h-6 bg-inherit rounded-md text-sm border-2 border-color-border dark:border-[#161d29f5] outline-none cursor-pointer' 
+                        firstOptionClassName="dark:bg-[#121721f5]"
+                        childClassName="dark:bg-[#121721f5]"
+                        placeholder="Select Dam" 
+                        defaultValue={selectedRainGaugeId}
+                    />
                     <label
                         htmlFor="dropzone-file"
                         className="flex flex-col items-center justify-center w-full h-28 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -157,6 +186,13 @@ const RainBulkUpload = ({setAddRainBulkUpload}) => {
                 </Wrapper>
                 {validationError && (
                     <Wrapper className="w-full mt-2 text-red-500 text-sm">{validationError}</Wrapper>
+                )}
+                {serverError && (
+                    serverError.map((msg, idx) => (
+                        <Wrapper key={idx} className="w-full text-red-500 text-sm">
+                          {msg}
+                        </Wrapper>
+                      ))
                 )}
                 <Wrapper className="w-full pt-4 overflow-x-scroll no-scrollbar">
                     <table className="w-full">
