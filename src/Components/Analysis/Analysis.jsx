@@ -263,7 +263,7 @@ const Analysis = ({mode,theme,setAddDamData,setAddDamAlert,setAddBulkUpload}) =>
           </Wrapper>
           { filteredDamData?.[0]?.dam_data?.[0]?.remarks &&  <Wrapper className='w-full h-auto pt-2'>
                 <Typography tag="h4" className="text-lg font-bold mt-2 " text="Remarks" />
-                <Wrapper className='w-60 mt-1 h-24 rounded-xl border-2 border-color-border dark:border-none dark:bg-[#121721f5] pl-2 cursor-pointer overflow-y-scroll no-scrollbar p-2'>
+                <Wrapper className='w-60 mt-1 h-auto max-h-24 rounded-xl border border-primary dark:bg-[#121721f5] pl-2 cursor-pointer overflow-y-scroll no-scrollbar p-2 '>
                   <Typography tag="p" className="text-xs text-black dark:text-[#7d8da196] ml-1">
                     {filteredDamData?.[0]?.dam_data?.[0]?.remarks}
                   </Typography>

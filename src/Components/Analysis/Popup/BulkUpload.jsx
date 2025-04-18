@@ -7,12 +7,13 @@ import Wrapper from "../../AtomicDesign/Atom/Wrapper/Wrapper";
 import InputPopUp from "../../AtomicDesign/Molecule/PopUp/InputPopUp";
 import Button from "../../AtomicDesign/Atom/Button/Button";
 import { ExcelRenderer } from "react-excel-renderer";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { usePopUp } from "../../Contexts/PopUpContext";
 import { addBulkDamData } from "../../../API/Handler/setDataHandler";
 import { excelSerialToDate, excelTimeToString } from "./utils";
 import Select from "../../AtomicDesign/Atom/Input/Select";
 import DamDataContext from "../../Contexts/DamDataContext/DamDataContext";
+import { getDamAlert } from "../../../API/Handler/getDataHandler";
 
 const BulkUpload = ({ setAddBulkUpload }) => {
     const [header, setHeader] = useState([]);
@@ -21,6 +22,8 @@ const BulkUpload = ({ setAddBulkUpload }) => {
     const [validationError, setValidationError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedDamId,setSelectedDamId] = useState(1) //default damid eg: 1-idukki
+    const [damAlert, setDamAlert] = useState([]);
+    const [serverError, setServerError] = useState([]);
 
     const { showSuccess, showError } = usePopUp()
     const {damData} = useContext(DamDataContext)
@@ -37,8 +40,6 @@ const BulkUpload = ({ setAddBulkUpload }) => {
                 const newHeader = resp.rows[0]
                 const headerLower = newHeader.map((h) => h.toLowerCase().trim())
                 const requiredFields = [
-                    "dam_id",
-                    "dam_alert_id",
                     "date",
                     "water_level",
                     "live_storage",
@@ -67,11 +68,13 @@ const BulkUpload = ({ setAddBulkUpload }) => {
         if (validationError || data.length === 0) {
             return showError(validationError || "No data to submit");
         }
-    
+        if(damAlert.length===0){
+            showError("No dam alert data found for the selected dam")
+            return setIsLoading(false)
+        }
+
         // Define required fields based on API validation rules
         const requiredFields = [
-            "dam_id",
-            "dam_alert_id",
             "date",
             "water_level",
             "live_storage",
@@ -123,9 +126,16 @@ const BulkUpload = ({ setAddBulkUpload }) => {
         if (validData.length === 0) {
             return showError("No valid data rows to submit after filtering");
         }
+
+        console.log("Valid data to be submitted:", validData);
     
         try {
-            const { data } = await addBulkDamData({ data: validData });
+            const validDataWithIds = validData.map(row => ({
+                ...row,
+                dam_id: selectedDamId,
+                dam_alert_id: damAlert[0].id
+            }));
+            const { data } = await addBulkDamData({ data: validDataWithIds });
             showSuccess(data?.message);
             console.log(data);
             setAddBulkUpload(prev=>prev.fetchAllDamData())
@@ -133,11 +143,40 @@ const BulkUpload = ({ setAddBulkUpload }) => {
         } catch (error) {
             console.log(error);
             showError(error?.message || 'An error occurred while uploading data');
+            if(error?.response?.status === 422) {
+                const errorsObj = error?.response?.data?.errors;
+                // grab all the arrays of messages…
+                const allErrorArrays = Object.values(errorsObj)
+                // flatten them into one array of strings
+                const flattened = allErrorArrays.flat();
+                setServerError(flattened);
+            }
         }
         finally {
             setIsLoading(false);
         }
     };
+
+    console.log(selectedDamId)
+
+    const fetchDamAlert = useCallback(async (params = {})=>{
+                try {
+                    setIsLoading(true)
+                    const {data} = await getDamAlert(params)
+                    setDamAlert(data)
+                    console.log("dam alert data",data)
+                } catch (error) {
+                    console.error("Error fetching dam data:", error)
+                }finally{
+                    setIsLoading(false)
+                }
+        },[])
+    
+        useEffect(()=>{
+            if(selectedDamId){
+            fetchDamAlert({id:selectedDamId})
+            }
+        },[selectedDamId,fetchDamAlert])
 
     return (
         <InputPopUp width="70%" className="w-full h-full bg-[#000000be] absolute flex items-center justify-center z-20">
@@ -158,14 +197,14 @@ const BulkUpload = ({ setAddBulkUpload }) => {
                 </Wrapper>
                 
                 <Wrapper className="w-full pt-4">
-                <Select
-                    options={damData} 
-                    onChange={(e)=>setSelectedDamId(parseInt(e.target.value))}
-                    className='w-32 mb-4 h-6 bg-inherit rounded-md text-sm border-2 border-color-border dark:border-[#161d29f5] outline-none cursor-pointer' 
-                    firstOptionClassName="dark:bg-[#121721f5]"
-                    childClassName="dark:bg-[#121721f5]"
-                    placeholder="Select Dam" 
-                    defaultValue={selectedDamId}
+                    <Select
+                        options={damData} 
+                        onChange={(e)=>setSelectedDamId(parseInt(e.target.value))}
+                        className='w-32 mb-4 h-6 bg-inherit rounded-md text-sm border-2 border-color-border dark:border-[#161d29f5] outline-none cursor-pointer' 
+                        firstOptionClassName="dark:bg-[#121721f5]"
+                        childClassName="dark:bg-[#121721f5]"
+                        placeholder="Select Dam" 
+                        defaultValue={selectedDamId}
                     />
                     <label
                         htmlFor="dropzone-file"
@@ -183,6 +222,13 @@ const BulkUpload = ({ setAddBulkUpload }) => {
                 </Wrapper>
                 {validationError && (
                     <Wrapper className="w-full mt-2 text-red-500 text-sm">{validationError}</Wrapper>
+                )}
+                {serverError && (
+                    serverError.map((msg, idx) => (
+                        <Wrapper key={idx} className="w-full text-red-500 text-sm">
+                          {msg}
+                        </Wrapper>
+                      ))
                 )}
                 <Wrapper className="w-full pt-4 overflow-x-scroll no-scrollbar">
                     <table className="w-full">
