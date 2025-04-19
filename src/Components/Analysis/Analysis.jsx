@@ -11,8 +11,6 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import { getColor, donutStyles, inflowStyles, getWaterLevelStyles, getCardData, getPreviousYearDate } from './utils'
 import Button from '../AtomicDesign/Atom/Button/Button'
 import AddSolidIcon from '../../Assets/icons/AddSolidIcon'
-import Media from '../AtomicDesign/Atom/Media/Media'
-import drop from "../../Assets/drop.png"
 import { useNavigate } from 'react-router-dom'
 import DamDataContext from '../Contexts/DamDataContext/DamDataContext'
 import SettingsContext from '../Contexts/SettingsContext/SettingsContext'

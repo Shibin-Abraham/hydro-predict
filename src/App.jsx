@@ -33,6 +33,7 @@ import RaingaugeProvider from "./Components/Contexts/RaingaugeContext/RaingaugeP
 import RainGaugeUserAssignment from "./Components/Users/Popup/RainGaugeUserAssignment";
 import AddRaingaugeData from "./Components/RainGauge/Popup/AddRaingaugeData";
 import RainBulkUpload from "./Components/RainGauge/Popup/RainBulkUpload";
+import Statistics from "./Components/Statistics/Statistics";
 
 function App() {
 
@@ -174,6 +175,16 @@ function App() {
                 </ProtectedLayout>
               }
             />
+            {/* <Route
+              path="/Statistics"
+              element={
+                <ProtectedLayout theme={theme}>
+
+                  <Statistics mode={mode} theme={theme} />
+              
+                </ProtectedLayout>
+              }
+            /> */}
             {auth?.user?.position.toUpperCase()==='ADMIN'&&<Route
               path="/users"
               element={

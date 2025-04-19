@@ -90,8 +90,8 @@ const NavBar = () => {
                         </NavLink>
                     </Wrapper>
 
-                    <Wrapper className="h-12 relative">
-                         <NavLink to="/Logs" className={({ isActive }) => {
+                    {/* <Wrapper className="h-12 relative">
+                         <NavLink to="/Statistics" className={({ isActive }) => {
                              return isActive ? "active" : null
                          }}>{
                                  expand ?
@@ -100,7 +100,7 @@ const NavBar = () => {
                          [.active_&]:before:left-0">
                                          <TableIcon className="size-4 text-black dark:text-[#7d8da1] ml-6 [.active_&]:text-primary group-hover:ml-10 group-hover:text-primary transition-all ease-linear duration-200" />
                                          <Typography tag="h4" className="text-black dark:text-[#7d8da1] [.active_&]:text-primary group-hover:text-primary">
-                                             Logs
+                                         Statistics
                                          </Typography>
                                      </Wrapper>
                                      :
@@ -109,9 +109,9 @@ const NavBar = () => {
                                      </Wrapper>
                              }
                          </NavLink>
-                     </Wrapper>
+                     </Wrapper> */}
  
-                     <Wrapper className="h-12 relative">
+                     {/* <Wrapper className="h-12 relative">
                          <NavLink to="/Activities" className={({ isActive }) => {
                              return isActive ? "active" : null
                          }}>{
@@ -130,7 +130,7 @@ const NavBar = () => {
                                      </Wrapper>
                              }
                          </NavLink>
-                     </Wrapper>
+                     </Wrapper> */}
 
                         {
                             auth?.user?.position?.toUpperCase()==='ADMIN'

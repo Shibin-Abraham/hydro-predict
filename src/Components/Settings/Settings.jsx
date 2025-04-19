@@ -1,25 +1,41 @@
+/* eslint-disable react/prop-types */
 
 import Wrapper from '../AtomicDesign/Atom/Wrapper/Wrapper'
 import Typography from '../AtomicDesign/Atom/Typography/Typography'
 import MoonIcon from '../../Assets/icons/MoonIcon'
 import SunIcon from '../../Assets/icons/SunIcon'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import SettingsContext from '../Contexts/SettingsContext/SettingsContext'
 import { useNavigate } from 'react-router-dom'
-import Cookies from 'js-cookie';
+import { RiLogoutCircleLine } from 'react-icons/ri'
+import { logout } from '../../API/Handler/authHandler'
+import { usePopUp } from '../Contexts/PopUpContext'
+import BtnLoader from '../AtomicDesign/Atom/Loader/BtnLoader'
 
 const Settings = ({ mode, setMode, theme, setTheme }) => {
+  const [isLoading,setIsLoading] = useState(false)
+
   const {expand,setExpand} = useContext(SettingsContext)
+  const {showError} = usePopUp()
+
   const navigate = useNavigate();
   console.log('cookie',document.cookie)
 
-    const handleLogout = () => {
-        // Clear the JWT cookie by setting its expiration date to a past date.
-        // Replace 'jwt' with the actual name of your JWT cookie if it's different.
-        Cookies.remove('jwt', { path: '/' });
-        
-        // Redirect to the "/login" route.
-        navigate("/login");
+    const handleLogout = async () => {
+        try {
+            setIsLoading(true)
+            const response = await logout();
+            console.log(response)
+            if(response.status===200){
+              navigate("/login");
+            }
+        } catch (error) {
+            console.log(error)
+            showError(error.response?.data?.error??'Error occured')
+        }finally{
+            setIsLoading(false)
+        }
+
     };
   return (
     <Wrapper className={`w-full h-full text-[#595959] dark:text-[#7d8da1] text-lg overflow-hidden ${expand?'p-8':'py-8 pl-16 pr-8'}`}>
@@ -106,8 +122,16 @@ const Settings = ({ mode, setMode, theme, setTheme }) => {
 
             {/* Logout */}
             <Wrapper className='flex items-start justify-between'>
-                <Wrapper>
-                <Typography onClick={handleLogout} tag="h4" text={`Logout`} className='text-sm text-primary ml-1 cursor-pointer' />
+                <Wrapper onClick={handleLogout} className={`${isLoading?'cursor-progress':'cursor-pointer'} border border-primary px-3 py-1 rounded-2xl flex items-center text-primary hover:bg-primary hover:text-white`}>
+                  <RiLogoutCircleLine className='size-3' />
+                  <Typography tag="h4" text={`Logout`} className='text-xs ml-1 mr-1' />
+                  {
+                    isLoading&&
+                    <BtnLoader
+                      className='border-color-border dark:border-[#161d29f5] flex items-center justify-center'
+                      spinnerClassName='w-3 h-3 border-[2px] border-[#575353] border-t-white rounded-[50%] animate-spin'
+                  />
+                  }
                 </Wrapper>
                 
             </Wrapper>

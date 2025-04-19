@@ -15,9 +15,9 @@ import { decimalNumberPattern } from "../Analysis/Popup/utils"
 import axios from "axios"
 import { getPredictionData } from "../../API/Handler/getDataHandler"
 import DamDataContext from "../Contexts/DamDataContext/DamDataContext"
-import { GiWaterSplash } from "react-icons/gi"
 import { Transition } from 'semantic-ui-react';
 import { BsStars } from "react-icons/bs"
+import BtnLoader from "../AtomicDesign/Atom/Loader/BtnLoader"
 
 // eslint-disable-next-line react/prop-types
 const Prediction = ({mode}) => {
@@ -31,7 +31,6 @@ const [boxesVisible, setBoxesVisible] = useState(false);
  const {
         register,
         handleSubmit,
-        setError,
         formState: { errors },
       } = useForm();
 const resultRef = useRef(null)
@@ -325,11 +324,26 @@ const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
                   <Wrapper className='w-[60%] h-full flex flex-col items-end justify-center'>
                   <Typography tag="p" className="text-xs font-normal text-center" text="Predicted Water Level" />
                   <Wrapper>
-                  <Typography tag="p" className="text-lg font-bold text-center text-primary" text={`${roundedFinalValue} m`} />
+                    {
+                      loading?
+                      <BtnLoader
+                      className='w-full h-full border-b border-color-border dark:border-[#161d29f5] flex items-center justify-center'
+                      spinnerClassName='w-4 h-4 border-[2px] border-[#575353] border-t-white rounded-[50%] animate-spin'
+                  />
+                  :<Typography tag="p" className="text-lg font-bold text-center text-primary" text={`${roundedFinalValue} m`} />
+                    }
+                  
                   </Wrapper>
                   
                   <Typography tag="p" className="text-[10px] font-normal text-center pt-1" text="Inflow Value" />
+                  {
+                    loading?
+                    <BtnLoader
+                    className='w-full h-full border-b border-color-border dark:border-[#161d29f5] flex items-center justify-center'
+                    spinnerClassName='w-3 h-3 border-[2px] border-[#575353] border-t-white rounded-[50%] animate-spin'
+                />:
                   <Typography tag="p" className="text-xs font-semibold text-center" text={`${predictedData?.inflow_t1 ? Number(predictedData.inflow_t1).toFixed(4) : ''} cumecs`} />
+                  }
                   
                   </Wrapper>
                 </Wrapper>
@@ -365,7 +379,13 @@ const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
                   <Wrapper className='w-[60%] h-full flex flex-col items-end justify-center'>
                   <Typography tag="p" className="text-xs font-normal text-center" text="Predicted Water Level" />
                   <Wrapper>
-                  <Typography tag="p" className="text-lg font-bold text-center text-color-light-gray dark:text-color-dark-gray" text={`${roundedFinalValue_t2} m`} />
+                    {
+                      loading?
+                      <BtnLoader
+                      className='w-full h-full border-b border-color-border dark:border-[#161d29f5] flex items-center justify-center'
+                      spinnerClassName='w-4 h-4 border-[2px] border-[#575353] border-t-white rounded-[50%] animate-spin'
+                  />:<Typography tag="p" className="text-lg font-bold text-center text-color-light-gray dark:text-color-dark-gray" text={`${roundedFinalValue_t2} m`} />
+                    }
                   </Wrapper>
                   
                   <Typography tag="p" className="text-[10px] font-normal text-center pt-1" text="Inflow Value" />
@@ -628,7 +648,7 @@ const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
           </Form>
           <Wrapper ref={resultRef} className="w-full pt-4 flex justify-between gap-3 pb-2">
             <Transition animation="fly right" duration={2000} visible={boxesVisible}>
-            <Wrapper className="h-16 w-[45%] gap-2 border-2 dark:border border-primary  dark:bg-[#121721f5] rounded-lg cursor-pointer">
+            <Wrapper className="h-16 w-[45%] gap-2 border-2 dark:border border-primary  dark:bg-[#121721f5] rounded-lg cursor-pointer overflow-hidden">
               <Wrapper className='w-full h-6 flex justify-between'>
                 <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1 text-primary" text="Next 24:00 hours" />
                     <Wrapper className='w-20 h-full bg-primary rounded-bl-lg grid place-items-center'>
@@ -643,7 +663,7 @@ const percentage_t2 = ((roundedFinalValue_t2 / MWL) * 100).toFixed(2);
           </Transition>
 
           <Transition animation="fly right" duration={2000} visible={boxesVisible}>
-            <Wrapper className="h-16 w-[45%] border-2 border-color-light-gray dark:border dark:border-color-dark-gray  dark:bg-[#121721f5] rounded-lg mr-1 cursor-pointer">
+            <Wrapper className="h-16 w-[45%] border-2 border-color-light-gray dark:border dark:border-color-dark-gray  dark:bg-[#121721f5] rounded-lg mr-1 cursor-pointer overflow-hidden">
                 <Wrapper className='w-full h-6 flex justify-between'>
                     <Typography tag="p" className="text-xs font-normal text-center pl-3 pt-1" text="Next 48:00 hours" />
                     <Wrapper className='w-20 h-full bg-color-light-gray dark:bg-color-dark-gray rounded-bl-lg grid place-items-center'>
