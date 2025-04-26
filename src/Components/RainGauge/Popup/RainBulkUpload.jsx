@@ -167,7 +167,7 @@ const RainBulkUpload = ({setAddRainBulkUpload}) => {
                         className='w-32 mb-4 h-6 bg-inherit rounded-md text-sm border-2 border-color-border dark:border-[#161d29f5] outline-none cursor-pointer' 
                         firstOptionClassName="dark:bg-[#121721f5]"
                         childClassName="dark:bg-[#121721f5]"
-                        placeholder="Select Dam" 
+                        placeholder="Select Raingauge" 
                         defaultValue={selectedRainGaugeId}
                     />
                     <label
