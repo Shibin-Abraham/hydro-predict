@@ -6,7 +6,6 @@ import Button from "../AtomicDesign/Atom/Button/Button"
 import { useNavigate } from "react-router-dom"
 import Media from "../AtomicDesign/Atom/Media/Media"
 import laptop from '../../Assets/images/laptop.png'
-import lap from '../../Assets/images/lap.png'
 import { useEffect, useState } from "react"
 import { useRef } from "react"
 
